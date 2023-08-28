@@ -26,20 +26,31 @@ const Index = () => {
                             exact={true}
                         />
                     ))}
-                </Route>
-
-                <Route>
                     {authProtectedRoutes.map((route, idx) => (
                         <Route
                             path={route.path}
-                            element={
-                                <AuthProtected>
-                                    <VerticalLayout>{route.component}</VerticalLayout>
-                                </AuthProtected>}
+                            element={<VerticalLayout>{route.component}</VerticalLayout>
+                                // <AuthProtected>
+                                // </AuthProtected>
+                        }
                             key={idx}
                             exact={true}
                         />
                     ))}
+                </Route>
+
+                <Route>
+                    {/*{authProtectedRoutes.map((route, idx) => (*/}
+                    {/*    <Route*/}
+                    {/*        path={route.path}*/}
+                    {/*        element={*/}
+                    {/*            <AuthProtected>*/}
+                    {/*                <VerticalLayout>{route.component}</VerticalLayout>*/}
+                    {/*            </AuthProtected>}*/}
+                    {/*        key={idx}*/}
+                    {/*        exact={true}*/}
+                    {/*    />*/}
+                    {/*))}*/}
                 </Route>
             </Routes>
         </React.Fragment>
