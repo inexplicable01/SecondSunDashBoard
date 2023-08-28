@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from "react";
 import {MapContainer, TileLayer, GeoJSON} from "react-leaflet";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {Col, Container, Row} from 'reactstrap';
 import BreadCrumb from '../../Components/Common/BreadCrumb';
 import {Grid, Config} from "gridjs-react";
 
 const NodeLocations = () => {
+     const navigate = useNavigate();
     const [deviceData, setDeviceData] = useState(null);
   const [lastRefreshTime, setLastRefreshTime] = useState(null);
   const [selectedDevice, setSelectedDevice] = useState(null);
@@ -83,6 +85,12 @@ const NodeLocations = () => {
     return () => clearInterval(deviceDataInterval);
   }, []);
 
+  const seeMoreData = () => {
+    if(selectedDevice) {
+      navigate(`/node-device-data?device=${encodeURIComponent(selectedDevice.name)}`);
+    }
+  };
+
   const tableConfig = {
     columns: ["Attribute", "Value"],
     data: selectedDevice ? Object.entries(selectedDevice) : [],
@@ -123,6 +131,7 @@ const NodeLocations = () => {
                             </div>
                             <div style={{flex: "30%", overflowX: "auto"}}>
                                 <Grid {...tableConfig} />
+                                <button onClick={seeMoreData}>See More Data</button>  {/* New button */}
                             </div>
                         </div>
                     </div>

@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import ReactApexChart from "react-apexcharts";
 import {Col, Container, Row} from 'reactstrap';
+import { useLocation } from "react-router-dom";
 import BreadCrumb from '../../Components/Common/BreadCrumb';
 
 const NodeDeviceData = () => {
+     const location = useLocation();
   const [data, setData] = useState({
     time: [],
     temperature: [],
@@ -34,7 +36,13 @@ const [selectedDevice, setSelectedDevice] = useState('Device 1');
       console.error("An error occurred while fetching data:", error);
     }
   };
-
+    useEffect(() => {
+        const urlParams = new URLSearchParams(location.search);
+        const deviceFromUrl = urlParams.get("device");
+        if (deviceFromUrl) {
+            setSelectedDevice(deviceFromUrl);
+        }
+    }, [location.search]);
   useEffect(() => {
     fetchData();
     const intervalId = setInterval(fetchData, 60000); // Refresh every 60 seconds
