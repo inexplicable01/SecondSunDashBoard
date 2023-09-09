@@ -4,6 +4,8 @@ import { Navigate } from "react-router-dom";
 //SSL
 import NodeLocations from "../pages/SSL/NodeLocations";
 import NodeDeviceData from "../pages/SSL/NodeDeviceData";
+import DeviceManagement from "../pages/SSL/DeviceManagement";
+import StyledRegistrationWizard from "../pages/SSL/DeviceRegister";
 //Dashboard
 import DashboardAnalytics from "../pages/DashboardAnalytics";
 import DashboardCrm from "../pages/DashboardCrm";
@@ -253,7 +255,8 @@ const authProtectedRoutes = [
   // { path: "/dashboard-crm", component: <DashboardCrm /> },
   { path: "/dashboard", component: <NodeLocations /> },
   { path: "/index", component: <NodeLocations /> },
-  // { path: "/dashboard-crypto", component: <DashboardCrypto /> },
+  { path: "/device-management", component: <DeviceManagement /> },
+  { path: "/register-device", component: <StyledRegistrationWizard /> },
   // { path: "/dashboard-projects", component: <DashboardProject /> },
   // { path: "/dashboard-nft", component: <DashboardNFT /> },
   // { path : "/dashboard-job", component : <DashboardJob /> },

@@ -7,6 +7,7 @@ const Navdata = () => {
     const [isDashboard, setIsDashboard] = useState(false);
     const [isApps, setIsApps] = useState(false);
     const [isAuth, setIsAuth] = useState(false);
+    const [isDeviceManagement, setIsDeviceManagement] = useState(false);
     const [isPages, setIsPages] = useState(false);
     const [isBaseUi, setIsBaseUi] = useState(false);
     const [isAdvanceUi, setIsAdvanceUi] = useState(false);
@@ -80,8 +81,8 @@ const Navdata = () => {
         if (iscurrentState !== 'Apps') {
             setIsApps(false);
         }
-        if (iscurrentState !== 'Auth') {
-            setIsAuth(false);
+        if (iscurrentState !== 'deviceManagement') {
+            setIsDeviceManagement(false);
         }
         if (iscurrentState !== 'Pages') {
             setIsPages(false);
@@ -121,6 +122,7 @@ const Navdata = () => {
         history,
         iscurrentState,
         isDashboard,
+        isDeviceManagement,
         isApps,
         isAuth,
         isPages,
@@ -141,7 +143,7 @@ const Navdata = () => {
         },
         {
             id: "dashboard",
-            label: "Dashboards",
+            label: "Node Data",
             icon: "ri-dashboard-2-line",
             link: "/node-locations",
             stateVariables: isDashboard,
@@ -163,7 +165,30 @@ const Navdata = () => {
                     parentId: "dashboard",
                 },],
         },
-
+        {
+            id: "nodedevicemanagement",
+            label: "Device Management",
+            icon: "ri-map-pin-line",
+            link: "/node-device-management",
+            stateVariables: isDeviceManagement,
+            click: function (e) {
+                e.preventDefault();
+                setIsDeviceManagement(!isDeviceManagement);
+                setIscurrentState('deviceManagement');
+                updateIconSidebar(e);
+            },
+            subItems: [                {
+                    id: "registerdevice",
+                    label: "Register Device",
+                    link: "/register-device",
+                    parentId: "dashboard",
+                },{
+                    id: "listdevice",
+                    label: "List Device",
+                    link: "/device-management",
+                    parentId: "dashboard",
+                },],
+        },
         // {
         //     label: "pages",
         //     isHeader: true,

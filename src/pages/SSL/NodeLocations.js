@@ -1,100 +1,26 @@
 import React, {useState, useEffect} from "react";
-import {MapContainer, TileLayer, GeoJSON} from "react-leaflet";
-import { useNavigate } from "react-router-dom";
+import {MapContainer, TileLayer, GeoJSON, Polyline, Marker, Popup} from "react-leaflet";
+import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import {Col, Container, Row} from 'reactstrap';
 import BreadCrumb from '../../Components/Common/BreadCrumb';
 import {Grid, Config} from "gridjs-react";
+import L from 'leaflet';
+import {generateDeviceData, locationsGeoJSON} from './DummyData';
+import './NodeLocations.css';
 
 const NodeLocations = () => {
-     const navigate = useNavigate();
-    const [deviceData, setDeviceData] = useState(null);
-  const [lastRefreshTime, setLastRefreshTime] = useState(null);
-  const [selectedDevice, setSelectedDevice] = useState(null);
-    const fetchDeviceData = async () => {
-        try {
-            // const response = await axios.get("/api/devices"); // Replace with your API endpoint
-            // setDeviceData(response.data);
-            // Hardcoded dummy GeoJSON data
-            setDeviceData({
-                type: "FeatureCollection",
-                features: [
-                    {
-                        type: "Feature",
-                        geometry: {type: "Point", coordinates: [-122.4194, 37.7749]}, // San Francisco, USA
-                        properties: {name: "Device 1", temperature: 23, humidity: 45, pressure: 1013, acceleration: 2}
-                    },
-                    {
-                        type: "Feature",
-                        geometry: {type: "Point", coordinates: [103.8198, 1.3521]}, // Singapore
-                        properties: {name: "Device 2", temperature: 25, humidity: 55, pressure: 1513, acceleration: 4}
-                    },
-                    {
-                        type: "Feature",
-                        geometry: {type: "Point", coordinates: [12.4964, 41.9028]}, // Rome, Italy
-                        properties: {
-                            name: "Device 3",
-                            temperature: 253,
-                            humidity: 455,
-                            pressure: 16713,
-                            acceleration: 2
-                        },
-                    },
-                    {
-                        type: "Feature",
-                        geometry: {type: "Point", coordinates: [77.2090, 28.6139]}, // New Delhi, India
-                        properties: {
-                            name: "Device 4",
-                            temperature: 453,
-                            humidity: 425,
-                            pressure: 156713,
-                            acceleration: 2
-                        },
-                    },
-                    {
-                        type: "Feature",
-                        geometry: {type: "Point", coordinates: [-58.4173, -34.6118]}, // Buenos Aires, Argentina
-                        properties: {
-                            name: "Device 5",
-                            temperature: 73,
-                            humidity: 465,
-                            pressure: 10946713,
-                            acceleration: 2
-                        },
-                    },
-                ],
-            });
-            setLastRefreshTime(new Date().toLocaleTimeString());
-        } catch (error) {
-            console.error("Error fetching device data:", error);
-        }
-    };
-    // Function to add Popup to each feature
-    const onEachFeature = (feature, layer) => {
-        layer.on({
-            click: () => setSelectedDevice(feature.properties),
-        });
-        layer.bindPopup(`<strong>${feature.properties.name}</strong>`);
-    };
+    const navigate = useNavigate();
+    const [selectedDevice, setSelectedDevice] = useState(null);
+    // const [filteredDeviceData, setFilteredDeviceData] = useState(null);
+    const [deviceData, setDeviceData] = useState(generateDeviceData);
+    // console.log('generateDeviceData', generateDeviceData)
+    const deviceFeature = deviceData.features.find(device => device.properties.name === selectedDevice);
+    const filteredDeviceData = deviceFeature ? {
+        type: "FeatureCollection",
+        features: [deviceFeature]
+    } : null;
 
-  useEffect(() => {
-    fetchDeviceData();
-    const deviceDataInterval = setInterval(() => {
-      fetchDeviceData();
-    }, 60000);
-    return () => clearInterval(deviceDataInterval);
-  }, []);
-
-  const seeMoreData = () => {
-    if(selectedDevice) {
-      navigate(`/node-device-data?device=${encodeURIComponent(selectedDevice.name)}`);
-    }
-  };
-
-  const tableConfig = {
-    columns: ["Attribute", "Value"],
-    data: selectedDevice ? Object.entries(selectedDevice) : [],
-  };
     document.title = "Device Locations | SSL ";
     return (
         <React.Fragment>
@@ -107,32 +33,72 @@ const NodeLocations = () => {
                     </Row>
 
                     <div>
-                        <button onClick={fetchDeviceData}>Refresh</button>
-  {lastRefreshTime && <div>Last refreshed at: {lastRefreshTime}</div>}
+                        {selectedDevice ? `Selected Device: ${selectedDevice}` : 'No device selected'}
+
+                        {/*<button onClick={fetchDeviceData}>Refresh</button>*/}
+                        {/*{lastRefreshTime && <div>Last refreshed at: {lastRefreshTime}</div>}*/}
                         <div style={{display: "flex", flexDirection: "row"}}>
-                            <div style={{flex: "70%"}}>
+                            <div style={{flex: "80%"}}>
                                 <MapContainer
-                                    center={[0, 0]} // Initial world view
+                                    center={[0, 0]}
                                     zoom={2}
                                     style={{height: "60vh", width: "100%"}}
-                                    scrollWheelZoom={false} // Disable scroll wheel zoom}
+                                    scrollWheelZoom={false}
                                 >
                                     <TileLayer
                                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                                         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                                     />
-                                    {deviceData && (
-                                        <GeoJSON
-                                            data={deviceData}
-                                            onEachFeature={onEachFeature} // Attach Popup to each feature
-                                        />
-                                    )}
+                                    {deviceData.features.map((feature, idx) => {
+                                        // Assuming the last coordinate in the path is the current location of the device
+                                        const currentLocation = feature.geometry.coordinates[feature.geometry.coordinates.length - 1];
+                                        const switchxy = [currentLocation[1], currentLocation[0]]
+                                        return (
+                                            <Marker key={idx} position={switchxy}
+                                                    eventHandlers={{
+                                                        click: () => {
+                                                            // Update the state with the device's name when the marker is clicked
+                                                            setSelectedDevice(feature.properties.name);
+                                                        }
+                                                    }}
+
+                                            >
+                                                <Popup>
+                                                    {feature.properties.name}
+                                                    <table>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td><strong>Temp:</strong></td>
+                                                            <td>{feature.properties.temperature}°C</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Pressure:</strong></td>
+                                                            <td>{feature.properties.pressure}hPa</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Luminosity:</strong></td>
+                                                            <td>{feature.properties.luminosity} lux</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Shock:</strong></td>
+                                                            <td>{feature.properties.shock}g</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </Popup>
+                                            </Marker>
+                                        );
+                                    })}
+                                    {console.log('filteredDeviceData', filteredDeviceData)}
+                                    {filteredDeviceData && <GeoJSON key={selectedDevice} data={filteredDeviceData}/>}
                                 </MapContainer>
+
+
                             </div>
-                            <div style={{flex: "30%", overflowX: "auto"}}>
-                                <Grid {...tableConfig} />
-                                <button onClick={seeMoreData}>See More Data</button>  {/* New button */}
-                            </div>
+                            {/*<div style={{flex: "30%", overflowX: "auto"}}>*/}
+                            {/*    <Grid {...tableConfig} />*/}
+                            {/*    <button onClick={seeMoreData}>See More Data</button>  /!* New button *!/*/}
+                            {/*</div>*/}
                         </div>
                     </div>
                 </Container>
