@@ -36,7 +36,7 @@ const FormAdvanced = () => {
     id(prev_data_attr - 1);
   }
 
-  document.title = "Form Advanced | Velzon - React Admin & Dashboard Template";
+  document.title = "Form Advanced | Second Sun Node Device Dashboard";
   return (
     <React.Fragment>
       <div className="page-content">

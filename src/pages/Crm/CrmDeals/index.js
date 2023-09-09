@@ -64,7 +64,7 @@ const CrmDeals = () => {
       setModal(true);
     }
   };
-  document.title = "Deals | Velzon - React Admin & Dashboard Template";
+  document.title = "Deals | Second Sun Node Device Dashboard";
 
   return (
     <React.Fragment>

@@ -412,7 +412,7 @@ const CrmLeads = () => {
     setDate(joinDate);
   };
 
-  document.title = "Leads | Velzon - React Admin & Dashboard Template";
+  document.title = "Leads | Second Sun Node Device Dashboard";
 
   return (
     <React.Fragment>

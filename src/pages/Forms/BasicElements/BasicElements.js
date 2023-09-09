@@ -9,7 +9,7 @@ import PreviewCardHeader from '../../../Components/Common/PreviewCardHeader';
 
 
 const BasicElements = () => {
-    document.title="Basic Elements | Velzon - React Admin & Dashboard Template";
+    document.title="Basic Elements | Second Sun Node Device Dashboard";
 
     return (
         <React.Fragment>

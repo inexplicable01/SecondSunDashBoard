@@ -28,7 +28,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAPIKey } from "../../store/actions";
 
 const APIKey = () => {
-  document.title = "API Key | Velzon -  Admin & Dashboard Template";
+  document.title = "API Key | Admin & Dashboard Template";
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);

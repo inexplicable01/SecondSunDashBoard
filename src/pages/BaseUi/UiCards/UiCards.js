@@ -70,7 +70,7 @@ const UiCards = () => {
         }, 3000);
     };
     
-    document.title="Cards | Velzon - React Admin & Dashboard Template";
+    document.title="Cards | Second Sun Node Device Dashboard";
 
     return (
         <React.Fragment>

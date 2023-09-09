@@ -201,7 +201,7 @@ const Chat = () => {
   };
 
 
-  document.title = "Chat | Velzon - React Admin & Dashboard Template";
+  document.title = "Chat | Second Sun Node Device Dashboard";
 
   return (
     <React.Fragment>

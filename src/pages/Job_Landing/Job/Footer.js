@@ -15,7 +15,7 @@ const Footer = () => {
                   <img src={LogoLight} alt="logo light" height="17" />
                 </div>
                 <div className="mt-4 fs-15">
-                  <p>Premium Multipurpose Admin & Dashboard Template</p>
+                  <p>Second Sun Node Device Dashboard</p>
                   <p>
                     You can build any type of web application like eCommerce,
                     CRM, CMS, Project management apps, Admin Panels, etc using

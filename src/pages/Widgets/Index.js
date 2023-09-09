@@ -13,7 +13,7 @@ import CreditCard from './CreditCard';
 
 
 const Widgets = () => {
-    document.title="Widgets | Velzon - React Admin & Dashboard Template";
+    document.title="Widgets | Second Sun Node Device Dashboard";
     return (
         <React.Fragment>
             <div className="page-content">

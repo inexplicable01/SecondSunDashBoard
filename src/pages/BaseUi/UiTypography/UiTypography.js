@@ -12,7 +12,7 @@ import { DisplayHeadingExample, HeadingsExample, BlockquotesExample, BlockquoteC
 
 
 const UiTypography = () => {
-    document.title="Typography | Velzon - React Admin & Dashboard Template";
+    document.title="Typography | Second Sun Node Device Dashboard";
     return (
         <React.Fragment>
             <UiContent />

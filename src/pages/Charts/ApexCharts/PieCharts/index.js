@@ -5,7 +5,7 @@ import {SimplePie,SimpleDonut,UpdateDonut,MonochromePie,GradientDonut,PatternedD
 
 
 const PieCharts = () => {
-    document.title="Pie Charts | Velzon - React Admin & Dashboard Template";
+    document.title="Pie Charts | Second Sun Node Device Dashboard";
   return (
     <div className="page-content">
                 <Container fluid>

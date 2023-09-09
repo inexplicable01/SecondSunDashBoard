@@ -11,7 +11,7 @@ import StoreVisits from "./StoreVisits";
 import TopSellers from "./TopSellers";
 
 const DashboardEcommerce = () => {
-  document.title ="Dashboard | Velzon - React Admin & Dashboard Template";
+  document.title ="Dashboard | Second Sun Node Device Dashboard";
 
   const [rightColumn, setRightColumn] = useState(true);
   const toggleRightColumn = () => {

@@ -17,7 +17,7 @@ import { StacksVerticalExample, StacksHorizontalExample, TextSelectionExample, P
 
 
 const UiUtilities = () => {
-    document.title = "Utilities | Velzon - React Admin & Dashboard Template";
+    document.title = "Utilities | Second Sun Node Device Dashboard";
     return (
         <React.Fragment>
             <UiContent />

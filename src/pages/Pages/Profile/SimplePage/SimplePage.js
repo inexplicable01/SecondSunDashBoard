@@ -45,7 +45,7 @@ const SimplePage = () => {
         }
     };
 
-    document.title = "Profile | Velzon - React Admin & Dashboard Template";
+    document.title = "Profile | Second Sun Node Device Dashboard";
 
     return (
         <React.Fragment>

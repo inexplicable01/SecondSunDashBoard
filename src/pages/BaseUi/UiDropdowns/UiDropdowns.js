@@ -45,7 +45,7 @@ const UiDropdowns = () => {
         }
     };
 
-    document.title="Dropdowns | Velzon - React Admin & Dashboard Template";
+    document.title="Dropdowns | Second Sun Node Device Dashboard";
     
     return (
         <React.Fragment>

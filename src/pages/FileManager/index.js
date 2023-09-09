@@ -26,7 +26,7 @@ import { Link } from 'react-router-dom';
 
 
 const FileManager = () => {
-    document.title = "File Manager | Velzon - React Admin & Dashboard Template";
+    document.title = "File Manager | Second Sun Node Device Dashboard";
 
     const dispatch = useDispatch();
 

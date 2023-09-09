@@ -70,7 +70,7 @@ const FormWizard = () => {
     }
   }
 
-document.title ="Wizard | Velzon - React Admin & Dashboard Template";
+document.title ="Wizard | Second Sun Node Device Dashboard";
   return (
     <React.Fragment>
       <div className="page-content">        

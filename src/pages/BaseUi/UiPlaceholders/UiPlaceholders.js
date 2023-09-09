@@ -16,7 +16,7 @@ import { DefaultPlaceholderExample, WidthExample, SizingExample, ColorExample } 
 
 
 const UiPlaceholders = () => {
-    document.title="Placeholders | Velzon - React Admin & Dashboard Template";
+    document.title="Placeholders | Second Sun Node Device Dashboard";
     return (
         <React.Fragment>
             <UiContent />

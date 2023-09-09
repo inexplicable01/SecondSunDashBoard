@@ -110,7 +110,7 @@ const Login = (props) => {
         }
     }, [dispatch, error]);
 
-    document.title = "Basic SignIn | Velzon - React Admin & Dashboard Template";
+    document.title = "Basic SignIn | Second Sun Node Device Dashboard";
     return (
         <React.Fragment>
             <ParticlesAuth>

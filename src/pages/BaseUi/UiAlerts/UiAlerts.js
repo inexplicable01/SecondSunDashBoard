@@ -14,7 +14,7 @@ import { DefaultAlertsExample, BorderlessExample, DismissingExample, LinkColorEx
 
 
 const UiAlerts = () => {
-    document.title="Alerts | Velzon - React Admin & Dashboard Template";
+    document.title="Alerts | Second Sun Node Device Dashboard";
     const [show, setShow] = useState(false);
 
     return (

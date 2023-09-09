@@ -16,7 +16,7 @@ import {
 
 
 const BarCharts = () => {
-    document.title="Bar Charts | Velzon - React Admin & Dashboard Template";
+    document.title="Bar Charts | Second Sun Node Device Dashboard";
     return (
         <React.Fragment>
             <div className="page-content">            
