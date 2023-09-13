@@ -2,8 +2,9 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import SimpleBar from "simplebar-react";
 //import logo
-import logoSm from "../assets/images/logo_ssl.JPG";
-import logoDark from "../assets/images/logo_ssl_dark.png";
+import logoSm from "../assets/images/logo_ssl_dark.png";
+import logoSm_dark from "../assets/images/logo_ssl_dark.png";
+import logoDark from "../assets/images/ssl_logo_android-chrome-384x384.png";
 import logoLight from "../assets/images/logo_ssl.JPG";
 
 //Import Components
@@ -37,22 +38,22 @@ const Sidebar = ({ layoutType }) => {
   return (
     <React.Fragment>
       <div className="app-menu navbar-menu border-end">
-        <div className="navbar-brand-box">
-          <Link to="/" className="logo logo-dark">
-            <span className="logo-sm">
-              <img src={logoSm} alt="" height="22" />
-            </span>
-            <span className="logo-lg">
-              <img src={logoDark} alt="" height="17" />
-            </span>
-          </Link>
+        <div className="navbar-brand-box" style={{ padding: '20px' }}>
+          {/*<Link to="/" className="logo logo-dark">*/}
+          {/*  <span className="logo-sm">*/}
+          {/*    <img src={logoSm} alt="" height="80" />*/}
+          {/*  </span>*/}
+          {/*  <span className="logo-lg">*/}
+          {/*    <img src={logoDark} alt="" height="80" />*/}
+          {/*  </span>*/}
+          {/*</Link>*/}
 
           <Link to="/" className="logo logo-light">
             <span className="logo-sm">
-              <img src={logoSm} alt="" height="22" />
+              <img src={logoDark} alt="" height="40" />
             </span>
             <span className="logo-lg">
-              <img src={logoLight} alt="" height="17" />
+              <img src={logoLight} alt="" height="60" style={{borderRadius: '5%'}}/>
             </span>
           </Link>
           <button

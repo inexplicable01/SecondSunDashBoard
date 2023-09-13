@@ -13,3 +13,9 @@ table td:first-child {
     font-weight: bold;
     background-color: #f2f2f2;
 }
+
+.side-by-side-container {
+    display: flex;
+    justify-content: space-between; /* This will push the child elements to the far ends */
+    align-items: center; /* This will vertically center the child elements */
+}

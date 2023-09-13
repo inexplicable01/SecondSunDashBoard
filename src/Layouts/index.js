@@ -95,9 +95,9 @@ const Layout = (props) => {
 
     useEffect(() => {
         if (sidebarVisibilitytype === 'show' || layoutType === "vertical" || layoutType === "twocolumn") {
-            document.querySelector(".hamburger-icon").classList.remove('open');
+            // document.querySelector(".hamburger-icon").classList.remove('open');
         } else {
-            document.querySelector(".hamburger-icon").classList.add('open');
+            // document.querySelector(".hamburger-icon").classList.add('open');
         }
     }, [sidebarVisibilitytype, layoutType]);
     /*
@@ -126,10 +126,10 @@ const Layout = (props) => {
     return (
         <React.Fragment>
             <div id="layout-wrapper">
-                <Header
-                    headerClass={headerClass}
-                    layoutModeType={layoutModeType}
-                    onChangeLayoutMode={onChangeLayoutMode} />
+                {/*<Header*/}
+                {/*    headerClass={headerClass}*/}
+                {/*    layoutModeType={layoutModeType}*/}
+                {/*    onChangeLayoutMode={onChangeLayoutMode} />*/}
                 <Sidebar
                 layoutType={layoutType}
                  />

@@ -4,33 +4,33 @@ import {useLocation} from "react-router-dom";
 import {useTable} from 'react-table';
 import {Col, Container, Row} from 'reactstrap';
 import BreadCrumb from '../../Components/Common/BreadCrumb';
-import {ports} from './DummyData';
+import {ports, generateDeviceData} from './DummyData';
+import './DeviceManagement.css';
+import {Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input, Button} from 'reactstrap';
+
 
 const DeviceManagement = () => {
     // State to hold devices
     const location = useLocation();
     const {serialNumber, name, company, startPort, endPort} = location.state || {};
+    const [visibleColumns, setVisibleColumns] = useState({
+        serialNumber: true,
+        name: true,
+        company: true,
+        status: true,
+        lastTransmitted: true,
+        lastLocation: true,
+        batteryLife: true,
+        registeredDate: true,
+        registeredBy: true,
+        startPort: true,
+        endPort: true,
+    });
+    const [showCheckboxes, setShowCheckboxes] = useState(false); // state to toggle visibility of checkboxes
+    const [isModalOpen, setIsModalOpen] = useState(false);
+// Render checkboxes
 
-    const generateDummyData = (numberOfDevices) => {
-        const names = ['John Doe', 'Jane Smith', 'Alice Johnson', 'Bob Brown', 'Charlie Wilson'];
-        const locations = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia', 'San Antonio'];
-        // const ports = ['Port of Los Angeles', 'Port of New York', 'Port of Houston', 'Port of Seattle', 'Port of Miami'];
 
-        const getRandomItem = (items) => items[Math.floor(Math.random() * items.length)];
-
-        return Array.from({length: numberOfDevices}).map(() => ({
-            name: name? name:'John Bob',
-            company: company? company:'Bob Shipping',
-            serialNumber: Math.floor(10000 + Math.random() * 90000).toString(),  // random 5 digit number
-            lastTransmitted: `2023-${Math.floor(1 + Math.random() * 12).toString().padStart(2, '0')}-${Math.floor(1 + Math.random() * 28).toString().padStart(2, '0')} 12:00`, // random date in 2023
-            lastLocation: getRandomItem(locations),
-            batteryLife: Math.floor(10 + Math.random() * 91), // random battery percentage from 10 to 100
-            registeredDate: `2023-${Math.floor(1 + Math.random() * 12).toString().padStart(2, '0')}-${Math.floor(1 + Math.random() * 28).toString().padStart(2, '0')}`, // random date in 2023
-            registeredBy: getRandomItem(names),
-            startPort: getRandomItem(ports),
-            endPort: getRandomItem(ports),
-        }));
-    }
     const getIncomingDevice = () => {
         if (serialNumber) {
             return {
@@ -50,58 +50,89 @@ const DeviceManagement = () => {
         return null;
     };
 
-    const [devices, setDevices] = useState([
-        ...(getIncomingDevice() ? [getIncomingDevice()] : []),
-        ...generateDummyData(9)
-    ]);
+    const [devices, setDevices] = useState([...generateDeviceData.features,
+        ...(getIncomingDevice() ? [getIncomingDevice()] : [])
 
+    ]);
+    const handleCheckboxChange = (e) => {
+        setVisibleColumns({
+            ...visibleColumns,
+            [e.target.name]: e.target.checked
+        });
+    };
     const data = React.useMemo(() => devices, [devices]);
 
-    const columns = React.useMemo(
-        () => [
-            {
+    const columns = React.useMemo(() => {
+        let cols = [];
+        if (visibleColumns.serialNumber) {
+            cols.push({
                 Header: 'Serial Number',
-                accessor: 'serialNumber',
-            },
-                        {
+                accessor: 'properties.serialNumber',
+            });
+        }
+        if (visibleColumns.status) {
+            cols.push({
+                Header: 'Status',
+                accessor: 'Active/Inactive',
+            });
+        }
+        if (visibleColumns.name) {
+            cols.push({
                 Header: 'Owner',
-                accessor: 'name',
-            },
-                        {
+                accessor: 'properties.name',
+            });
+        }
+        if (visibleColumns.company) {
+            cols.push({
                 Header: 'Company',
-                accessor: 'company',
-            },
-            {
+                accessor: 'properties.company',
+            });
+        }
+        if (visibleColumns.lastTransmitted) {
+            cols.push({
                 Header: 'Last Transmitted',
-                accessor: 'lastTransmitted',
-            },
-            {
+                accessor: 'properties.lastTransmitted',
+            });
+        }
+        if (visibleColumns.lastLocation) {
+            cols.push({
                 Header: 'Last Location',
-                accessor: 'lastLocation',
-            },
-            {
+                accessor: 'properties.lastLocation',
+            });
+        }
+        if (visibleColumns.batteryLife) {
+            cols.push({
                 Header: 'Battery Life (%)',
-                accessor: 'batteryLife',
-            },
-            {
+                accessor: 'properties.batteryLife',
+            });
+        }
+        if (visibleColumns.registeredDate) {
+            cols.push({
                 Header: 'Registered Date',
-                accessor: 'registeredDate',
-            },
-            {
+                accessor: 'properties.registeredDate',
+            });
+        }
+        if (visibleColumns.registeredBy) {
+            cols.push({
                 Header: 'Registered By',
-                accessor: 'registeredBy',
-            },
-            {
+                accessor: 'properties.registeredBy',
+            });
+        }
+        if (visibleColumns.startPort) {
+            cols.push({
                 Header: 'Start Port',
-                accessor: 'startPort',
-            },
-            {
+                accessor: 'properties.startPort',
+            });
+        }
+        if (visibleColumns.endPort) {
+            cols.push({
                 Header: 'End Port',
-                accessor: 'endPort',
-            }
-        ],
-        []
-    );
+                accessor: 'properties.endPort',
+            });
+        }
+
+        return cols;
+    }, [visibleColumns]);
 
     const {
         getTableProps,
@@ -110,6 +141,16 @@ const DeviceManagement = () => {
         rows,
         prepareRow,
     } = useTable({columns, data});
+
+
+    const toggleColumnVisibility = (key) => {
+        setVisibleColumns(prev => ({...prev, [key]: !prev[key]}));
+    }
+
+    const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+};
+
     document.title = "Registered Devices | Second Sun Labs";
 
     return (
@@ -119,7 +160,20 @@ const DeviceManagement = () => {
                     <BreadCrumb title="Registered Devices" pageTitle="Devices"/>
                     <Row>
                         <Col xs={12}>
-                            <h3>Registered Devices</h3>
+
+                            <div className="side-by-side-container">
+                                <h3>Registered Devices</h3>
+                                <button onClick={toggleModal}>Toggle</button>
+                            </div>
+
+                            {showCheckboxes &&
+                                <div className="checkbox-container">
+                                    <input type="checkbox" id="serialNumber" checked={visibleColumns.serialNumber}
+                                           onChange={() => toggleColumnVisibility('serialNumber')}/>
+                                    <label htmlFor="serialNumber">Serial Number</label>
+                                </div>
+                            }
+
                             <table {...getTableProps()} style={{border: 'solid 1px gray', width: '100%'}}>
                                 <thead>
                                 {headerGroups.map((headerGroup, headerGroupIndex) => (
@@ -152,6 +206,37 @@ const DeviceManagement = () => {
                             </table>
                         </Col>
                     </Row>
+
+                    <Modal isOpen={isModalOpen} toggle={toggleModal}>
+                        <ModalHeader toggle={toggleModal}>Select Columns</ModalHeader>
+                        <ModalBody>
+                            <FormGroup check>
+                                <Label check>
+                                    <Input type="checkbox" name="serialNumber" checked={visibleColumns.serialNumber}
+                                           onChange={handleCheckboxChange}/>
+                                    Serial Number
+                                </Label>
+                            </FormGroup>
+                            <FormGroup check>
+                                <Label check>
+                                    <Input type="checkbox" name="status" checked={visibleColumns.status}
+                                           onChange={handleCheckboxChange}/>
+                                    Status
+                                </Label>
+                            </FormGroup>
+                            <FormGroup check>
+                                <Label check>
+                                    <Input type="checkbox" name="name" checked={visibleColumns.name}
+                                           onChange={handleCheckboxChange}/>
+                                    Owner
+                                </Label>
+                            </FormGroup>
+                            {/* ... repeat for other columns ... */}
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button color="primary" onClick={toggleModal}>Done</Button>
+                        </ModalFooter>
+                    </Modal>
                 </Container>
             </div>
         </React.Fragment>

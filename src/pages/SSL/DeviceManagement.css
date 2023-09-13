@@ -1,0 +1,34 @@
+/* Style for the container of the checkbox */
+.checkbox-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* Hide the default browser checkbox */
+.checkbox-container input[type="checkbox"] {
+  display: none;
+}
+
+/* Create a custom checkbox */
+.checkbox-container::before {
+  content: "";
+  display: block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid gray;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/* Style when checkbox is checked */
+.checkbox-container input[type="checkbox"]:checked::after {
+  content: "";
+  display: block;
+  width: 14px;
+  height: 14px;
+  background-color: gray;
+  position: absolute;
+  left: 3px;
+  top: 3px;
+}
