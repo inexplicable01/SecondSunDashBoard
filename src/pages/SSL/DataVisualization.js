@@ -28,7 +28,7 @@ const DataVisualization = ({device, location, temperatureData}) => {
 
             <div className="map-container">
                 Location for Device {device.properties.name}
-                <MapContainer center={fakelocation} zoom={13} style={{height: '50vh', width: '100%'}}>
+                <MapContainer center={fakelocation} zoom={13} style={{height: '100vh', width: '100%'}}>
                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
                     <Marker position={fakelocation}/>
                 </MapContainer>

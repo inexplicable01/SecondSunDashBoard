@@ -243,6 +243,7 @@ const handleDataIconClick = useCallback((device) => {
                                     <DataVisualization device={clickedDeviceData} location={location} temperatureData={temperatureData}/>
                                 </div>
                             )}
+                            <div>   </div>
                             <div className="side-by-side-container">
                                 <h3>Registered Devices</h3>
                                 <button onClick={toggleModal}>Show/Hide Columns</button>
