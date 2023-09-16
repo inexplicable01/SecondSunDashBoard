@@ -362,7 +362,14 @@ function generateHexSerial() {
     return serial.toUpperCase(); // If you want it in uppercase
 }
 
+const generateStatus = () => {
+  return Math.random() < 0.5 ? 'Active' : 'Inactive';
+}
+
+
+
 for (let feature of generateDeviceData.features) {
+    feature.properties.status = feature.properties.status || generateStatus();
     feature.properties.name = feature.properties.name || 'John Bob';
     feature.properties.company = feature.properties.company || 'Bob Shipping';
     feature.properties.serialNumber = generateHexSerial();

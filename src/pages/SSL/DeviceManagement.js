@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import {useLocation} from "react-router-dom";
 import {useTable} from 'react-table';
@@ -6,12 +6,28 @@ import {Col, Container, Row} from 'reactstrap';
 import BreadCrumb from '../../Components/Common/BreadCrumb';
 import {ports, generateDeviceData} from './DummyData';
 import './DeviceManagement.css';
-import {Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input, Button} from 'reactstrap';
+import {Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input, Button, CustomInput} from 'reactstrap';
+import ColumnVisibilityModal from './ColumnVisibilityModal';
+import DataVisualization from './DataVisualization';
+
+
+const location = [51.505, -0.09]; // [latitude, longitude]
+const temperatureData = {
+    labels: ['January', 'February', 'March', 'April', 'May'],
+    datasets: [{
+        label: 'Temperature',
+        data: [12, 19, 3, 5, 2],
+        fill: false,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.1
+    }]
+};
 
 
 const DeviceManagement = () => {
     // State to hold devices
     const location = useLocation();
+    const [clickedDeviceData, setClickedDeviceData] = useState(null);
     const {serialNumber, name, company, startPort, endPort} = location.state || {};
     const [visibleColumns, setVisibleColumns] = useState({
         serialNumber: true,
@@ -29,7 +45,8 @@ const DeviceManagement = () => {
     const [showCheckboxes, setShowCheckboxes] = useState(false); // state to toggle visibility of checkboxes
     const [isModalOpen, setIsModalOpen] = useState(false);
 // Render checkboxes
-
+    const allColumns = Object.keys(visibleColumns);  // Get all column keys
+    const [showDeviceData, setShowDeviceData] = useState(false);
 
     const getIncomingDevice = () => {
         if (serialNumber) {
@@ -61,19 +78,40 @@ const DeviceManagement = () => {
         });
     };
     const data = React.useMemo(() => devices, [devices]);
-
+    const handleDataIconClick = (device) => {
+        setClickedDeviceData(device);
+        if (showDeviceData) {
+            const height = dataDivRef.current.scrollHeight + 'px';
+            setMaxHeight(height);
+        }
+        setShowDeviceData(!showDeviceData);
+        // setShowDeviceData(true);  // Show the data when icon is clicked
+    };
     const columns = React.useMemo(() => {
         let cols = [];
         if (visibleColumns.serialNumber) {
             cols.push({
                 Header: 'Serial Number',
                 accessor: 'properties.serialNumber',
+                Cell: ({cell, row}) => {
+                    const isDeviceActive = row.original.properties.status === 'Active';
+                    return (
+                        <span style={{color: isDeviceActive ? 'black' : 'gray'}}>
+                    {cell.value}
+                            {isDeviceActive &&
+                                <i className="data-icon" onClick={() => handleDataIconClick(row.original)}>
+                                    📊
+                                </i>
+                            }
+                </span>
+                    );
+                }
             });
         }
         if (visibleColumns.status) {
             cols.push({
                 Header: 'Status',
-                accessor: 'Active/Inactive',
+                accessor: 'properties.status',
             });
         }
         if (visibleColumns.name) {
@@ -148,11 +186,41 @@ const DeviceManagement = () => {
     }
 
     const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-};
+        setIsModalOpen(!isModalOpen);
+    };
+
+    const handleStatusChange = (rowData) => {
+        // Toggle the status of the given row data and update the devices state
+        const updatedDevices = devices.map(device => {
+            if (device === rowData) {
+
+                return {
+                    ...device,
+                    properties: {
+                        ...device.properties,
+                        status: device.properties.status === 'Active' ? 'Inactive' : 'Active'
+                    }
+                };
+            }
+            return device;
+        });
+
+        setDevices(updatedDevices);
+    };
 
     document.title = "Registered Devices | Second Sun Labs";
 
+    const dataDivRef = useRef(null);
+    const [maxHeight, setMaxHeight] = useState('0px');
+
+    useEffect(() => {
+        if (!showDeviceData) {
+            const timer = setTimeout(() => {
+                setMaxHeight('0px');
+            }, 300); // This delay should match the sum of the transition duration of opacity and its delay
+            return () => clearTimeout(timer);
+        }
+    }, [showDeviceData]);
     return (
         <React.Fragment>
             <div className="page-content">
@@ -161,10 +229,7 @@ const DeviceManagement = () => {
                     <Row>
                         <Col xs={12}>
 
-                            <div className="side-by-side-container">
-                                <h3>Registered Devices</h3>
-                                <button onClick={toggleModal}>Toggle</button>
-                            </div>
+
 
                             {showCheckboxes &&
                                 <div className="checkbox-container">
@@ -173,6 +238,15 @@ const DeviceManagement = () => {
                                     <label htmlFor="serialNumber">Serial Number</label>
                                 </div>
                             }
+                            {clickedDeviceData && (
+                                <div className={`clicked-device-data ${showDeviceData ? 'open' : ''}`}>
+                                    <DataVisualization device={clickedDeviceData} location={location} temperatureData={temperatureData}/>
+                                </div>
+                            )}
+                            <div className="side-by-side-container">
+                                <h3>Registered Devices</h3>
+                                <button onClick={toggleModal}>Show/Hide Columns</button>
+                            </div>
 
                             <table {...getTableProps()} style={{border: 'solid 1px gray', width: '100%'}}>
                                 <thead>
@@ -196,7 +270,20 @@ const DeviceManagement = () => {
                                                 <td {...cell.getCellProps()} key={cellIndex} style={{
                                                     border: 'solid 1px gray',
                                                     padding: '10px'
-                                                }}>{cell.render('Cell')}</td>
+                                                }}>
+                                                    {cell.column.id === 'properties.status'
+                                                        ? (
+                                                            <label className="switch">
+                                                                <input type="checkbox"
+                                                                       checked={cell.value === 'Active'}
+                                                                       onChange={() => handleStatusChange(cell.row.original)}
+                                                                />
+                                                                <span className="slider"></span>
+                                                            </label>
+                                                        )
+                                                        : cell.render('Cell')
+                                                    }
+                                                </td>
                                             ))}
                                         </tr>
                                     );
@@ -207,36 +294,13 @@ const DeviceManagement = () => {
                         </Col>
                     </Row>
 
-                    <Modal isOpen={isModalOpen} toggle={toggleModal}>
-                        <ModalHeader toggle={toggleModal}>Select Columns</ModalHeader>
-                        <ModalBody>
-                            <FormGroup check>
-                                <Label check>
-                                    <Input type="checkbox" name="serialNumber" checked={visibleColumns.serialNumber}
-                                           onChange={handleCheckboxChange}/>
-                                    Serial Number
-                                </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                                <Label check>
-                                    <Input type="checkbox" name="status" checked={visibleColumns.status}
-                                           onChange={handleCheckboxChange}/>
-                                    Status
-                                </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                                <Label check>
-                                    <Input type="checkbox" name="name" checked={visibleColumns.name}
-                                           onChange={handleCheckboxChange}/>
-                                    Owner
-                                </Label>
-                            </FormGroup>
-                            {/* ... repeat for other columns ... */}
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button color="primary" onClick={toggleModal}>Done</Button>
-                        </ModalFooter>
-                    </Modal>
+                    <ColumnVisibilityModal
+                        isVisible={isModalOpen}
+                        toggleModal={toggleModal}
+                        visibleColumns={visibleColumns}
+                        handleCheckboxChange={handleCheckboxChange}
+                        allColumns={allColumns}
+                    />
                 </Container>
             </div>
         </React.Fragment>

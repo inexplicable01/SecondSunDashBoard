@@ -32,3 +32,77 @@
   left: 3px;
   top: 3px;
 }
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;  /* Makes the slider background rounded */
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;  /* Makes the slider handle rounded */
+}
+
+.switch input:checked + .slider {
+  background-color: #2196F3;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(26px);
+}
+.clicked-device-data {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-50%);
+    transition:
+        max-height 0.5s ease-in-out,
+        opacity 0.3s ease-in-out 0.2s, /* delay to ensure opacity transition starts after max-height */
+        transform 0.3s ease-in-out 0.2s;
+}
+
+.clicked-device-data.open {
+    max-height: 600px; /* or any large number */
+    opacity: 1;
+    transform: translateY(0);
+}
