@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import axios from "axios";
 import {useLocation} from "react-router-dom";
 import {useTable} from 'react-table';
@@ -78,15 +78,15 @@ const DeviceManagement = () => {
         });
     };
     const data = React.useMemo(() => devices, [devices]);
-    const handleDataIconClick = (device) => {
-        setClickedDeviceData(device);
-        if (showDeviceData) {
-            const height = dataDivRef.current.scrollHeight + 'px';
-            setMaxHeight(height);
-        }
-        setShowDeviceData(!showDeviceData);
-        // setShowDeviceData(true);  // Show the data when icon is clicked
-    };
+const handleDataIconClick = useCallback((device) => {
+    setClickedDeviceData(device);
+    if (showDeviceData) {
+        const height = dataDivRef.current.scrollHeight + 'px';
+        setMaxHeight(height);
+    }
+    setShowDeviceData(!showDeviceData);
+}, [showDeviceData]);
+
     const columns = React.useMemo(() => {
         let cols = [];
         if (visibleColumns.serialNumber) {
@@ -170,7 +170,7 @@ const DeviceManagement = () => {
         }
 
         return cols;
-    }, [visibleColumns]);
+    }, [visibleColumns, handleDataIconClick]);
 
     const {
         getTableProps,
