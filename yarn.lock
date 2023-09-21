@@ -8110,7 +8110,14 @@ language-tags@=1.0.5:
   dependencies:
     language-subtag-registry "~0.3.2"
 
-leaflet@^1.9.4:
+leaflet-color-markers@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/leaflet-color-markers/-/leaflet-color-markers-0.1.0.tgz#7bd43593c73bd9f2f8d080c1e72fa05b579f07e2"
+  integrity sha512-r1PAnSbCftBXGrXiulBnin3bVfWAc1LxWSsm3eIusLlDXJK4C44O71Zc3rdWE4rpxvlgzt/m4KFiHHfD8xUQqw==
+  dependencies:
+    leaflet "^1.7.1"
+
+leaflet@^1.7.1, leaflet@^1.9.4:
   version "1.9.4"
   resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.9.4.tgz#23fae724e282fa25745aff82ca4d394748db7d8d"
   integrity sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==

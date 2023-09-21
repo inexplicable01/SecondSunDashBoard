@@ -240,6 +240,7 @@ const handleDataIconClick = useCallback((device) => {
                             }
                             {clickedDeviceData && (
                                 <div className={`clicked-device-data ${showDeviceData ? 'open' : ''}`}>
+                                     <h3>Device {clickedDeviceData.properties.name}</h3>
                                     <DataVisualization device={clickedDeviceData} location={location} temperatureData={temperatureData}/>
                                 </div>
                             )}

@@ -3,35 +3,47 @@
     justify-content: space-between;
     width: 100%;
     /*height: 100%;*/
-    height: 600px;
+    /*height: 800px;*/
+    flex-direction: row;
+        justify-content: space-between;
 
 }
 
-.map-container,
-.temperature-plot-container {
-    flex: 1;
-    margin: 0 10px;
+.custom-icon .mdi {
+    color: red; /* Or any other color you prefer */
+}
+
+.map-container {
+    flex: 3;
+    margin: 10px;
+    width: 300px;
+    /*border: 2px solid #0000FF;*/
 }
 
 .plot-section {
-    height: 500px; /* Adjust if needed */
-    display: flex;
+    /*height: 500px; !* Adjust if needed *!*/
+    /*display: flex;*/
+    flex: 1;
+    /*border: 2px solid #008000;*/
     flex-direction: column;
         justify-content: space-between;
+    align-items: end;
 }
 
 .temperature-plot-container {
-    flex: 0.6; /* It will occupy 60% of the available space */
-    margin-bottom: 10px;
+    flex: 3; /* It will occupy 60% of the available space */
+    /*margin-bottom: 10px;*/
 }
 
 .control-buttons {
     display: flex;
-    flex: 0.2;
+    flex: 1;
     justify-content: space-between;
 /*// This will space out the controls*/
+    flex-direction: row;
     align-items: center;
     width: 100%;
+     /*border: 2px solid #FF0000;*/
 /*// Ensure it takes the full width of the parent*/
 }
 
@@ -41,7 +53,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    border: 2px solid #d4d4d4;
+    /*border: 2px solid #d4d4d4;*/
     padding: 15px;
     margin: 0 5px;
     border-radius: 10px;

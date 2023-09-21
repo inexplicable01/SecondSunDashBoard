@@ -92,9 +92,11 @@
 }
 .clicked-device-data {
     overflow: hidden;
-    max-height: 0;
+    /*max-height: 0;*/
+  /*height: 100%;*/
     opacity: 0;
   margin-bottom: 30px;
+  /*border: 2px solid #FFFF00;*/
     transform: translateY(-50%);
     transition:
         max-height 0.5s ease-in-out,
@@ -103,8 +105,10 @@
 }
 
 .clicked-device-data.open {
-    max-height: 600px; /* or any large number */
+    max-height: 670px; /* or any large number */
+  /*height: 100%;*/
     opacity: 1;
     transform: translateY(0);
   padding-bottom: 30px;
+  /*border: 2px solid #FFFF00;*/
 }

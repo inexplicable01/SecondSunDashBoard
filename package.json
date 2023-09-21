@@ -42,6 +42,7 @@
     "i18next": "^22.4.10",
     "i18next-browser-languagedetector": "^7.0.1",
     "leaflet": "^1.9.4",
+    "leaflet-color-markers": "^0.1.0",
     "list.js": "^2.3.1",
     "lord-icon-element": "^4.0.3",
     "lottie-web": "^5.10.2",
