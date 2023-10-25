@@ -48,7 +48,7 @@ import DashboardCRM from "./dashboardCRM/reducer";
 import DashboardEcommerce from "./dashboardEcommerce/reducer";
 
 // Dashboard Cryto
-import DashboardCrypto from "./dashboardCrypto/reducer";
+import DashboardCrypto from "./deviceData/reducer";
 
 // Dashboard Cryto
 import DashboardProject from "./dashboardProject/reducer";

@@ -34,7 +34,7 @@ export * from "./dashboardCRM/action";
 // Dashboard Ecommerce
 export * from "./dashboardEcommerce/action";
 // Dashboard Crypto
-export * from "./dashboardCrypto/action";
+export * from "./deviceData/action";
 // Dashboard Project
 export * from "./dashboardProject/action";
 // Dashboard NFT

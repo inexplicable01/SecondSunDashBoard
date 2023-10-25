@@ -2,7 +2,10 @@ import {
   API_RESPONSE_SUCCESS,
   API_RESPONSE_ERROR,
   GET_PORTFOLIO_CHARTS_DATA,
-  GET_MARKET_CHARTS_DATA
+  GET_MARKET_CHARTS_DATA,
+      FETCH_DEVICE_DATA,
+  FETCH_DEVICE_DATA_SUCCESS,
+  FETCH_DEVICE_DATA_FAILURE,
 } from "./actionType";
 
 // common success
@@ -27,4 +30,13 @@ export const getPortfolioChartsData = (portfolioData) => ({
 export const getMarketChartsData = (marketData) => ({
   type: GET_MARKET_CHARTS_DATA,
   payload: marketData
+});
+
+// export const getFastDemo = (marketData) => ({
+//   type: GET_MARKET_CHARTS_DATA,
+//   payload: marketData
+// });
+
+export const fetchDeviceData = () => ({
+  type: FETCH_DEVICE_DATA,
 });

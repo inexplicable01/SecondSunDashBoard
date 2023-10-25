@@ -40,7 +40,7 @@ import dashboardCrmSaga from "./dashboardCRM/saga";
 import dashboardEcommerceSaga from "./dashboardEcommerce/saga";
 
 // Dashboard Crypto
-import dashboardCryptoSaga from "./dashboardCrypto/saga";
+import watchDeviceData from "./deviceData/saga";
 
 // Dashboard Project
 import dashboardProjectSaga from "./dashboardProject/saga";
@@ -84,7 +84,7 @@ export default function* rootSaga() {
     fork(dashboardAnalyticsSaga),
     fork(dashboardCrmSaga),
     fork(dashboardEcommerceSaga),
-    fork(dashboardCryptoSaga),
+    fork(watchDeviceData),
     fork(dashboardProjectSaga),
     fork(dashboardNFTSaga),
     fork(teamSaga),

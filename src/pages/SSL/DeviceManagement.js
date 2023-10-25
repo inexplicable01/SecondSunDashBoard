@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, {useState, useRef, useEffect, useCallback} from "react";
 import axios from "axios";
 import {useLocation} from "react-router-dom";
 import {useTable} from 'react-table';
@@ -9,7 +9,7 @@ import './DeviceManagement.css';
 import {Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input, Button, CustomInput} from 'reactstrap';
 import ColumnVisibilityModal from './ColumnVisibilityModal';
 import DataVisualization from './DataVisualization';
-
+import axois from 'axios';
 
 const location = [51.505, -0.09]; // [latitude, longitude]
 const temperatureData = {
@@ -48,6 +48,10 @@ const DeviceManagement = () => {
     const allColumns = Object.keys(visibleColumns);  // Get all column keys
     const [showDeviceData, setShowDeviceData] = useState(false);
 
+    const [fastdemodata, setFastDemoData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
     const getIncomingDevice = () => {
         if (serialNumber) {
             return {
@@ -67,7 +71,42 @@ const DeviceManagement = () => {
         return null;
     };
 
-    const [devices, setDevices] = useState([...generateDeviceData.features,
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                console.log('gothere')
+                const response = await fetch('/api/Devices/demoFast');
+                // Access the headers from the response
+const responseHeaders = response.headers;
+
+// Log the headers to the console
+console.log('Response Headers:', responseHeaders);
+
+// To get a specific header value, you can use the get() method
+const contentType = responseHeaders.get('content-type');
+console.log('Content-Type Header:', contentType);
+                console.log(response)
+                console.log('hihi')
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const result = await response.json();
+                setFastDemoData(result);
+            } catch (error) {
+                console.log(error)
+                setError(error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        console.log('not async')
+        fetchData();
+    }, []);
+
+
+    const [devices, setDevices] = useState([
+        ...generateDeviceData.features,
         ...(getIncomingDevice() ? [getIncomingDevice()] : [])
 
     ]);
@@ -78,14 +117,14 @@ const DeviceManagement = () => {
         });
     };
     const data = React.useMemo(() => devices, [devices]);
-const handleDataIconClick = useCallback((device) => {
-    setClickedDeviceData(device);
-    if (showDeviceData) {
-        const height = dataDivRef.current.scrollHeight + 'px';
-        setMaxHeight(height);
-    }
-    setShowDeviceData(!showDeviceData);
-}, [showDeviceData]);
+    const handleDataIconClick = useCallback((device) => {
+        setClickedDeviceData(device);
+        if (showDeviceData) {
+            const height = dataDivRef.current.scrollHeight + 'px';
+            setMaxHeight(height);
+        }
+        setShowDeviceData(!showDeviceData);
+    }, [showDeviceData]);
 
     const columns = React.useMemo(() => {
         let cols = [];
@@ -225,10 +264,25 @@ const handleDataIconClick = useCallback((device) => {
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
+
+                    <div>
+                        {loading ? (
+                            <p>Loading...</p>
+                        ) : error ? (
+                            <p>Error: {error.message}</p>
+                        ) : (
+                            <ul>
+                                {fastdemodata.map((item) => (
+                                    <li key={item.id}>{item.name}</li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+
+
                     <BreadCrumb title="Registered Devices" pageTitle="Devices"/>
                     <Row>
                         <Col xs={12}>
-
 
 
                             {showCheckboxes &&
@@ -240,11 +294,12 @@ const handleDataIconClick = useCallback((device) => {
                             }
                             {clickedDeviceData && (
                                 <div className={`clicked-device-data ${showDeviceData ? 'open' : ''}`}>
-                                     <h3>Device {clickedDeviceData.properties.name}</h3>
-                                    <DataVisualization device={clickedDeviceData} location={location} temperatureData={temperatureData}/>
+                                    <h3>Device {clickedDeviceData.properties.name}</h3>
+                                    <DataVisualization device={clickedDeviceData} location={location}
+                                                       temperatureData={temperatureData}/>
                                 </div>
                             )}
-                            <div>   </div>
+                            <div></div>
                             <div className="side-by-side-container">
                                 <h3>Registered Devices</h3>
                                 <button onClick={toggleModal}>Show/Hide Columns</button>
