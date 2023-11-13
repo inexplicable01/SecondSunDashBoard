@@ -1,8 +1,8 @@
 import React from 'react';
 import {MapContainer, TileLayer, Marker, GeoJSON, Popup, useMap} from 'react-leaflet';
 import ReactApexChart from "react-apexcharts";
-import './DataVisualization.css';
-import UpDownControl from './UpDownControl';
+import '../DataVisualization.css';
+import UpDownControl from '../UpDownControl';
 import L from 'leaflet';
 import { blackIcon , goldIcon} from 'leaflet-color-markers';
 import 'leaflet/dist/leaflet.css';

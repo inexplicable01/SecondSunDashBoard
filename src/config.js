@@ -8,6 +8,8 @@ module.exports = {
     APP_ID: "",
   },
   api: {
-    API_URL: "https://api-node.themesbrand.website",
+    // API_URL: "https://www.drillbreaker29.com/beaman",
+
+    API_URL: "http://35.160.4.251:5000/",
   }
 };

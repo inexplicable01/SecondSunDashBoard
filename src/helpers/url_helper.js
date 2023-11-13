@@ -12,6 +12,39 @@ export const SOCIAL_LOGIN = "/social-login";
 export const POST_EDIT_JWT_PROFILE = "/post-jwt-profile";
 export const POST_EDIT_PROFILE = "/user";
 
+// SSL Devices
+
+export const GET_ACCOUNT_IDS = "/Devices";
+
+// export const GET_ACCOUNT_IDS = "/Devices/demoFast";
+// export const GET_ACCOUNT_IDS = "";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Calendar
 export const GET_EVENTS = "/events";
 export const GET_CATEGORIES = "/categories";

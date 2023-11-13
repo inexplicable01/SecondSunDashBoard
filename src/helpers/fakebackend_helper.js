@@ -56,6 +56,23 @@ export const postJwtRegister = (url, data) => {
     });
 };
 
+
+export const getAccountDevices = (accountID) => {
+  // Define headers for this specific call
+  const headers = {
+    'accountId': accountID// Replace with your actual header and value
+    // Add more headers if needed
+  };
+
+  // Make the GET request with custom headers
+  return api.get(url.GET_ACCOUNT_IDS, { headers });
+};
+
+
+
+
+
+
 // Login Method
 export const postJwtLogin = data => api.create(url.POST_FAKE_JWT_LOGIN, data);
 
@@ -281,6 +298,8 @@ export const getOctSalesData = () => api.get(url.GET_OCTSALES_DATA);
 export const getNovSalesData = () => api.get(url.GET_NOVSALES_DATA);
 export const getDecSalesData = () => api.get(url.GET_DECSALES_DATA);
 export const getJanSalesData = () => api.get(url.GET_JANSALES_DATA);
+
+
 
 // Dashboard Ecommerce
 // Revenue

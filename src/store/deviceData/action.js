@@ -4,8 +4,7 @@ import {
   GET_PORTFOLIO_CHARTS_DATA,
   GET_MARKET_CHARTS_DATA,
       FETCH_DEVICE_DATA,
-  FETCH_DEVICE_DATA_SUCCESS,
-  FETCH_DEVICE_DATA_FAILURE,
+    FETCH_ACCOUNT_ID
 } from "./actionType";
 
 // common success
@@ -39,4 +38,10 @@ export const getMarketChartsData = (marketData) => ({
 
 export const fetchDeviceData = () => ({
   type: FETCH_DEVICE_DATA,
+});
+
+export const fetchAccountID = (accountID) => ({
+
+  type: FETCH_ACCOUNT_ID,
+  accountID:accountID
 });

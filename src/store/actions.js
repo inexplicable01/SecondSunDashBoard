@@ -17,28 +17,17 @@ export * from "./ecommerce/action";
 export * from "./tasks/action";
 //Form advanced 
 export * from './formAdvanced/action';
-// Crypto
-export * from "./crypto/action";
 //TicketsList
 export * from "./tickets/action";
-//crm
-export * from "./crm/action";
 //invoice
 export * from "./invoice/action";
 //mailbox
 export * from "./mailbox/action";
 // Dashboard Analytics
-export * from "./dashboardAnalytics/action";
-// Dashboard Analytics
-export * from "./dashboardCRM/action";
-// Dashboard Ecommerce
-export * from "./dashboardEcommerce/action";
 // Dashboard Crypto
 export * from "./deviceData/action";
 // Dashboard Project
 export * from "./dashboardProject/action";
-// Dashboard NFT
-export * from "./dashboardNFT/action";
 // Pages > Team
 export * from "./team/action";
 // File Manager
