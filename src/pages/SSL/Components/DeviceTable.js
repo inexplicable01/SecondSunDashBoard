@@ -62,8 +62,8 @@ const DeviceTable = ({ devices, visibleColumns, onStatusChange , handleDataIconC
     }
     if (visibleColumns.lastLocation) {
         cols.push({
-            Header: 'Last Location',
-            accessor: 'properties.lastLocation',
+            Header: 'ICCID',
+            accessor: 'iccid',
         });
     }
     if (visibleColumns.batteryLife) {

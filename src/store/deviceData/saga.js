@@ -37,7 +37,7 @@ function* fetchAccountIDsSaga({ accountID }) {
 
 
     const response2 = yield call(getAccountDevices, 'test account');
-    console.log(response)
+    console.log(response2)
 
     const devices2 = response2.map(device2 =>  ({...device2, status:'Active'}))
 

@@ -87,7 +87,7 @@ const DeviceManagement = () => {
         useEffect(() => {
             // Define a function to calculate the new devices array
             dispatch(fetchAccountID('blahfakafake'));
-        }, []); // This effect runs whenever `fastdemodata` changes
+        }, [dispatch]); // This effect runs whenever `fastdemodata` changes
 
         // useEffect(() => {
         //     async function fetchData() {
