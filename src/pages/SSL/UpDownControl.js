@@ -11,8 +11,8 @@ function countDown(id, prev_data_attr) {
 }
 
 const UpDownControl = ({label, initialValue, onChange, minLimit, maxLimit}) => {
-    const [upperLimit, setUpperLimit] = useState(initialValue + 5); // just an example, set it as you need
-    const [lowerLimit, setLowerLimit] = useState(initialValue - 5);
+    const [upperLimit, setUpperLimit] = useState(0); // just an example, set it as you need
+    const [lowerLimit, setLowerLimit] = useState(0);
     // const [yellowCounter, setyellowCounter] = useState(5);
     // const [redCounter, setredCounter] = useState(5);
     const adjustUpperLimit = (amount) => {
@@ -36,6 +36,7 @@ const UpDownControl = ({label, initialValue, onChange, minLimit, maxLimit}) => {
             <div className="current-value">{label}</div>
             <div className="input-step step-danger">
                 <button
+                    disabled={true}
                     type="button"
                     className="minus"
                     onClick={() => {
@@ -53,6 +54,7 @@ const UpDownControl = ({label, initialValue, onChange, minLimit, maxLimit}) => {
                     readOnly
                 />
                 <button
+                    disabled={true}
                     type="button"
                     className="plus"
                     onClick={() => {
@@ -62,9 +64,12 @@ const UpDownControl = ({label, initialValue, onChange, minLimit, maxLimit}) => {
                     +
                 </button>
             </div>
-            <div className="updown-label current-value">{initialValue}</div>
+            <div className="updown-label current-value">
+                {typeof initialValue === 'number' ? initialValue.toFixed(2) : initialValue}
+            </div>
             <div className="input-step step-warning">
                 <button
+                    disabled={true}
                     type="button"
                     className="minus"
                     onClick={() => {
@@ -82,6 +87,7 @@ const UpDownControl = ({label, initialValue, onChange, minLimit, maxLimit}) => {
                     readOnly
                 />
                 <button
+                    disabled={true}
                     type="button"
                     className="plus"
                     onClick={() => {

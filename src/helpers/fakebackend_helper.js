@@ -1,6 +1,7 @@
 import { APIClient } from "./api_helper";
 
 import * as url from "./url_helper";
+import {GET_DEVICE_DATA} from "./url_helper";
 
 const api = new APIClient();
 
@@ -68,9 +69,29 @@ export const getAccountDevices = (accountID) => {
   return api.get(url.GET_ACCOUNT_IDS, { headers });
 };
 
+export const getDeviceDataStatus = (deviceId) => {
+  // Define headers for this specific call
+  // const headers = {
+  //   'accountId': accountID// Replace with your actual header and value
+  //   // Add more headers if needed
+  // };
 
+  // Make the GET request with custom headers
+  // console.log('fackend_helper url ' + url.GET_DEVICE_DATA + '/' + deviceId + '/timeSeries')
+  return api.get(url.GET_DEVICE_DATA + '/' + deviceId + '/status');
+};
 
+export const getDeviceDataTimeSeries = (deviceId) => {
+  // Define headers for this specific call
+  // const headers = {
+  //   'accountId': accountID// Replace with your actual header and value
+  //   // Add more headers if needed
+  // };
 
+  // Make the GET request with custom headers
+  // console.log('fackend_helper url ' + url.GET_DEVICE_DATA + '/' + deviceId + '/status')
+  return api.get(url.GET_DEVICE_DATA + '/' + deviceId + '/timeSeries');
+};
 
 
 // Login Method

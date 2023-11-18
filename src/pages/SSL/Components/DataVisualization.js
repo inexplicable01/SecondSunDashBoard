@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {MapContainer, TileLayer, Marker, GeoJSON, Popup, useMap} from 'react-leaflet';
 import ReactApexChart from "react-apexcharts";
 import '../DataVisualization.css';
@@ -6,33 +6,9 @@ import UpDownControl from '../UpDownControl';
 import L from 'leaflet';
 import { blackIcon , goldIcon} from 'leaflet-color-markers';
 import 'leaflet/dist/leaflet.css';
+import {useSelector} from "react-redux";
 
-const dataLength = 20;
-const time = Array.from({length: dataLength}, (_, i) => `${i}:00`);
-const temperature = Array.from({length: dataLength}, () => Math.random() * 10 + 20);
 
-const commonOptions = {
-    chart: {id: 'basic-bar'},
-    xaxis: {categories: time},
-    yaxis: {
-        labels: {
-            formatter: function (value) {
-                return Number(value).toPrecision(3);  // Keep only 3 significant figures
-            }
-        }
-    },
-};
-
-const fakelocation = [51.505, -0.09];
-
-function getRandomElement(arr) {
-    if (arr.length <= 2) {
-        throw new Error("The array should have more than 2 elements");
-    }
-
-    const randomIndex = Math.floor(Math.random() * (arr.length - 2)) + 1;
-    return [arr[randomIndex][1],arr[randomIndex][0]]
-}
 
 function switchxy(arr) {
     return arr.map(subArray => {
@@ -57,85 +33,113 @@ function SetViewToFitBounds({ coordinates }) {
     map.fitBounds(coordinates);
     return null;  // No UI rendered by this component
 }
+const randomcoords = switchxy([
+                    [47.8610025, -122.3269672],  // Sao Paulo
+                    [47.6610025, -122.3269672],  // Curitiba
+                    [47.3610025, -122.3269672],  // Florianopolis
+                    [47.6610025, -122.3269672],  // Porto Alegre
+                    [47.1258383, -122.1609394],  // Montevideo
+                    [47.3610025, -122.1609394]   // Buenos Aires
+                ])
+const formatToGeoJsonDevice = (coords)=> {
+    console.log('geo',coords)
+    return {
+        type: "Feature",
+        geometry: {
+            type: "LineString", coordinates: coords
+        }, // New Delhi
+    }
+}
+
 const DataVisualization = ({device, location, temperatureData}) => {
-    const curlocation = getRandomElement(device.geometry.coordinates)
-    const startPort = [device.geometry.coordinates[0][1],device.geometry.coordinates[0][0]];
-    const endPortswitched = device.geometry.coordinates[device.geometry.coordinates.length - 1];
-    const endPort = [endPortswitched[1],endPortswitched[0]];
-    const startIcon = createIcon('mdi mdi-crosshairs-gps');
-    const endIcon = createIcon('mdi mdi-flag-checkered');
+            const {deviceData, curdevice} = useSelector(state => ({
+            deviceData: state.DeviceReducer.deviceData,
+            curdevice: state.DeviceReducer.curdevice
+        }));
+    const curlocation = deviceData[curdevice]?.locationhistory[0] ?? randomcoords[1]
+
+
     const currentLocationIcon = createIcon('mdi mdi-truck-plus-outline ');
-    // Icons
-    // const startIcon = new L.Icon({
-    //   iconUrl: 'path_to_start_icon.png',
-    //   iconSize: [25, 41],
-    // });
-    //
-    // const endIcon = new L.Icon({
-    //   iconUrl: 'path_to_end_icon.png',
-    //   iconSize: [25, 41],
-    // });
-    //
-    // const currentLocationIcon = new L.Icon({
-    //   iconUrl: 'path_to_current_location_icon.png',
-    //   iconSize: [25, 41],
-    // });
+    const commonOptions = {
+        chart: {id: 'basic-bar'},
+        xaxis: {categories: deviceData[curdevice]?.time_temp?? [[0,0]]},
+        yaxis: {
+            labels: {
+                formatter: function (value) {
+                    return Number(value).toPrecision(3);  // Keep only 3 significant figures
+                }
+            }
+        },
+    };
+    const defaultCoords = [[ -122.3321,47.6062], [-122.0613245,48.6092392] ]; // Replace with your desired default coordinates
 
+    const locationHistory = deviceData[curdevice]?.locationhistory ?? randomcoords;
+    const validLocationHistory = locationHistory.length >= 2 ? locationHistory : defaultCoords;
 
+// Now use validLocationHistory in your component
+
+  const geoJsonData = useMemo(() => {
+    return formatToGeoJsonDevice(deviceData[curdevice]?.locationhistory ?? randomcoords);
+  }, [deviceData, curdevice]);
+console.log('Cure Location ', [curlocation[1],curlocation[0]])
+console.log('device', curdevice,'  ', deviceData[curdevice]?.locationhistory ?? defaultCoords)
     return (
         <div className="data-visualization-container">
-
             <div className="map-container">
 
-                {/*{console.log('device', device)}*/}
+
                 <MapContainer scrollWheelZoom={false}
-                    center={curlocation} zoom={13} style={{height: '100vh', width: '100%'}}>
-                    <SetViewToFitBounds coordinates={switchxy(device.geometry.coordinates)} />
+                    zoom={13} style={{height: '100vh', width: '100%'}}>
+                    <SetViewToFitBounds coordinates={switchxy(validLocationHistory)} />
                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-                    <Marker position={startPort} >
-                        <Popup>Start Port</Popup>
-                    </Marker>
+                    {/*<Marker position={startPort} >*/}
+                    {/*    <Popup>Start Port</Popup>*/}
+                    {/*</Marker>*/}
 
-                    <Marker position={endPort} >
-                        <Popup>End Port</Popup>
-                    </Marker>
+                    {/*<Marker position={endPort} >*/}
+                    {/*    <Popup>End Port</Popup>*/}
+                    {/*</Marker>*/}
 
-                    <Marker position={curlocation} icon={currentLocationIcon} >
+                    <Marker position={[curlocation[1],curlocation[0]]} icon={currentLocationIcon} >
                         <Popup>Current Location</Popup>
                     </Marker>
-                    <GeoJSON key={device.properties.name} data={device}/>
+                    <GeoJSON key={`geojson-${device.deviceId}-${Date.now()}`}  data={geoJsonData}/>
                 </MapContainer>
             </div>
+{/*           {console.log('device sdfdsf', temperature)}*/}
 
+{/*{console.log('device sdfdsf', deviceData[curdevice]?.temperaturehistory ?? 'default_value')}*/}
             <div className="plot-section">
                 <div className="temperature-plot-container">
                     <h4>Temperature (°C)</h4>
                     <ReactApexChart
                         options={commonOptions}
-                        series={[{name: 'Temperature', data: temperature}]}
+                        series={[{name: 'Temperature', data: deviceData[curdevice]?.temperaturehistory ?? []}]}
                         type="line"
                         width="100%"
                     />
                 </div>
 
                 <div className="control-buttons">
+                    {/*{console.log('device sdfdsf', deviceData[curdevice]?.currenthumidity ?? 'default_value')}*/}
                     <UpDownControl
                         label="Humidity"
-                        initialValue={50}
+                        // initialValue={deviceData[curdevice]['currenthumidity']}
+                        initialValue={deviceData[curdevice]?.currenthumidity ?? '-'}
                         onChange={(limits) => console.log('Humidity limits:', limits)}
                         minLimit={0}
                         maxLimit={100}
                     />
                     <UpDownControl
                         label="Luminosity"
-                        initialValue={70}
+                        initialValue={deviceData[curdevice]?.currentluminosity ?? '-'}
                         onChange={(limits) => console.log('Luminosity limits:', limits)}
                         minLimit={0}
                         maxLimit={100}
                     />
                     <UpDownControl
                         label="Shock (g)"
-                        initialValue={5}
+                        initialValue={deviceData[curdevice]?.currentshock ?? '-'}
                         onChange={(limits) => console.log('Shock limits:', limits)}
                         minLimit={0}
                         maxLimit={10}
@@ -147,3 +151,10 @@ const DataVisualization = ({device, location, temperatureData}) => {
 };
 
 export default DataVisualization;
+
+
+    const startPort = [-22.9068,-43.1729];
+    // const endPortswitched = device.geometry.coordinates[device.geometry.coordinates.length - 1];
+    const endPort = [ -34.6037,-58.3816];
+    const startIcon = createIcon('mdi mdi-crosshairs-gps');
+    const endIcon = createIcon('mdi mdi-flag-checkered');

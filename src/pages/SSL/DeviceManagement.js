@@ -10,7 +10,7 @@ import ColumnVisibilityModal from './ColumnVisibilityModal';
 import DataVisualization from './Components/DataVisualization';
 import DeviceTable from './Components/DeviceTable';
 import {useSelector, useDispatch} from "react-redux";
-import {fetchAccountID} from '../../store/deviceData/action'
+import {fetchAccountID, fetchDeviceData} from '../../store/deviceData/action'
 
 const temperatureData = {
     labels: ['January', 'February', 'March', 'April', 'May'],
@@ -89,63 +89,7 @@ const DeviceManagement = () => {
             dispatch(fetchAccountID('blahfakafake'));
         }, [dispatch]); // This effect runs whenever `fastdemodata` changes
 
-        // useEffect(() => {
-        //     async function fetchData() {
-        //         try {
-        //             // console.log('gothere')
-        //             const response = await fetch('http://35.160.4.251:5000/Devices/demoFast', {
-        //                 method: 'GET',
-        //                 mode: 'cors',
-        //                 headers: {
-        //                     'Content-Type': 'application/json',
-        //                     // other headers as needed
-        //                 },
-        //                 // credentials: 'include'  // If you need to include credentials like cookies
-        //             })
-        //             if (!response.ok) {
-        //                 throw new Error('Network response was not ok');
-        //             } else {
-        //                 const result = await response.json();
-        //                 console.log(result)
-        //                 setFastDemoData({
-        //                     type: "Feature",
-        //                     geometry: {
-        //                         type: "LineString", coordinates: [
-        //                             [-43.1729, -22.9068],  // Rio de Janeiro
-        //                             [-46.6333, -23.5505],  // Sao Paulo
-        //                             [-49.2718, -25.4289],  // Curitiba
-        //                             [-48.5044, -27.6146],  // Florianopolis
-        //                             [-51.2177, -30.0346],  // Porto Alegre
-        //                             [-56.1882, -34.9033],  // Montevideo
-        //                             [-58.3816, -34.6037]   // Buenos Aires
-        //                         ]
-        //                     }, // Buenos Aires
-        //                     properties: {
-        //                         name: result.deviceId, // assuming you want to use the name in your device data, if not, remove this
-        //                         company: result.deviceOwner, // if this is not in the structure of device data, remove this
-        //                         serialNumber: 'NeedtoAdd',
-        //                         lastTransmitted: result.measurementTime, // random date in 2023, or you might have another date logic
-        //                         lastLocation: 'Home', // you might need logic here if you have location data for incoming device
-        //                         batteryLife: result.estimatedBatteryLife, // random battery percentage from 10 to 100, or use incoming device data
-        //                         registeredDate: new Date().toISOString().split('T')[0], // this uses today's date for the registeredDate of the incoming device
-        //                         registeredBy: result.deviceOwner, // I'm assuming the registeredBy is the name provided in the form
-        //                         startPort: 'startPort',
-        //                         endPort: 'EndPort',
-        //                     }
-        //                 });
-        //             }
-        //
-        //         } catch (error) {
-        //             console.log(error)
-        //             setError(error);
-        //         } finally {
-        //             setLoading(false);
-        //         }
-        //     }
-        //
-        //     console.log('not async')
-        //     fetchData();
-        // }, []);
+
 
 
         // console.log('fakee data', generateDeviceData.features[0])
@@ -167,12 +111,15 @@ const DeviceManagement = () => {
 
         const handleDataIconClick = useCallback((device) => {
             setClickedDeviceData(device);
+            // console.log(device)
+            // console.log(device.deviceId)
+            dispatch(fetchDeviceData(device.deviceId));
             if (showDeviceData) {
                 const height = dataDivRef.current.scrollHeight + 'px';
                 setMaxHeight(height);
             }
             setShowDeviceData(!showDeviceData);
-        }, [showDeviceData]);
+        }, [showDeviceData, dispatch]);
 
 
         const toggleColumnVisibility = (key) => {
@@ -231,13 +178,7 @@ const DeviceManagement = () => {
                                         <label htmlFor="serialNumber">Serial Number</label>
                                     </div>
                                 }
-                                {clickedDeviceData && (
-                                    <div className={`clicked-device-data ${showDeviceData ? 'open' : ''}`}>
-                                        <h3>Device {clickedDeviceData.properties.name}</h3>
-                                        <DataVisualization device={clickedDeviceData} location={location}
-                                                           temperatureData={temperatureData}/>
-                                    </div>
-                                )}
+
                                 <div></div>
                                 <div className="side-by-side-container">
                                     <h3>Registered Devices</h3>
@@ -249,7 +190,13 @@ const DeviceManagement = () => {
                                     onStatusChange={handleStatusChange}
                                     handleDataIconClick={handleDataIconClick}
                                 />
-
+                                {clickedDeviceData && (
+                                    <div className={`clicked-device-data ${showDeviceData ? 'open' : ''}`}>
+                                        <h3>Device {clickedDeviceData.deviceId}</h3>
+                                        <DataVisualization device={clickedDeviceData} location={location}
+                                                           temperatureData={temperatureData}/>
+                                    </div>
+                                )}
 
                             </Col>
                         </Row>
@@ -269,3 +216,60 @@ const DeviceManagement = () => {
 ;
 
 export default DeviceManagement;
+        // useEffect(() => {
+        //     async function fetchData() {
+        //         try {
+        //             // console.log('gothere')
+        //             const response = await fetch('http://35.160.4.251:5000/Devices/demoFast', {
+        //                 method: 'GET',
+        //                 mode: 'cors',
+        //                 headers: {
+        //                     'Content-Type': 'application/json',
+        //                     // other headers as needed
+        //                 },
+        //                 // credentials: 'include'  // If you need to include credentials like cookies
+        //             })
+        //             if (!response.ok) {
+        //                 throw new Error('Network response was not ok');
+        //             } else {
+        //                 const result = await response.json();
+        //                 console.log(result)
+        //                 setFastDemoData({
+        //                     type: "Feature",
+        //                     geometry: {
+        //                         type: "LineString", coordinates: [
+        //                             [-43.1729, -22.9068],  // Rio de Janeiro
+        //                             [-46.6333, -23.5505],  // Sao Paulo
+        //                             [-49.2718, -25.4289],  // Curitiba
+        //                             [-48.5044, -27.6146],  // Florianopolis
+        //                             [-51.2177, -30.0346],  // Porto Alegre
+        //                             [-56.1882, -34.9033],  // Montevideo
+        //                             [-58.3816, -34.6037]   // Buenos Aires
+        //                         ]
+        //                     }, // Buenos Aires
+        //                     properties: {
+        //                         name: result.deviceId, // assuming you want to use the name in your device data, if not, remove this
+        //                         company: result.deviceOwner, // if this is not in the structure of device data, remove this
+        //                         serialNumber: 'NeedtoAdd',
+        //                         lastTransmitted: result.measurementTime, // random date in 2023, or you might have another date logic
+        //                         lastLocation: 'Home', // you might need logic here if you have location data for incoming device
+        //                         batteryLife: result.estimatedBatteryLife, // random battery percentage from 10 to 100, or use incoming device data
+        //                         registeredDate: new Date().toISOString().split('T')[0], // this uses today's date for the registeredDate of the incoming device
+        //                         registeredBy: result.deviceOwner, // I'm assuming the registeredBy is the name provided in the form
+        //                         startPort: 'startPort',
+        //                         endPort: 'EndPort',
+        //                     }
+        //                 });
+        //             }
+        //
+        //         } catch (error) {
+        //             console.log(error)
+        //             setError(error);
+        //         } finally {
+        //             setLoading(false);
+        //         }
+        //     }
+        //
+        //     console.log('not async')
+        //     fetchData();
+        // }, []);

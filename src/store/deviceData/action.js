@@ -36,8 +36,10 @@ export const getMarketChartsData = (marketData) => ({
 //   payload: marketData
 // });
 
-export const fetchDeviceData = () => ({
+export const fetchDeviceData = (deviceId) => ({
   type: FETCH_DEVICE_DATA,
+  // deviceId:deviceId,
+  payload: deviceId
 });
 
 export const fetchAccountID = (accountID) => ({

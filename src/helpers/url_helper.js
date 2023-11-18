@@ -16,6 +16,8 @@ export const POST_EDIT_PROFILE = "/user";
 
 export const GET_ACCOUNT_IDS = "/Devices";
 
+export const GET_DEVICE_DATA = "/Devices";
+
 // export const GET_ACCOUNT_IDS = "/Devices/demoFast";
 // export const GET_ACCOUNT_IDS = "";
 
