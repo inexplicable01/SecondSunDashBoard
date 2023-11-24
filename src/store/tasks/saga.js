@@ -27,7 +27,7 @@ import {
     updateTask,
     deleteTask,
 }
-    from "../../helpers/fakebackend_helper";
+    from "../../helpers/backend_helper";
 
 function* getTaskList() {
     try {

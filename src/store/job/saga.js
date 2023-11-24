@@ -8,7 +8,7 @@ import {
 } from "./action";
 
 //Include Both Helper File with needed methods
-import { getJobApplicationList as getApplicationListApi } from "../../helpers/fakebackend_helper";
+import { getJobApplicationList as getApplicationListApi } from "../../helpers/backend_helper";
 
 function* getApplicationList() {
   try {

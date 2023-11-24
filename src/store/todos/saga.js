@@ -37,7 +37,7 @@ import {
 
   getProjects as getProjectsApi,
   addNewProject,
-} from "../../helpers/fakebackend_helper";
+} from "../../helpers/backend_helper";
 
 function* getTodos() {
   try {

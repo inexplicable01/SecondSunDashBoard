@@ -15,7 +15,7 @@ import {
     getDeviceDataStatus,
     getDeviceDataTimeSeries
 }
-  from "../../helpers/fakebackend_helper";
+  from "../../helpers/backend_helper";
 import {watchGetProjectStatusChartsData} from "../dashboardProject/saga";
 // import {watchGetBalanceChartsData, watchGetDialChartsData, watchGetSalesChartsData} from "../dashboardCRM/saga";
 // import {GET_SALESFORECAST_CHARTS_DATA} from "../dashboardCRM/actionType";
@@ -45,8 +45,11 @@ function* fetchAccountIDsSaga({ accountID }) {
     // console.log(response2)
 
     const devices2 = response2.filter(device => device !== null).map(device2 =>  ({...device2, status:'Active'}))
+    const response3 = yield call(getAccountDevices, 'default');
+    // console.log(response2)
 
-    const combinedDevices = [...devices, ...devices2];
+    const devices3 = response3.filter(device => device !== null).map(device =>  ({...device, status:'Active'}))
+    const combinedDevices = [...devices, ...devices2,...devices3];
 
     yield put({ type: FETCH_ACCOUNT_ID_SUCCESS, devices: combinedDevices });
   } catch (error) {

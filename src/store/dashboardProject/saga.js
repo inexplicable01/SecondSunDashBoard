@@ -15,7 +15,7 @@ import {
   getMonthProjectStatusData,
   getQuarterProjectStatusData
 }
-  from "../../helpers/fakebackend_helper";
+  from "../../helpers/backend_helper";
 
 function* getProjectChartsData({ payload: data }) {
   try {

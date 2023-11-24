@@ -5,7 +5,7 @@ import { GET_API_KEY } from "./actionType";
 import { APIKeyResponseSuccess, APIKeyResponseError } from "./action";
 
 //Include Both Helper File with needed methods
-import { getAPIKey as getAPIKeyApi } from "../../helpers/fakebackend_helper";
+import { getAPIKey as getAPIKeyApi } from "../../helpers/backend_helper";
 
 function* getAPIKeys() {
   try {

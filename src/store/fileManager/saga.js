@@ -45,7 +45,7 @@ import {
   addNewFile,
   updateFile,
   deleteFile,
-} from "../../helpers/fakebackend_helper";
+} from "../../helpers/backend_helper";
 
 function* getFolders() {
   try {

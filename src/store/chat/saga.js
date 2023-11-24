@@ -23,7 +23,7 @@ import {
   getChannels as getChannelsApi,
   addMessage as addMessageApi,
   deleteMessage as deleteMessageApi,
-} from "../../helpers/fakebackend_helper";
+} from "../../helpers/backend_helper";
 
 function* getDirectContact() {
   try {

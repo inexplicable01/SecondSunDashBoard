@@ -28,7 +28,7 @@ import {
     updateTicket,
     deleteTicket
 }
-    from "../../helpers/fakebackend_helper";
+    from "../../helpers/backend_helper";
 
 function* getTicketsList() {
     try {

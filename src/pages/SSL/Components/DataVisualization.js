@@ -104,6 +104,7 @@ console.log('device', curdevice,'  ', deviceData[curdevice]?.locationhistory ?? 
                         <Popup>Current Location</Popup>
                     </Marker>
                     <GeoJSON key={`geojson-${device.deviceId}-${Date.now()}`}  data={geoJsonData}/>
+                    <GeoJSON key={deviceData[curdevice]?.locationhistory?? defaultCoords }  data={geoJsonData}/>
                 </MapContainer>
             </div>
 {/*           {console.log('device sdfdsf', temperature)}*/}
