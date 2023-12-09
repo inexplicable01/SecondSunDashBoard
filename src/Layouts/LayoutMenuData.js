@@ -141,30 +141,32 @@ const Navdata = () => {
             label: "Menu",
             isHeader: true,
         },
-        {
-            id: "dashboard",
-            label: "Node Data",
-            icon: "ri-dashboard-2-line",
-            link: "/node-locations",
-            stateVariables: isDashboard,
-            click: function (e) {
-                e.preventDefault();
-                setIsDashboard(!isDashboard);
-                setIscurrentState('Dashboard');
-                updateIconSidebar(e);
-            },
-            subItems: [                {
-                    id: "nodelocations",
-                    label: "Node Locations",
-                    link: "/node-locations",
-                    parentId: "dashboard",
-                },{
-                    id: "nodedevicedata",
-                    label: "Node Data",
-                    link: "/node-device-data",
-                    parentId: "dashboard",
-                },],
-        },
+        // {
+        //     id: "dashboard",
+        //     label: "Node Data",
+        //     icon: "ri-dashboard-2-line",
+        //     link: "/node-locations",
+        //     stateVariables: isDashboard,
+        //     click: function (e) {
+        //         e.preventDefault();
+        //         setIsDashboard(!isDashboard);
+        //         setIscurrentState('Dashboard');
+        //         updateIconSidebar(e);
+        //     },
+        //     subItems: [                {
+        //             id: "nodelocations",
+        //             label: "Node Locations",
+        //             link: "/node-locations",
+        //             parentId: "dashboard",
+        //         },
+        //         // {
+        //         //     id: "nodedevicedata",
+        //         //     label: "Node Data",
+        //         //     link: "/node-device-data",
+        //         //     parentId: "dashboard",
+        //         // },
+        //     ],
+        // },
         {
             id: "nodedevicemanagement",
             label: "Device Management",

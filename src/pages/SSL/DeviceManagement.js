@@ -4,9 +4,9 @@ import {useLocation} from "react-router-dom";
 
 import {Col, Container, Row} from 'reactstrap';
 import BreadCrumb from '../../Components/Common/BreadCrumb';
-import {ports, generateDeviceData} from './DummyData';
+import {ports, generateDeviceData} from './Components/DummyData';
 import './DeviceManagement.css';
-import ColumnVisibilityModal from './ColumnVisibilityModal';
+import ColumnVisibilityModal from './Components/ColumnVisibilityModal';
 import DataVisualization from './Components/DataVisualization';
 import DeviceTable from './Components/DeviceTable';
 import {useSelector, useDispatch} from "react-redux";
@@ -54,9 +54,9 @@ const DeviceManagement = () => {
         const allColumns = Object.keys(visibleColumns);  // Get all column keys
         const [showDeviceData, setShowDeviceData] = useState(false);
 
-        const [fastdemodata, setFastDemoData] = useState(null);
-        const [loading, setLoading] = useState(true);
-        const [error, setError] = useState(null);
+        // const [fastdemodata, setFastDemoData] = useState(null);
+        // const [loading, setLoading] = useState(true);
+        // const [error, setError] = useState(null);
 
 
         //this needs to be taken care of via Redux.
@@ -84,6 +84,8 @@ const DeviceManagement = () => {
         const handleFetchAccountID = (accountID) => {
             dispatch(fetchAccountID(accountID));
         };
+
+
         useEffect(() => {
             // Define a function to calculate the new devices array
             dispatch(fetchAccountID('blahfakafake'));

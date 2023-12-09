@@ -8,7 +8,7 @@ import Sidebar from './Sidebar';
 import Footer from './Footer';
 // import RightSidebar from '../Components/Common/RightSidebar';
 
-//import actions
+// import actions
 import {
     changeLayout,
     changeSidebarTheme,
@@ -103,11 +103,11 @@ const Layout = (props) => {
     /*
     call dark/light mode
     */
-    const onChangeLayoutMode = (value) => {
-        if (changeLayoutMode) {
-            dispatch(changeLayoutMode(value));
-        }
-    };
+    // const onChangeLayoutMode = (value) => {
+    //     if (changeLayoutMode) {
+    //         dispatch(changeLayoutMode(value));
+    //     }
+    // };
     
     // class add remove in header 
     useEffect(() => {

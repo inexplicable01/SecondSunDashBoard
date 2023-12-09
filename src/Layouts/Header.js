@@ -17,7 +17,7 @@ import NotificationDropdown from '../Components/Common/NotificationDropdown';
 import ProfileDropdown from '../Components/Common/ProfileDropdown';
 import LightDark from '../Components/Common/LightDark';
 
-import { changeSidebarVisibility } from '../store/actions';
+// import { changeSidebarVisibility } from '../store/actions';
 import { useSelector, useDispatch } from "react-redux";
 
 const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
@@ -32,7 +32,7 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
 
     const toogleMenuBtn = () => {
         var windowSize = document.documentElement.clientWidth;
-        dispatch(changeSidebarVisibility("show"));
+        // dispatch(changeSidebarVisibility("show"));
         if (windowSize > 767)
             document.querySelector(".hamburger-icon").classList.toggle('open');
         //For collapse horizontal menu

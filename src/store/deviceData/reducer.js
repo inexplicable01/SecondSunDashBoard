@@ -43,8 +43,14 @@ const DeviceReducer = (state = initialState, action) => {
                 error: null,
                 deviceData:{...state.deviceData,
                     [action.deviceId]:{
-                        time_temp:action.series.map(item => new Date(item.measurementTime).toLocaleTimeString()),
-                        temperaturehistory:action.series.map(item=> item.temperature),
+    //                     time_temp:[...action.series].reverse().map(item => new Date(item.measurementTime)
+    //                         .toLocaleTimeString('en-US', {
+    //     hour: 'numeric',
+    //     minute: 'numeric',
+    //     hour12: true
+    // })),
+    //                     temperaturehistory:[...action.series].reverse().map(item=> item.temperature),
+                        dataseries:[...action.series].reverse(),
                         locationhistory:action.series
   .filter(item => item.coordinates && item.coordinates.latitude != null && item.coordinates.longitude != null)
   .map(item => [item.coordinates.longitude, item.coordinates.latitude]),
@@ -59,8 +65,8 @@ const DeviceReducer = (state = initialState, action) => {
                 }
                 },
                 curdevice:action.deviceId,
-                locationhistory:[[-122.3192532,42.6610025] ,[-122.0613245,43.6092392] ,
-                            [-122.0613245,45.6092392],[-122.0613245,48.6092392]  ]
+                // locationhistory:[[-122.3192532,42.6610025] ,[-122.0613245,43.6092392] ,
+                //             [-122.0613245,45.6092392],[-122.0613245,48.6092392]  ]
             };
         case FETCH_DEVICE_DATA_FAILURE:
             return {

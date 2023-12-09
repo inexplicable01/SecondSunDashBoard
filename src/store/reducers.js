@@ -10,33 +10,33 @@ import ForgetPassword from "./auth/forgetpwd/reducer";
 import Profile from "./auth/profile/reducer";
 
 //Calendar
-import Calendar from "./calendar/reducer";
-//Chat
-import chat from "./chat/reducer";
-//Ecommerce
-import Ecommerce from "./ecommerce/reducer";
+// import Calendar from "./TemplateReferences/calendar/reducer";
+// //Chat
+// import chat from "./TemplateReferences/chat/reducer";
+// //Ecommerce
+// import Ecommerce from "./TemplateReferences/ecommerce/reducer";
 
 //Project
-import Projects from "./projects/reducer";
-
-// Tasks
-import Tasks from "./tasks/reducer";
-//Form advanced
-import changeNumber from "./formAdvanced/reducer";
+// import Projects from "./TemplateReferences/projects/reducer";
+//
+// // Tasks
+// import Tasks from "./TemplateReferences/tasks/reducer";
+// //Form advanced
+// import changeNumber from "./TemplateReferences/formAdvanced/reducer";
 
 //Crypto
 
 
 //TicketsList
-import Tickets from "./tickets/reducer";
-//Crm
-
-
-//Invoice
-import Invoice from "./invoice/reducer";
-
-//Mailbox
-import Mailbox from "./mailbox/reducer";
+// import Tickets from "./TemplateReferences/tickets/reducer";
+// //Crm
+//
+//
+// //Invoice
+// import Invoice from "./TemplateReferences/invoice/reducer";
+//
+// //Mailbox
+// import Mailbox from "./TemplateReferences/mailbox/reducer";
 
 // Dashboard Analytics
 
@@ -45,21 +45,21 @@ import Mailbox from "./mailbox/reducer";
 import DeviceReducer from "./deviceData/reducer";
 
 // Dashboard Cryto
-import DashboardProject from "./dashboardProject/reducer";
+// import DashboardProject from "./TemplateReferences/dashboardProject/reducer";
 
 
 
 // Pages > Team
-import Team from "./team/reducer";
-
-// File Manager
-import FileManager from "./fileManager/reducer"
-
-// To do
-import Todos from "./todos/reducer"
-
-//Job 
-import Jobs from "./job/reducer";
+// import Team from "./TemplateReferences/team/reducer";
+//
+// // File Manager
+// import FileManager from "./TemplateReferences/fileManager/reducer"
+//
+// // To do
+// import Todos from "./TemplateReferences/todos/reducer"
+//
+// //Job
+// import Jobs from "./TemplateReferences/job/reducer";
 
 //API Key
 import APIKey from "./apikey/reducer";
@@ -71,21 +71,21 @@ const rootReducer = combineReducers({
     Account,
     ForgetPassword,
     Profile,
-    Calendar,
-    chat,
-    Projects,
-    Ecommerce,
-    Tasks,
-    changeNumber,
-    Tickets,
-    Invoice,
-    Mailbox,
+    // Calendar,
+    // chat,
+    // Projects,
+    // Ecommerce,
+    // Tasks,
+    // changeNumber,
+    // Tickets,
+    // Invoice,
+    // Mailbox,
     DeviceReducer,
-    DashboardProject,
-    Team,
-    FileManager,
-    Todos,
-    Jobs,
+    // DashboardProject,
+    // Team,
+    // FileManager,
+    // Todos,
+    // Jobs,
     APIKey
 });
 

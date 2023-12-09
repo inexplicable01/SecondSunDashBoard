@@ -16,7 +16,7 @@ import {
     getDeviceDataTimeSeries
 }
   from "../../helpers/backend_helper";
-import {watchGetProjectStatusChartsData} from "../dashboardProject/saga";
+import {watchGetProjectStatusChartsData} from "../TemplateReferences/dashboardProject/saga";
 // import {watchGetBalanceChartsData, watchGetDialChartsData, watchGetSalesChartsData} from "../dashboardCRM/saga";
 // import {GET_SALESFORECAST_CHARTS_DATA} from "../dashboardCRM/actionType";
 
@@ -34,11 +34,11 @@ function* fetchDeviceDataSaga({payload:deviceId}) {
 
 function* fetchAccountIDsSaga({ accountID }) {
   try {
-    console.log('Got to Saga!')
-    const response = yield call(getAccountDevices, 'testAccount');
-    // console.log(response)
-
-    const devices = response.filter(device => device !== null).map(device =>  ({...device, status:'Active'}))
+    // console.log('Got to Saga!')
+    // const response = yield call(getAccountDevices, 'testAccount');
+    // // console.log(response)
+    //
+    // const devices = response.filter(device => device !== null).map(device =>  ({...device, status:'Active'}))
 
 
     const response2 = yield call(getAccountDevices, 'test account');
@@ -49,12 +49,13 @@ function* fetchAccountIDsSaga({ accountID }) {
     // console.log(response2)
 
     const devices3 = response3.filter(device => device !== null).map(device =>  ({...device, status:'Active'}))
-    const combinedDevices = [...devices, ...devices2,...devices3];
+    const combinedDevices = [ ...devices2,...devices3];
+    console.log(combinedDevices)
 
     yield put({ type: FETCH_ACCOUNT_ID_SUCCESS, devices: combinedDevices });
   } catch (error) {
     console.log('error',error)
-    yield put({ type: FETCH_ACCOUNT_ID_SUCCESS, error: error.message,victory:['No Fuck you'] });
+    yield put({ type: FETCH_ACCOUNT_ID_SUCCESS, error: error.message,victory:['No'] });
   }
 }
 
