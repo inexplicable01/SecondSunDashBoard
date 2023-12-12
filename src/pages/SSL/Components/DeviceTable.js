@@ -1,6 +1,7 @@
 // DeviceTable.js
 import React from 'react';
 import { useTable } from 'react-table';
+import { Button } from 'reactstrap';
 
 const DeviceTable = ({ devices, visibleColumns, onStatusChange , handleDataIconClick}) => {
 
@@ -9,36 +10,61 @@ const DeviceTable = ({ devices, visibleColumns, onStatusChange , handleDataIconC
     let cols = [];
     if (visibleColumns.serialNumber) {
         cols.push({
-            Header: 'Serial Number',
+            Header: 'Unique ID',
             accessor: 'deviceId',
             Cell: ({cell, row}) => {
                 const isDeviceActive = row.original.status === 'Active';
                 return (
                     <span style={{color: isDeviceActive ? 'black' : 'gray'}}>
-                    {cell.value}
-                        {isDeviceActive &&
-                            <i className="data-icon" onClick={() => handleDataIconClick(row.original)}>
-                                📊
-                            </i>
-                        }
+                    {cell.value}<br/>
+                        {/*{isDeviceActive &&*/}
+                        {/*    // <i className="data-icon" onClick={() => handleDataIconClick(row.original)}>*/}
+                        {/*    //     PushMe*/}
+                        {/*    // </i>*/}
+                        {/*    <Button color="secondary" className="rounded-pill" style={{ margin: '0px' }}*/}
+                        {/*        onClick={() => handleDataIconClick(row.original)}>*/}
+                        {/*        View Data*/}
+                        {/*    </Button>*/}
+
+                        {/*}*/}
                 </span>
                 );
             }
         });
     }
+        if (visibleColumns.startPort) {
+        cols.push({
+            Header: 'Name',
+            accessor: 'properties.startPort',
+        });
+    }
+    if (visibleColumns.endPort) {
+        cols.push({
+            Header: 'Location',
+            accessor: 'properties.endPort',
+        });
+    }
     if (visibleColumns.status) {
       cols.push({
-        Header: 'Status',
+        Header: '',
         accessor: 'status',
         Cell: ({ row }) => (
-          <label className="switch">
-            <input
-              type="checkbox"
-              checked={row.original.status === 'Active'}
-              onChange={() => onStatusChange(row.original)}
-            />
-            <span className="slider"></span>
-          </label>
+
+                          <Button color="secondary" className="rounded-pill"
+                      onClick={() => handleDataIconClick(row.original)}>
+                  View Data
+              </Button>
+            // <label className="switch">
+            //
+            //
+            //
+            //   {/*<input*/}
+            //   {/*  type="checkbox"*/}
+            //   {/*  checked={row.original.status === 'Active'}*/}
+            //   {/*  onChange={() => onStatusChange(row.original)}*/}
+            //   {/*/>*/}
+            //   {/*<span className="slider"></span>*/}
+            // </label>
         ),
       });
     }
@@ -68,38 +94,27 @@ const DeviceTable = ({ devices, visibleColumns, onStatusChange , handleDataIconC
     }
     if (visibleColumns.batteryLife) {
         cols.push({
-            Header: 'Battery Life (%)',
+            Header: 'Battery Life (Days)',
             accessor: 'estimatedBatteryLife',
         });
     }
     if (visibleColumns.registeredDate) {
         cols.push({
-            Header: 'Registered Date',
+            Header: 'Last Transmission',
             accessor: 'properties.registeredDate',
         });
     }
-    if (visibleColumns.registeredBy) {
-        cols.push({
-            Header: 'Registered By',
-            accessor: 'properties.registeredBy',
-        });
-    }
-    if (visibleColumns.startPort) {
-        cols.push({
-            Header: 'Start Port',
-            accessor: 'properties.startPort',
-        });
-    }
-    if (visibleColumns.endPort) {
-        cols.push({
-            Header: 'End Port',
-            accessor: 'properties.endPort',
-        });
-    }
+    // if (visibleColumns.registeredBy) {
+    //     cols.push({
+    //         Header: 'Registered By',
+    //         accessor: 'properties.registeredBy',
+    //     });
+    // }
+
 
     return cols;
-}, [visibleColumns, onStatusChange, handleDataIconClick]);
-
+}, [visibleColumns, handleDataIconClick]);
+// onStatusChange,
 
 
 
@@ -120,7 +135,8 @@ const DeviceTable = ({ devices, visibleColumns, onStatusChange , handleDataIconC
                                     {headerGroup.headers.map((column, columnIndex) => (
                                         <th {...column.getHeaderProps()} key={columnIndex} style={{
                                             border: 'solid 1px gray',
-                                            padding: '10px'
+                                            padding: '10px',
+                                            backgroundColor: "grey"
                                         }}>{column.render('Header')}</th>
                                     ))}
                                 </tr>

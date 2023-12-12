@@ -3,15 +3,17 @@ import PropTypes from "prop-types";
 import { Link } from 'react-router-dom';
 import { Collapse } from 'reactstrap';
 import withRouter from '../../Components/Common/withRouter';
-
+import { Button } from 'reactstrap';
 // Import Data
 import navdata from "../LayoutMenuData";
 //i18n
+import { useNavigate } from 'react-router-dom';
 import { withTranslation } from "react-i18next";
 import { useSelector } from 'react-redux';
 
 const VerticalLayout = (props) => {
     const navData = navdata().props.children;
+    const navigate = useNavigate();
 
     /*
     layout settings
@@ -231,6 +233,7 @@ const VerticalLayout = (props) => {
                                     </li>
                                 ) : (
                                     <li className="nav-item">
+
                                         <Link
                                             className="nav-link menu-link"
                                             to={item.link ? item.link : "/#"}>
@@ -243,9 +246,16 @@ const VerticalLayout = (props) => {
                                 ))
                             )
                         }
+
                     </React.Fragment>
                 );
             })}
+            <Button color="secondary" className="rounded-pill" style={{ margin: '20px' }}
+            onClick={()=>{
+                navigate('/register-device');
+            }}
+            > Register Device </Button>
+
         </React.Fragment>
     );
 };

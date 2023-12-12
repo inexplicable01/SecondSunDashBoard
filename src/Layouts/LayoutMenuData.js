@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 const Navdata = () => {
     const history = useNavigate();
@@ -7,7 +7,7 @@ const Navdata = () => {
     const [isDashboard, setIsDashboard] = useState(false);
     const [isApps, setIsApps] = useState(false);
     const [isAuth, setIsAuth] = useState(false);
-    const [isDeviceManagement, setIsDeviceManagement] = useState(false);
+
     const [isPages, setIsPages] = useState(false);
     const [isBaseUi, setIsBaseUi] = useState(false);
     const [isAdvanceUi, setIsAdvanceUi] = useState(false);
@@ -17,6 +17,12 @@ const Navdata = () => {
     const [isIcons, setIsIcons] = useState(false);
     const [isMaps, setIsMaps] = useState(false);
     const [isMultiLevel, setIsMultiLevel] = useState(false);
+
+    const [isDeviceManagement, setIsDeviceManagement] = useState(false);
+    // const [isInfrast, setIsInfrast] = useState(false);
+    // const [isEnvMon, setIsEnvMov] = useState(false);
+    // const [isSmartCity, setIsDeviceManagement] = useState(false);
+    // const [isDeviceManagement, setIsDeviceManagement] = useState(false);
 
     // Apps
     const [isEmail, setEmail] = useState(false);
@@ -169,27 +175,123 @@ const Navdata = () => {
         // },
         {
             id: "nodedevicemanagement",
-            label: "Device Management",
+            label: "Logistics Demo",
             icon: "ri-map-pin-line",
             link: "/node-device-management",
-            stateVariables: isDeviceManagement,
-            click: function (e) {
-                e.preventDefault();
-                setIsDeviceManagement(!isDeviceManagement);
-                setIscurrentState('deviceManagement');
-                updateIconSidebar(e);
-            },
-            subItems: [                {
-                    id: "registerdevice",
-                    label: "Register Device",
-                    link: "/register-device",
-                    parentId: "dashboard",
-                },{
-                    id: "listdevice",
-                    label: "List Device",
-                    link: "/device-management",
-                    parentId: "dashboard",
-                },],
+            // stateVariables: isDeviceManagement,
+            // click: function (e) {
+            //     e.preventDefault();
+            //     setIsDeviceManagement(!isDeviceManagement);
+            //     setIscurrentState('deviceManagement');
+            //     updateIconSidebar(e);
+            // },
+            // subItems: [{
+            //     id: "registerdevice",
+            //     label: "Register Device",
+            //     link: "/register-device",
+            //     parentId: "dashboard",
+            // }, {
+            //     id: "listdevice",
+            //     label: "List Device",
+            //     link: "/device-management",
+            //     parentId: "dashboard",
+            // },],
+        },
+        {
+            id: "infrastructuremanagement",
+            label: "Infrastructure Demo",
+            icon: "ri-building-line",
+            link: "/node-device-management",
+            // stateVariables: isDeviceManagement,
+            // click: function (e) {
+            //     e.preventDefault();
+            //     setIsDeviceManagement(!isDeviceManagement);
+            //     setIscurrentState('deviceManagement');
+            //     updateIconSidebar(e);
+            // },
+            // subItems: [{
+            //     id: "nodelocations",
+            //     label: "Node Locations",
+            //     link: "/node-locations",
+            //     parentId: "dashboard",
+            // }, {
+            //     id: "listdevice",
+            //     label: "List Device",
+            //     link: "/device-management",
+            //     parentId: "dashboard",
+            // },],
+        },
+        {
+            id: "environmentalmonitor",
+            label: "Environmental Monitoring",
+            icon: "ri-leaf-line",
+            link: "/node-device-management",
+            // stateVariables: isDeviceManagement,
+            // click: function (e) {
+            //     e.preventDefault();
+            //     setIsDeviceManagement(!isDeviceManagement);
+            //     setIscurrentState('deviceManagement');
+            //     updateIconSidebar(e);
+            // },
+            // subItems: [{
+            //     id: "registerdevice",
+            //     label: "Register Device",
+            //     link: "/register-device",
+            //     parentId: "dashboard",
+            // }, {
+            //     id: "listdevice",
+            //     label: "List Device",
+            //     link: "/device-management",
+            //     parentId: "dashboard",
+            // },],
+        },
+        {
+            id: "smartcity",
+            label: "Smart City",
+            icon: "ri-traffic-light-fill",
+            link: "/node-device-management",
+            // stateVariables: isDeviceManagement,
+            // click: function (e) {
+            //     e.preventDefault();
+            //     setIsDeviceManagement(!isDeviceManagement);
+            //     setIscurrentState('deviceManagement');
+            //     updateIconSidebar(e);
+            // },
+            // subItems: [{
+            //     id: "registerdevice",
+            //     label: "Register Device",
+            //     link: "/register-device",
+            //     parentId: "dashboard",
+            // }, {
+            //     id: "listdevice",
+            //     label: "List Device",
+            //     link: "/device-management",
+            //     parentId: "dashboard",
+            // },],
+        },
+        {
+            id: "fleetmanagement",
+            label: "Fleet Management",
+            icon: "ri-truck-line",
+            link: "/node-device-management",
+            // stateVariables: isDeviceManagement,
+            // click: function (e) {
+            //     e.preventDefault();
+            //     setIsDeviceManagement(!isDeviceManagement);
+            //     setIscurrentState('deviceManagement');
+            //     updateIconSidebar(e);
+            // },
+            // subItems: [{
+            //     id: "registerdevice",
+            //     label: "Register Device",
+            //     link: "/register-device",
+            //     parentId: "dashboard",
+            // }, {
+            //     id: "listdevice",
+            //     label: "List Device",
+            //     link: "/device-management",
+            //     parentId: "dashboard",
+            // },],
         },
         // {
         //     label: "pages",
