@@ -175,14 +175,14 @@ const Navdata = () => {
         // },
         {
             id: "nodedevicemanagement",
-            label: "Logistics Demo",
+            label: "Logistics",
             icon: "ri-map-pin-line",
             link: "/device-management",
 
         },
         {
             id: "infrastructuremanagement",
-            label: "Infrastructure Demo",
+            label: "Infrastructure",
             icon: "ri-building-line",
             link: "/infrastructure-management",
         },

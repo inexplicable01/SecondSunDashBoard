@@ -257,7 +257,11 @@ const VerticalLayout = (props) => {
                 navigate('/register-device');
             }}
             > Register Device </Button>
-
+            <Button color="primary" className="rounded-pill" style={{ margin: '20px' }}
+            onClick={()=>{
+                navigate('/purchase-device');
+            }}
+            > Purchase Device </Button>
         </React.Fragment>
     );
 };
