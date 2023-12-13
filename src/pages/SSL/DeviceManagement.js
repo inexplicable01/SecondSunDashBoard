@@ -174,7 +174,6 @@ const DeviceManagement = (props) => {
 
     }))
 
-    console.log('devices',devices)
         return (
             <React.Fragment>
                 <div className="page-content">
