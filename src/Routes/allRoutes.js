@@ -5,7 +5,12 @@ import { Navigate } from "react-router-dom";
 import NodeLocations from "../pages/SSL/NodeLocations";
 import NodeDeviceData from "../pages/SSL/NodeDeviceData";
 import DeviceManagement from "../pages/SSL/DeviceManagement";
+import InfrastructureManagement from "../pages/SSL/DemoPages/InfrastructureManagement";
+import SmartCity from "../pages/SSL/DemoPages/SmartCity";
+import EnvironmentalMonitoring from "../pages/SSL/DemoPages/EnvironmentalMonitoring";
 import StyledRegistrationWizard from "../pages/SSL/DeviceRegister";
+
+import ComingSoon from '../pages/TemplateReferences/Pages/ComingSoon/ComingSoon';
 //Dashboard
 // import DashboardAnalytics from "../pages/DashboardAnalytics";
 // import DashboardCrm from "../pages/DashboardCrm";
@@ -167,7 +172,7 @@ import StyledRegistrationWizard from "../pages/SSL/DeviceRegister";
 // import Pricing from '../pages/Pages/Pricing/Pricing';
 // import Gallery from '../pages/Pages/Gallery/Gallery';
 // import Maintenance from '../pages/Pages/Maintenance/Maintenance';
-// import ComingSoon from '../pages/Pages/ComingSoon/ComingSoon';
+
 // import SiteMap from '../pages/Pages/SiteMap/SiteMap';
 // import SearchResults from '../pages/Pages/SearchResults/SearchResults';
 //
@@ -256,7 +261,12 @@ const authProtectedRoutes = [
   { path: "/dashboard", component: <DeviceManagement /> },
   { path: "/index", component: <DeviceManagement /> },
   { path: "/device-management", component: <DeviceManagement /> },
+      { path: "/infrastructure-management", component: <InfrastructureManagement /> },
+      { path: "/environmental-management", component: <EnvironmentalMonitoring /> },
+      { path: "/smartcity-management", component: <SmartCity /> },
   { path: "/register-device", component: <StyledRegistrationWizard /> },
+          // { path: "/fleet-management", component: <DeviceManagement /> },
+    { path: "/fleet-management", component: <ComingSoon /> },
   // { path: "/dashboard-projects", component: <DashboardProject /> },
   // { path: "/dashboard-nft", component: <DashboardNFT /> },
   // { path : "/dashboard-job", component : <DashboardJob /> },
@@ -488,7 +498,7 @@ const publicRoutes = [
   // { path: "/auth-404-alt", component: <Alt404 /> },
   // { path: "/auth-500", component: <Error500 /> },
   // { path: "/pages-maintenance", component: <Maintenance /> },
-  // { path: "/pages-coming-soon", component: <ComingSoon /> },
+  //
   //
   // { path: "/landing", component: <OnePage /> },
   // { path: "/nft-landing", component: <NFTLanding /> },

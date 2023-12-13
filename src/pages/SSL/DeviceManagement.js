@@ -23,10 +23,22 @@ const temperatureData = {
     }]
 };
 
+const fakedata = [
+  { name: 'Lucas Smith', location: 'San Diego' },
+  { name: 'Amelia Williams', location: 'San Jose' },
+  { name: 'Amelia Smith', location: 'San Diego' },
+  { name: 'Emma Wilson', location: 'Dallas' },
+  { name: 'Olivia Williams', location: 'Dallas' },
+  { name: 'Elijah Jackson', location: 'New York' },
+  { name: 'Noah Davis', location: 'Chicago' },
+  { name: 'Isabella Williams', location: 'San Diego' },
+  { name: 'Lucas Martinez', location: 'San Diego' },
+  { name: 'Benjamin Anderson', location: 'San Antonio' }
+]
 
-const DeviceManagement = () => {
+const DeviceManagement = (props) => {
         // State to hold devices
-        document.title = "Registered Devices | Second Sun Labs";
+        // document.title = "Registered Devices | Second Sun Labs";
         const {deviceids, devices} = useSelector(state => ({
             deviceids: state.DeviceReducer.deviceids,
             devices: state.DeviceReducer.devices
@@ -54,12 +66,6 @@ const DeviceManagement = () => {
         const allColumns = Object.keys(visibleColumns);  // Get all column keys
         const [showDeviceData, setShowDeviceData] = useState(false);
 
-        // const [fastdemodata, setFastDemoData] = useState(null);
-        // const [loading, setLoading] = useState(true);
-        // const [error, setError] = useState(null);
-
-
-        //this needs to be taken care of via Redux.
         const location = useLocation();
         const {serialNumber, name, company, startPort, endPort} = location.state || {};
         const getIncomingDevice = () => {
@@ -92,10 +98,7 @@ const DeviceManagement = () => {
         }, [dispatch]); // This effect runs whenever `fastdemodata` changes
 
 
-        // console.log('fakee data', generateDeviceData.features[0])
-        // console.log('fastdemodata', fastdemodata)
-
-        // const [devices, setDevices] = useState([]);
+        const namelocationdata = props.fdata? props.fdata:fakedata
 
 
         const handleCheckboxChange = (e) => {
@@ -159,12 +162,25 @@ const DeviceManagement = () => {
                 return () => clearTimeout(timer);
             }
         }, [showDeviceData]);
+
+        // useEffect(() => {
+        //
+        //
+        // }, [devices]);
+    const newdevices = devices.map((device,index)=>({
+        ...device,
+            name:namelocationdata[index].name,
+        location:namelocationdata[index].location,
+
+    }))
+
+    console.log('devices',devices)
         return (
             <React.Fragment>
                 <div className="page-content">
                     <Container fluid>
 
-                        <BreadCrumb title="Registered Devices" pageTitle="Devices"/>
+                        <BreadCrumb title={props.title? props.title:'Registered Devices'} pageTitle="Devices"/>
                         <Row>
                             <Col xs={12}>
 
@@ -183,9 +199,10 @@ const DeviceManagement = () => {
                                 </div>
                                 <div>
                                     <DeviceTable
-                                        devices={devices}
+                                        devices={newdevices}
                                         visibleColumns={visibleColumns}
                                         onStatusChange={handleStatusChange}
+                                        namelocationdata={namelocationdata}
                                         handleDataIconClick={handleDataIconClick}
                                     />
                                 </div>

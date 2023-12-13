@@ -175,6 +175,7 @@ const VerticalLayout = (props) => {
                                                                         <span className={"badge badge-pill bg-" + subItem.badgeColor} data-key="t-new">{subItem.badgeName}</span>
                                                                         : null}
                                                                 </Link>
+
                                                             </li>
                                                         ) : (
                                                             <li className="nav-item">
@@ -188,6 +189,7 @@ const VerticalLayout = (props) => {
                                                                         <span className={"badge badge-pill bg-" + subItem.badgeColor} data-key="t-new">{subItem.badgeName}</span>
                                                                 : null}
                                                                 </Link>
+
                                                                 <Collapse className="menu-dropdown" isOpen={subItem.stateVariables} id="sidebarEcommerce">
                                                                     <ul className="nav nav-sm flex-column">
                                                                         {/* child subItms  */}

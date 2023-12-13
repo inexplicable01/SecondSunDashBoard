@@ -3,7 +3,21 @@ import React from 'react';
 import { useTable } from 'react-table';
 import { Button } from 'reactstrap';
 
-const DeviceTable = ({ devices, visibleColumns, onStatusChange , handleDataIconClick}) => {
+
+const formatDateTime = (dateString) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true,
+        timeZone: 'America/Los_Angeles'
+    }).format(date);
+}
+
+const DeviceTable = ({ devices, visibleColumns, onStatusChange, handleDataIconClick}) => {
 
 
   const columns = React.useMemo(() => {
@@ -35,13 +49,13 @@ const DeviceTable = ({ devices, visibleColumns, onStatusChange , handleDataIconC
         if (visibleColumns.startPort) {
         cols.push({
             Header: 'Name',
-            accessor: 'properties.startPort',
+            accessor: 'name',
         });
     }
     if (visibleColumns.endPort) {
         cols.push({
             Header: 'Location',
-            accessor: 'properties.endPort',
+            accessor: 'location',
         });
     }
     if (visibleColumns.status) {
@@ -55,9 +69,6 @@ const DeviceTable = ({ devices, visibleColumns, onStatusChange , handleDataIconC
                   View Data
               </Button>
             // <label className="switch">
-            //
-            //
-            //
             //   {/*<input*/}
             //   {/*  type="checkbox"*/}
             //   {/*  checked={row.original.status === 'Active'}*/}
@@ -68,12 +79,12 @@ const DeviceTable = ({ devices, visibleColumns, onStatusChange , handleDataIconC
         ),
       });
     }
-    if (visibleColumns.name) {
-        cols.push({
-            Header: 'Owner',
-            accessor: 'deviceOwner',
-        });
-    }
+    // if (visibleColumns.name) {
+    //     cols.push({
+    //         Header: 'Owner',
+    //         accessor: 'deviceOwner',
+    //     });
+    // }
     if (visibleColumns.company) {
         cols.push({
             Header: 'Company',
@@ -84,6 +95,7 @@ const DeviceTable = ({ devices, visibleColumns, onStatusChange , handleDataIconC
         cols.push({
             Header: 'Last Transmitted',
             accessor: 'measurementTime',
+            Cell: ({ value }) => (formatDateTime(value) +  ', PT Time')
         });
     }
     if (visibleColumns.lastLocation) {
@@ -98,12 +110,12 @@ const DeviceTable = ({ devices, visibleColumns, onStatusChange , handleDataIconC
             accessor: 'estimatedBatteryLife',
         });
     }
-    if (visibleColumns.registeredDate) {
-        cols.push({
-            Header: 'Last Transmission',
-            accessor: 'properties.registeredDate',
-        });
-    }
+    // if (visibleColumns.registeredDate) {
+    //     cols.push({
+    //         Header: 'Last Transmission',
+    //         accessor: 'properties.registeredDate',
+    //     });
+    // }
     // if (visibleColumns.registeredBy) {
     //     cols.push({
     //         Header: 'Registered By',

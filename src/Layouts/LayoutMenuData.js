@@ -177,121 +177,32 @@ const Navdata = () => {
             id: "nodedevicemanagement",
             label: "Logistics Demo",
             icon: "ri-map-pin-line",
-            link: "/node-device-management",
-            // stateVariables: isDeviceManagement,
-            // click: function (e) {
-            //     e.preventDefault();
-            //     setIsDeviceManagement(!isDeviceManagement);
-            //     setIscurrentState('deviceManagement');
-            //     updateIconSidebar(e);
-            // },
-            // subItems: [{
-            //     id: "registerdevice",
-            //     label: "Register Device",
-            //     link: "/register-device",
-            //     parentId: "dashboard",
-            // }, {
-            //     id: "listdevice",
-            //     label: "List Device",
-            //     link: "/device-management",
-            //     parentId: "dashboard",
-            // },],
+            link: "/device-management",
+
         },
         {
             id: "infrastructuremanagement",
             label: "Infrastructure Demo",
             icon: "ri-building-line",
-            link: "/node-device-management",
-            // stateVariables: isDeviceManagement,
-            // click: function (e) {
-            //     e.preventDefault();
-            //     setIsDeviceManagement(!isDeviceManagement);
-            //     setIscurrentState('deviceManagement');
-            //     updateIconSidebar(e);
-            // },
-            // subItems: [{
-            //     id: "nodelocations",
-            //     label: "Node Locations",
-            //     link: "/node-locations",
-            //     parentId: "dashboard",
-            // }, {
-            //     id: "listdevice",
-            //     label: "List Device",
-            //     link: "/device-management",
-            //     parentId: "dashboard",
-            // },],
+            link: "/infrastructure-management",
         },
         {
             id: "environmentalmonitor",
             label: "Environmental Monitoring",
             icon: "ri-leaf-line",
-            link: "/node-device-management",
-            // stateVariables: isDeviceManagement,
-            // click: function (e) {
-            //     e.preventDefault();
-            //     setIsDeviceManagement(!isDeviceManagement);
-            //     setIscurrentState('deviceManagement');
-            //     updateIconSidebar(e);
-            // },
-            // subItems: [{
-            //     id: "registerdevice",
-            //     label: "Register Device",
-            //     link: "/register-device",
-            //     parentId: "dashboard",
-            // }, {
-            //     id: "listdevice",
-            //     label: "List Device",
-            //     link: "/device-management",
-            //     parentId: "dashboard",
-            // },],
+            link: "/environmental-management",
         },
         {
             id: "smartcity",
             label: "Smart City",
             icon: "ri-traffic-light-fill",
-            link: "/node-device-management",
-            // stateVariables: isDeviceManagement,
-            // click: function (e) {
-            //     e.preventDefault();
-            //     setIsDeviceManagement(!isDeviceManagement);
-            //     setIscurrentState('deviceManagement');
-            //     updateIconSidebar(e);
-            // },
-            // subItems: [{
-            //     id: "registerdevice",
-            //     label: "Register Device",
-            //     link: "/register-device",
-            //     parentId: "dashboard",
-            // }, {
-            //     id: "listdevice",
-            //     label: "List Device",
-            //     link: "/device-management",
-            //     parentId: "dashboard",
-            // },],
+            link: "/smartcity-management",
         },
         {
             id: "fleetmanagement",
             label: "Fleet Management",
             icon: "ri-truck-line",
-            link: "/node-device-management",
-            // stateVariables: isDeviceManagement,
-            // click: function (e) {
-            //     e.preventDefault();
-            //     setIsDeviceManagement(!isDeviceManagement);
-            //     setIscurrentState('deviceManagement');
-            //     updateIconSidebar(e);
-            // },
-            // subItems: [{
-            //     id: "registerdevice",
-            //     label: "Register Device",
-            //     link: "/register-device",
-            //     parentId: "dashboard",
-            // }, {
-            //     id: "listdevice",
-            //     label: "List Device",
-            //     link: "/device-management",
-            //     parentId: "dashboard",
-            // },],
+            link: "/fleet-management",
         },
         // {
         //     label: "pages",
