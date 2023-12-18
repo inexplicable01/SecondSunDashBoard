@@ -98,7 +98,7 @@ const DataVisualization = ({device, location, temperatureData}) => {
 
 
                 <MapContainer scrollWheelZoom={false}
-                              zoom={13} style={{height: '100vh', width: '100%'}}>
+                              zoom={8} className="map-container-container" >
                     <SetViewToFitBounds coordinates={switchxy(validLocationHistory)}/>
                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
                     {/*<Marker position={startPort} >*/}

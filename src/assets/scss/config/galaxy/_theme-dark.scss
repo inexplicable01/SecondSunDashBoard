@@ -255,42 +255,42 @@
   --#{$prefix}input-check-border:                    #{$border-color};
 
   //galaxy demo
-  --#{$prefix}card-bg-fill:                           #{$gray-200};
-  &[data-body-image="img-1"], [data-body-image="img-1"] {
-    --#{$prefix}body-bg-image:                              url('../../../images/galaxy/img-1.png');
-  }
-  
-  &[data-body-image="img-2"], [data-body-image="img-2"] {
-    --#{$prefix}body-bg-image:                              url('../../../images/galaxy/img-2.png');
-  }
-  
-  &[data-body-image="img-3"], [data-body-image="img-3"] {
-    --#{$prefix}body-bg-image:                              url('../../../images/galaxy/img-3.png');
-  }
+  //--#{$prefix}card-bg-fill:                           #{$gray-200};
+  //&[data-body-image="img-1"], [data-body-image="img-1"] {
+  //  --#{$prefix}body-bg-image:                              url('../../../images/galaxy/img-1.png');
+  //}
+  //
+  //&[data-body-image="img-2"], [data-body-image="img-2"] {
+  //  --#{$prefix}body-bg-image:                              url('../../../images/galaxy/img-2.png');
+  //}
+  //
+  //&[data-body-image="img-3"], [data-body-image="img-3"] {
+  //  --#{$prefix}body-bg-image:                              url('../../../images/galaxy/img-3.png');
+  //}
 }
 
-//sidebar color
-[data-sidebar="gradient"] { 
-  --#{$prefix}vertical-menu-bg-gradient:             linear-gradient(to right, var(--#{$prefix}primary), var(--#{$prefix}success));
-  --#{$prefix}vertical-menu-border-gradient:         var(--#{$prefix}success);
-  --#{$prefix}twocolumn-menu-bg-dark:                var(--#{$prefix}success);
-}
-
-[data-sidebar="gradient-2"] { 
-  --#{$prefix}vertical-menu-bg-gradient:             linear-gradient(to right, var(--#{$prefix}info), var(--#{$prefix}secondary));
-  --#{$prefix}vertical-menu-border-gradient:         var(--#{$prefix}secondary);
-  --#{$prefix}twocolumn-menu-bg-dark:                var(--#{$prefix}secondary);
-}
-
-[data-sidebar="gradient-3"] { 
-  --#{$prefix}vertical-menu-bg-gradient:             linear-gradient(to right, var(--#{$prefix}info), var(--#{$prefix}success));
-  --#{$prefix}vertical-menu-border-gradient:         var(--#{$prefix}success);
-  --#{$prefix}twocolumn-menu-bg-dark:                var(--#{$prefix}success);
-}
-
-[data-sidebar="gradient-4"] { 
-  --#{$prefix}vertical-menu-bg-gradient:             linear-gradient(to right, #1a1d21, var(--#{$prefix}primary));
-  --#{$prefix}vertical-menu-border-gradient:         var(--#{$prefix}primary);
-  --#{$prefix}twocolumn-menu-bg-dark:                var(--#{$prefix}primary);
-}
+////sidebar color
+//[data-sidebar="gradient"] {
+//  --#{$prefix}vertical-menu-bg-gradient:             linear-gradient(to right, var(--#{$prefix}primary), var(--#{$prefix}success));
+//  --#{$prefix}vertical-menu-border-gradient:         var(--#{$prefix}success);
+//  --#{$prefix}twocolumn-menu-bg-dark:                var(--#{$prefix}success);
+//}
+//
+//[data-sidebar="gradient-2"] {
+//  --#{$prefix}vertical-menu-bg-gradient:             linear-gradient(to right, var(--#{$prefix}info), var(--#{$prefix}secondary));
+//  --#{$prefix}vertical-menu-border-gradient:         var(--#{$prefix}secondary);
+//  --#{$prefix}twocolumn-menu-bg-dark:                var(--#{$prefix}secondary);
+//}
+//
+//[data-sidebar="gradient-3"] {
+//  --#{$prefix}vertical-menu-bg-gradient:             linear-gradient(to right, var(--#{$prefix}info), var(--#{$prefix}success));
+//  --#{$prefix}vertical-menu-border-gradient:         var(--#{$prefix}success);
+//  --#{$prefix}twocolumn-menu-bg-dark:                var(--#{$prefix}success);
+//}
+//
+//[data-sidebar="gradient-4"] {
+//  --#{$prefix}vertical-menu-bg-gradient:             linear-gradient(to right, #1a1d21, var(--#{$prefix}primary));
+//  --#{$prefix}vertical-menu-border-gradient:         var(--#{$prefix}primary);
+//  --#{$prefix}twocolumn-menu-bg-dark:                var(--#{$prefix}primary);
+//}
 

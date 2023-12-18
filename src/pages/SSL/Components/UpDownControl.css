@@ -5,7 +5,7 @@
     flex-direction: column;
     align-items: center;
 
-    /*padding: 10px;*/
+
     /*margin: 5px;*/
     /*border-radius: 8px;*/
 /*// Rounded corners for better aesthetics*/
@@ -86,4 +86,13 @@ button {
     width: 100%;
     justify-content: center;
     margin: 5px 0;
+}
+
+@media (max-width: 768px) {
+    .updown-control {
+    padding: 5px;
+        margin:5px;
+    }
+
+
 }

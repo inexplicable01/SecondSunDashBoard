@@ -17,16 +17,16 @@ File: Main Css File
 @import "variables";
 @import "./node_modules/bootstrap/scss/mixins";
 
-@import "theme-light";
+//@import "theme-light";
 @import "theme-dark";
 
 // Structure
-@import "../../structure/topbar";
+//@import "../../structure/topbar";
 @import "../../structure/page-head";
 @import "../../structure/footer";
 @import "../../structure/vertical";
 @import "../../structure/horizontal";
-@import "../../structure/two-column";
+//@import "../../structure/two-column";
 @import "../../structure/layouts";
 
 // Components

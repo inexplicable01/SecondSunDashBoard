@@ -207,7 +207,7 @@ const DeviceManagement = (props) => {
                                 </div>
                                 {clickedDeviceData && (
                                     <div className={`clicked-device-data ${showDeviceData ? 'open' : ''}`}
-                                         style={{padding:'20px' , margin:'20px'}}
+                                         // style={{padding:'20px' , margin:'20px'}}
                                     >
                                         <h3>Device {clickedDeviceData.deviceId}</h3>
                                         <DataVisualization device={clickedDeviceData} location={location}
