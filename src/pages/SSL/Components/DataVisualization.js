@@ -118,7 +118,7 @@ const DataVisualization = ({device, location, temperatureData}) => {
                     {
                         geoJsonData.geometry.coordinates.map((coord, index) => (
                             <Marker position={[coord[1], coord[0]]} key={`marker-${index}`}  icon={currentLocationIcon}>
-                                <Popup>{`Point ${index}`}</Popup>
+                                <Popup>{`Point ${index + 1}`}</Popup>
                             </Marker>
                         ))
                     }
