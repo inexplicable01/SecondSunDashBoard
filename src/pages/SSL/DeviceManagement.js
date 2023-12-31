@@ -43,6 +43,8 @@ const DeviceManagement = (props) => {
             deviceids: state.DeviceReducer.deviceids,
             devices: state.DeviceReducer.devices
         }));
+        const dataDivRef = useRef(null);
+        const [maxHeight, setMaxHeight] = useState('0px');
         const dispatch = useDispatch();
 
         const [clickedDeviceData, setClickedDeviceData] = useState(null);
@@ -116,6 +118,7 @@ const DeviceManagement = (props) => {
             dispatch(fetchDeviceData(device.deviceId));
             if (showDeviceData) {
                 const height = dataDivRef.current.scrollHeight + 'px';
+                // const height =  '500px';
                 setMaxHeight(height);
             }
             setShowDeviceData(!showDeviceData);
@@ -151,8 +154,7 @@ const DeviceManagement = (props) => {
         };
 
 
-        const dataDivRef = useRef(null);
-        const [maxHeight, setMaxHeight] = useState('0px');
+
 
         useEffect(() => {
             if (!showDeviceData) {

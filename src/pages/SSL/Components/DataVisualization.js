@@ -98,7 +98,7 @@ const DataVisualization = ({device, location, temperatureData}) => {
 
 
                 <MapContainer scrollWheelZoom={false}
-                              zoom={8} className="map-container-container" >
+                              zoom={8} className="map-container-container">
                     <SetViewToFitBounds coordinates={switchxy(validLocationHistory)}/>
                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
                     {/*<Marker position={startPort} >*/}
@@ -108,13 +108,43 @@ const DataVisualization = ({device, location, temperatureData}) => {
                     {/*<Marker position={endPort} >*/}
                     {/*    <Popup>End Port</Popup>*/}
                     {/*</Marker>*/}
+{/* Current Location Marker */}
+{/*                    <Marker position={[curlocation[1], curlocation[0]]} icon={currentLocationIcon}>*/}
+{/*                        <Popup>Current Location</Popup>*/}
+{/*                    </Marker>*/}
 
-                    <Marker position={[curlocation[1], curlocation[0]]} icon={currentLocationIcon}>
-                        <Popup>Current Location</Popup>
-                    </Marker>
                     <GeoJSON key={`geojson-${device.deviceId}-${Date.now()}`} data={geoJsonData}/>
+
+                    {
+                        geoJsonData.geometry.coordinates.map((coord, index) => (
+                            <Marker position={[coord[1], coord[0]]} key={`marker-${index}`}  icon={currentLocationIcon}>
+                                <Popup>{`Point ${index}`}</Popup>
+                            </Marker>
+                        ))
+                    }
+
                     <GeoJSON key={deviceData[curdevice]?.locationhistory ?? defaultCoords} data={geoJsonData}/>
                 </MapContainer>
+
+                {/*<MapContainer scrollWheelZoom={false} zoom={8} className="map-container-container">*/}
+
+
+                {/*    */}
+
+
+                {/*    /!* GeoJSON for the route *!/*/}
+                {/*    <GeoJSON key={`geojson-${device.deviceId}-${Date.now()}`} data={geoJsonData}/>*/}
+
+                {/*    /!* Loop through coordinates and create a marker for each *!/*/}
+                {/*    {*/}
+                {/*        geoJsonData.features[0].geometry.coordinates.map((coord, index) => (*/}
+                {/*            <Marker position={[coord[1], coord[0]]} key={`marker-${index}`}>*/}
+                {/*                <Popup>{`Point ${index}`}</Popup>*/}
+                {/*            </Marker>*/}
+                {/*        ))*/}
+                {/*    }*/}
+                {/*</MapContainer>*/}
+
             </div>
             {/*           {console.log('device sdfdsf', temperature)}*/}
 
