@@ -5,7 +5,7 @@ import {
 } from "./actionType";
 
 const INIT_STATE = {
-  apiKey: [],
+  apiKey: null,
 };
 
 const APIKey = (state = INIT_STATE, action) => {
@@ -13,9 +13,10 @@ const APIKey = (state = INIT_STATE, action) => {
     case API_KEY_RESPONSE_SUCCESS:
       switch (action.payload.actionType) {
         case GET_API_KEY:
+          // action.payload.navigate('/dashboard')
           return {
             ...state,
-            apiKey: action.payload.data,
+            apiKey: action.payload.apikey,
           };
         default:
           return { ...state };

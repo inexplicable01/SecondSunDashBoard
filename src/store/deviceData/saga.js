@@ -1,5 +1,6 @@
 // sagas.js
 import {put, takeLatest, call, all, fork} from 'redux-saga/effects';
+import axios from 'axios';
 import {
     FETCH_DEVICE_DATA_SUCCESS,
     FETCH_DEVICE_DATA,
@@ -54,20 +55,27 @@ function* fetchAccountIDsSaga({accountID}) {
         // // console.log(response)
         //
         // const devices = response.filter(device => device !== null).map(device =>  ({...device, status:'Active'}))
+        let config = {
+          method: 'get',
+          maxBodyLength: Infinity,
+          url: 'https://api.secondsunlabs.com/Devices',
+          headers: {
+            'x-api-key': 'SSL_API.8WkkjctJLH6eUwbhUo+2In/2nPQhr72KOAyEZ70En2c='
+          }
+        };
 
+        // axios.request(config)
+        // .then((response) => {
+        //   console.log(response);
+        // })
+        // .catch((error) => {
+        //   console.log(error);
+        // });
 
-        const response2 = yield call(getAccountDevices, 'test account');
-        // console.log(response2)
-
-        const devices2 = response2.filter(device => device !== null).map(device2 => ({...device2, status: 'Active'}))
-        // const response3 = yield call(getAccountDevices, 'default');
-        // // console.log(response2)
-        //
-        // const devices3 = response3.filter(device => device !== null).map(device => ({...device, status: 'Active'}))
-        // const combinedDevices = [...devices2, ...devices3];
-        console.log(devices2)
-
-        yield put({type: FETCH_ACCOUNT_ID_SUCCESS, devices: devices2});
+        const response= yield call(getAccountDevices);
+        const devices = response.filter(device => device !== null).map(device2 => ({...device2, status: 'Active'}))
+        console.log(devices)
+        yield put({type: FETCH_ACCOUNT_ID_SUCCESS, devices: devices});
     } catch (error) {
         console.log('error', error)
         yield put({type: FETCH_ACCOUNT_ID_SUCCESS, error: error.message, victory: ['No']});

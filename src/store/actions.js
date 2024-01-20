@@ -37,6 +37,6 @@ export * from "./auth/profile/actions";
 // //job
 // export * from "./TemplateReferences/job/action";
 // //API Key
-// export * from "./apikey/action";
+export * from "./apikey/action";
 export * from "./deviceRegister/action";
 export * from "./auth/registerAccount/action";

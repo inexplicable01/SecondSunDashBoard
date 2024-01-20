@@ -9,29 +9,38 @@ import { logoutUser } from "../store/actions";
 
 const AuthProtected = (props) => {
   const dispatch = useDispatch();
-  const { userProfile, loading, token } = useProfile();
-  setAPIKEY(process.env.REACT_APP_XAPIKEY);
+  const { xapikey} = useProfile();
+
   useEffect(() => {
-        console.log(process.env.REACT_APP_BLAHBLAH)
-
-
-    if (userProfile && !loading && token) {
-      // setAuthorization(token);
-
-    } else if (!userProfile && loading && !token) {
+    console.log('apiey haschanged')
+  // }
+  //
+    if (xapikey == null) {
       dispatch(logoutUser());
+      //
+
+    } else{
+      setAPIKEY(xapikey);
     }
-  }, [token, userProfile, loading, dispatch]);
+
+    //     if (userProfile && !loading && token) {Complex check useprofile logic could be usefull later
+    //   setAPIKEY(xapikey);
+    //
+    // } else if (!userProfile && loading && !token) {
+    //   dispatch(logoutUser());
+    // }
+  }, [xapikey]);
 
   /*
     Navigate is un-auth access protected routes via url
     */
 
   // if (!userProfile && loading && !token) {
-  //   return (
-  //     <Navigate to={{ pathname: "/login", state: { from: props.location } }} />
-  //   );
-  // }
+  if (xapikey == null) {
+    return (
+      <Navigate to={{ pathname: "/login", state: { from: props.location } }} />
+    );
+  }
 
   return <>{props.children}</>;
 };

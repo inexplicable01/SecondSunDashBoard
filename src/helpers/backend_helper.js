@@ -60,15 +60,11 @@ export const postJwtRegister = (url, data) => {
 };
 // #####################################START
 
-export const getAccountDevices = (accountID) => {
+export const getAccountDevices = () => {
     // Define headers for this specific call
-    const headers = {
-        'accountId': accountID// Replace with your actual header and value
-        // Add more headers if needed
-    };
 
     // Make the GET request with custom headers
-    return api.get(url.GET_ACCOUNT_IDS, {headers});
+    return api.get(url.GET_DEVICE_DATA);
 };
 
 export const getDeviceDataStatus = (deviceId) => {

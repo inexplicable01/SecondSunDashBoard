@@ -14,7 +14,7 @@ import PurchaseContactForm from "../pages/SSL/PurchaseContactForm";
 import ComingSoon from '../pages/TemplateReferences/Pages/ComingSoon/ComingSoon';
 
 import Logout from "../pages/Authentication/Logout";
-
+import Login from "../pages/Authentication/Login";
 const authProtectedRoutes = [
 
     // SSL
@@ -45,6 +45,7 @@ const authProtectedRoutes = [
 
 const publicRoutes = [
     // Authentication Page
+    {path: "/login", component: <Login/>},
     {path: "/logout", component: <Logout/>},
 
 

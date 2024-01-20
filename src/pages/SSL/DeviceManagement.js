@@ -89,9 +89,9 @@ const DeviceManagement = (props) => {
             return null;
         };
 
-        const handleFetchAccountID = (accountID) => {
-            dispatch(fetchAccountID(accountID));
-        };
+        // const handleFetchAccountID = (accountID) => {
+        //     dispatch(fetchAccountID(accountID));
+        // };
 
 
         useEffect(() => {
