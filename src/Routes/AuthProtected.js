@@ -29,7 +29,7 @@ const AuthProtected = (props) => {
     // } else if (!userProfile && loading && !token) {
     //   dispatch(logoutUser());
     // }
-  }, [xapikey]);
+  }, [xapikey, dispatch]);
 
   /*
     Navigate is un-auth access protected routes via url

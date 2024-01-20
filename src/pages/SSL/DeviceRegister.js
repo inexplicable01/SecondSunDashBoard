@@ -102,7 +102,7 @@ const RegistrationWizard = () => {
         // Here, you can dispatch your action with the form data
         setLoading(true);
 
-        dispatch(registerDevice(clientName, deviceDescription, deviceGroupID, deviceType, deviceiccid,navigate))
+        dispatch(registerDevice(clientName, deviceDescription, deviceGroupID, deviceType, deviceiccid))
         setLoading(false)
     };
 

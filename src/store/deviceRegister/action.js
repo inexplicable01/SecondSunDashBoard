@@ -5,7 +5,7 @@ import {
 
 } from "./actionTypes"
 
-export const registerDevice = (clientName, deviceDescription, deviceGroupID, deviceType, id,navigate) => {
+export const registerDevice = (clientName, deviceDescription, deviceGroupID, deviceType, id) => {
   return {
     type: REGISTER_DEVICE,
     payload: {
@@ -15,15 +15,13 @@ export const registerDevice = (clientName, deviceDescription, deviceGroupID, dev
                 deviceType: deviceType,
                 id:id
             },
-      navigate: navigate
   }
 }
 
-export const registerDeviceSuccessful = (devicedata,navigate) => {
+export const registerDeviceSuccessful = (devicedata) => {
   return {
     type: REGISTER_DEVICE_SUCCESSFUL,
-    payload: devicedata,
-      navigate:navigate
+    payload: devicedata
   }
 }
 

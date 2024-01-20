@@ -14,7 +14,7 @@ import {
 // const fireBaseBackend = getFirebaseBackend();
 
 // Is user register successfull then direct plot user in redux.
-function* registerdevice({payload: {clientName, deviceDescription, deviceGroupID, deviceType, id}, navigate:navigate}) {
+function* registerdevice({payload: {clientName, deviceDescription, deviceGroupID, deviceType, id}}) {
     try {
         // if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
         //   const response = yield call(
@@ -44,7 +44,7 @@ function* registerdevice({payload: {clientName, deviceDescription, deviceGroupID
             }, id
         );
         if ('deviceId' in response) {
-            yield put(registerDeviceSuccessful(response,navigate));
+            yield put(registerDeviceSuccessful(response));
         } else {
             yield put(registerDeviceFailed(response));
         }
