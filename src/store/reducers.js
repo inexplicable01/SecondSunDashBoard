@@ -5,7 +5,7 @@ import Layout from "./layouts/reducer";
 
 // Authentication
 import Login from "./auth/login/reducer";
-import Account from "./auth/register/reducer";
+import Account from "./auth/registerUser/reducer";
 import ForgetPassword from "./auth/forgetpwd/reducer";
 import Profile from "./auth/profile/reducer";
 
@@ -63,6 +63,8 @@ import DeviceReducer from "./deviceData/reducer";
 
 //API Key
 import APIKey from "./apikey/reducer";
+import deviceRegisterReducer from "./deviceRegister/reducer";
+import AccountReducer from "./auth/registerAccount/reducer";
 
 const rootReducer = combineReducers({
     // public
@@ -71,6 +73,7 @@ const rootReducer = combineReducers({
     Account,
     ForgetPassword,
     Profile,
+    AccountReducer,
     // Calendar,
     // chat,
     // Projects,
@@ -86,7 +89,8 @@ const rootReducer = combineReducers({
     // FileManager,
     // Todos,
     // Jobs,
-    APIKey
+    APIKey,
+    deviceRegisterReducer
 });
 
 export default rootReducer;

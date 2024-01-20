@@ -60,14 +60,14 @@ function* fetchAccountIDsSaga({accountID}) {
         // console.log(response2)
 
         const devices2 = response2.filter(device => device !== null).map(device2 => ({...device2, status: 'Active'}))
-        const response3 = yield call(getAccountDevices, 'default');
-        // console.log(response2)
+        // const response3 = yield call(getAccountDevices, 'default');
+        // // console.log(response2)
+        //
+        // const devices3 = response3.filter(device => device !== null).map(device => ({...device, status: 'Active'}))
+        // const combinedDevices = [...devices2, ...devices3];
+        console.log(devices2)
 
-        const devices3 = response3.filter(device => device !== null).map(device => ({...device, status: 'Active'}))
-        const combinedDevices = [...devices2, ...devices3];
-        console.log(combinedDevices)
-
-        yield put({type: FETCH_ACCOUNT_ID_SUCCESS, devices: combinedDevices});
+        yield put({type: FETCH_ACCOUNT_ID_SUCCESS, devices: devices2});
     } catch (error) {
         console.log('error', error)
         yield put({type: FETCH_ACCOUNT_ID_SUCCESS, error: error.message, victory: ['No']});

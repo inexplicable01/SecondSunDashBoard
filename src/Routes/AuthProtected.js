@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Navigate, Route } from "react-router-dom";
-import { setAuthorization } from "../helpers/api_helper";
+import { setAuthorization,setAPIKEY } from "../helpers/api_helper";
 import { useDispatch } from "react-redux";
 
 import { useProfile } from "../Components/Hooks/UserHooks";
@@ -10,9 +10,14 @@ import { logoutUser } from "../store/actions";
 const AuthProtected = (props) => {
   const dispatch = useDispatch();
   const { userProfile, loading, token } = useProfile();
+  setAPIKEY(process.env.REACT_APP_XAPIKEY);
   useEffect(() => {
+        console.log(process.env.REACT_APP_BLAHBLAH)
+
+
     if (userProfile && !loading && token) {
-      setAuthorization(token);
+      // setAuthorization(token);
+
     } else if (!userProfile && loading && !token) {
       dispatch(logoutUser());
     }
@@ -22,11 +27,11 @@ const AuthProtected = (props) => {
     Navigate is un-auth access protected routes via url
     */
 
-  if (!userProfile && loading && !token) {
-    return (
-      <Navigate to={{ pathname: "/login", state: { from: props.location } }} />
-    );
-  }
+  // if (!userProfile && loading && !token) {
+  //   return (
+  //     <Navigate to={{ pathname: "/login", state: { from: props.location } }} />
+  //   );
+  // }
 
   return <>{props.children}</>;
 };

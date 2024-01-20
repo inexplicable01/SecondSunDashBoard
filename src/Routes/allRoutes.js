@@ -9,6 +9,7 @@ import InfrastructureManagement from "../pages/SSL/DemoPages/InfrastructureManag
 import SmartCity from "../pages/SSL/DemoPages/SmartCity";
 import EnvironmentalMonitoring from "../pages/SSL/DemoPages/EnvironmentalMonitoring";
 import StyledRegistrationWizard from "../pages/SSL/DeviceRegister";
+import StyledAccountRegistrationWizard from "../pages/SSL/AccountRegister";
 import PurchaseContactForm from "../pages/SSL/PurchaseContactForm";
 import ComingSoon from '../pages/TemplateReferences/Pages/ComingSoon/ComingSoon';
 
@@ -30,6 +31,7 @@ const authProtectedRoutes = [
     {path: "/environmental-management", component: <EnvironmentalMonitoring/>},
     {path: "/smartcity-management", component: <SmartCity/>},
     {path: "/register-device", component: <StyledRegistrationWizard/>},
+    {path: "/register-account", component: <StyledAccountRegistrationWizard/>},
     {path: "/fleet-management", component: <ComingSoon/>},
 
 {   path: "/purchase-device", component: <PurchaseContactForm/>},

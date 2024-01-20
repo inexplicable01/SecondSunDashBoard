@@ -169,12 +169,15 @@ const DeviceManagement = (props) => {
         //
         //
         // }, [devices]);
-    const newdevices = devices.map((device,index)=>({
-        ...device,
-            name:namelocationdata[index].name,
-        location:namelocationdata[index].location,
+let newdevices = [];
 
-    }))
+if (Array.isArray(devices)) {
+    newdevices = devices.map((device, index) => ({
+        ...device,
+        name: namelocationdata[index]?.name,
+        location: namelocationdata[index]?.location,
+    }));
+}
 
         return (
             <React.Fragment>

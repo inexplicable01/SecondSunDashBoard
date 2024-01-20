@@ -257,6 +257,11 @@ const VerticalLayout = (props) => {
                 navigate('/register-device');
             }}
             > Register Device </Button>
+            <Button color="secondary" className="rounded-pill" style={{ margin: '20px' }}
+            onClick={()=>{
+                navigate('/register-account');
+            }}
+            > Register Account </Button>
             <Button color="primary" className="rounded-pill" style={{ margin: '20px' }}
             onClick={()=>{
                 navigate('/purchase-device');

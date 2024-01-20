@@ -1,7 +1,7 @@
 // Layout
 export * from "./layouts/action";
 // Authentication module
-export * from "./auth/register/actions";
+export * from "./auth/registerUser/actions";
 export * from "./auth/login/actions";
 export * from "./auth/forgetpwd/actions";
 export * from "./auth/profile/actions";
@@ -38,3 +38,5 @@ export * from "./auth/profile/actions";
 // export * from "./TemplateReferences/job/action";
 // //API Key
 // export * from "./apikey/action";
+export * from "./deviceRegister/action";
+export * from "./auth/registerAccount/action";

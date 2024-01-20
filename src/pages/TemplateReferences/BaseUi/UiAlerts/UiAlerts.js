@@ -21,7 +21,7 @@ const UiAlerts = () => {
         <React.Fragment>
             <UiContent />
             <div className="page-content">
-                <Container fluid={true}>
+                <Container fluid>
                     <BreadCrumb title="Alerts" pageTitle="Base UI" />
                     <Row>
                         <Col lg={12}>

@@ -18,7 +18,11 @@ export const GET_ACCOUNT_IDS = "/Devices";
 
 export const GET_DEVICE_DATA = "/Devices";
 
-// export const GET_ACCOUNT_IDS = "/Devices/demoFast";
+export const REGISTER_DEVICES = "Register/device";
+
+export const REGISTER_ACCOUNT = "/Register/account";
+
+// export const GET_ACCOUNT_IDS = "/Devices/demoFast";Devices/001389418
 // export const GET_ACCOUNT_IDS = "";
 
 

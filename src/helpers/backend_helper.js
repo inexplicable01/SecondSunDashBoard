@@ -1,21 +1,22 @@
-import { APIClient } from "./api_helper";
+import {APIClient} from "./api_helper";
 
 import * as url from "./url_helper";
-import {GET_DEVICE_DATA} from "./url_helper";
+import {GET_DEVICE_DATA, REGISTER_DEVICES} from "./url_helper";
 import qs from "qs";
+import {useState} from "react";
 
 const api = new APIClient();
 
 // Gets the logged in user data from local session
 export const getLoggedInUser = () => {
-  const user = localStorage.getItem("user");
-  if (user) return JSON.parse(user);
-  return null;
+    const user = localStorage.getItem("user");
+    if (user) return JSON.parse(user);
+    return null;
 };
 
 //is user is logged in
 export const isUserAuthenticated = () => {
-  return getLoggedInUser() !== null;
+    return getLoggedInUser() !== null;
 };
 
 // Register Method
@@ -35,70 +36,91 @@ export const postFakeProfile = (data) => api.update(url.POST_EDIT_PROFILE + '/' 
 
 // Register Method
 export const postJwtRegister = (url, data) => {
-  return api.create(url, data)
-    .catch(err => {
-      var message;
-      if (err.response && err.response.status) {
-        switch (err.response.status) {
-          case 404:
-            message = "Sorry! the page you are looking for could not be found";
-            break;
-          case 500:
-            message = "Sorry! something went wrong, please contact our support team";
-            break;
-          case 401:
-            message = "Invalid credentials";
-            break;
-          default:
-            message = err[1];
-            break;
-        }
-      }
-      throw message;
-    });
+    return api.create(url, data)
+        .catch(err => {
+            var message;
+            if (err.response && err.response.status) {
+                switch (err.response.status) {
+                    case 404:
+                        message = "Sorry! the page you are looking for could not be found";
+                        break;
+                    case 500:
+                        message = "Sorry! something went wrong, please contact our support team";
+                        break;
+                    case 401:
+                        message = "Invalid credentials";
+                        break;
+                    default:
+                        message = err[1];
+                        break;
+                }
+            }
+            throw message;
+        });
 };
 // #####################################START
 
 export const getAccountDevices = (accountID) => {
-  // Define headers for this specific call
-  const headers = {
-    'accountId': accountID// Replace with your actual header and value
-    // Add more headers if needed
-  };
+    // Define headers for this specific call
+    const headers = {
+        'accountId': accountID// Replace with your actual header and value
+        // Add more headers if needed
+    };
 
-  // Make the GET request with custom headers
-  return api.get(url.GET_ACCOUNT_IDS, { headers });
+    // Make the GET request with custom headers
+    return api.get(url.GET_ACCOUNT_IDS, {headers});
 };
 
 export const getDeviceDataStatus = (deviceId) => {
-  // Define headers for this specific call
-  // const headers = {
-  //   'accountId': accountID// Replace with your actual header and value
-  //   // Add more headers if needed
-  // };
+    // Define headers for this specific call
+    // const headers = {
+    //   'accountId': accountID// Replace with your actual header and value
+    //   // Add more headers if needed
+    // };
 
-  // Make the GET request with custom headers
-  // console.log('fackend_helper url ' + url.GET_DEVICE_DATA + '/' + deviceId + '/timeSeries')
-  return api.get(url.GET_DEVICE_DATA + '/' + deviceId + '/status');
+    // Make the GET request with custom headers
+    // console.log('fackend_helper url ' + url.GET_DEVICE_DATA + '/' + deviceId + '/timeSeries')
+    return api.get(url.GET_DEVICE_DATA + '/' + deviceId + '/status');
 };
 
-export const getDeviceDataTimeSeries = (deviceId, startTime,endTime) => {
-  // Define headers for this specific call
-  // const headers = {
-  //   'accountId': accountID// Replace with your actual header and value
-  //   // Add more headers if needed
-  // };
-const params = qs.stringify({
-  startTime,
-  endTime
-});
+export const getDeviceDataTimeSeries = (deviceId, startTime, endTime) => {
+    // Define headers for this specific call
+    // const headers = {
+    //   'accountId': accountID// Replace with your actual header and value
+    //   // Add more headers if needed
+    // };
+    const params = qs.stringify({
+        startTime,
+        endTime
+    });
 
-console.log('araon',params)
-  // Make the GET request with custom headers
-  // console.log('fackend_helper url ' + url.GET_DEVICE_DATA + '/' + deviceId + '/status')
-  return api.get(`${url.GET_DEVICE_DATA}/${deviceId}/timeSeries?${params}`);
+    console.log('araon', params)
+    // Make the GET request with custom headers
+    // console.log('fackend_helper url ' + url.GET_DEVICE_DATA + '/' + deviceId + '/status')
+    return api.get(`${url.GET_DEVICE_DATA}/${deviceId}/timeSeries?${params}`);
 };
 
+// const [clientName, setClientName] = useState('');
+// const [deviceDescription, setDeviceDescription] = useState('');
+// const [deviceGroupID, setDeviceGroupID] = useState('');
+// const [deviceType, setDeviceType] = useState('');
+export const registerDeviceCall = (data, id) => {
+
+// console.log(`${url.REGISTER_DEVICES}/${id}`)
+    return api.create(`${url.REGISTER_DEVICES}/${id}`, data);
+};
+
+
+export const registerAccountCall = (clientName, clientEmail) => {
+
+    const data ={
+            "clientName": clientName,
+            "clientEmail": clientEmail
+        };
+
+
+    return api.create(`${url.REGISTER_ACCOUNT}`,data);
+};
 
 // Login Method
 export const postJwtLogin = data => api.create(url.POST_FAKE_JWT_LOGIN, data);
@@ -126,20 +148,20 @@ export const addNewEvent = event => api.create(url.ADD_NEW_EVENT, event);
 export const updateEvent = event => api.put(url.UPDATE_EVENT, event);
 
 // delete Event
-export const deleteEvent = event => api.delete(url.DELETE_EVENT, { headers: { event } });
+export const deleteEvent = event => api.delete(url.DELETE_EVENT, {headers: {event}});
 
 // Chat
 // get Contact
 export const getDirectContact = () => api.get(url.GET_DIRECT_CONTACT);
 
 // get Messages
-export const getMessages = roomId => api.get(`${url.GET_MESSAGES}/${roomId}`, { params: { roomId } });
+export const getMessages = roomId => api.get(`${url.GET_MESSAGES}/${roomId}`, {params: {roomId}});
 
 // add Message
 export const addMessage = message => api.create(url.ADD_MESSAGE, message);
 
 // add Message
-export const deleteMessage = message => api.delete(url.DELETE_MESSAGE, { headers: { message } });
+export const deleteMessage = message => api.delete(url.DELETE_MESSAGE, {headers: {message}});
 
 // get Channels
 export const getChannels = () => api.get(url.GET_CHANNELS);
@@ -149,7 +171,7 @@ export const getChannels = () => api.get(url.GET_CHANNELS);
 export const getMailDetails = () => api.get(url.GET_MAIL_DETAILS);
 
 // delete Mail
-export const deleteMail = forId => api.delete(url.DELETE_MAIL, { headers: { forId } });
+export const deleteMail = forId => api.delete(url.DELETE_MAIL, {headers: {forId}});
 
 // Ecommerce
 // get Products
@@ -327,7 +349,6 @@ export const getDecSalesData = () => api.get(url.GET_DECSALES_DATA);
 export const getJanSalesData = () => api.get(url.GET_JANSALES_DATA);
 
 
-
 // Dashboard Ecommerce
 // Revenue
 export const getAllRevenueData = () => api.get(url.GET_ALLREVENUE_DATA);
@@ -372,11 +393,11 @@ export const getYearMarketplaceData = () => api.get(url.GET_YEARMARKETPLACE_DATA
 // Project
 export const addProjectList = (project) => api.create(url.ADD_NEW_PROJECT, project);
 export const updateProjectList = (project) => api.put(url.UPDATE_PROJECT, project);
-export const deleteProjectList = (project) => api.delete(url.DELETE_PROJECT, { headers: { project } });
+export const deleteProjectList = (project) => api.delete(url.DELETE_PROJECT, {headers: {project}});
 
 // Pages > Team
 export const getTeamData = (team) => api.get(url.GET_TEAMDATA, team);
-export const deleteTeamData = (team) => api.delete(url.DELETE_TEAMDATA, { headers: { team } });
+export const deleteTeamData = (team) => api.delete(url.DELETE_TEAMDATA, {headers: {team}});
 export const addTeamData = (team) => api.create(url.ADD_NEW_TEAMDATA, team);
 export const updateTeamData = (team) => api.put(url.UPDATE_TEAMDATA, team);
 
@@ -384,19 +405,19 @@ export const updateTeamData = (team) => api.put(url.UPDATE_TEAMDATA, team);
 
 // Folder
 export const getFolders = (folder) => api.get(url.GET_FOLDERS, folder);
-export const deleteFolder = (folder) => api.delete(url.DELETE_FOLDER, { headers: { folder } });
+export const deleteFolder = (folder) => api.delete(url.DELETE_FOLDER, {headers: {folder}});
 export const addNewFolder = (folder) => api.create(url.ADD_NEW_FOLDER, folder);
 export const updateFolder = (folder) => api.put(url.UPDATE_FOLDER, folder);
 
 // File
 export const getFiles = (file) => api.get(url.GET_FILES, file);
-export const deleteFile = (file) => api.delete(url.DELETE_FILE, { headers: { file } });
+export const deleteFile = (file) => api.delete(url.DELETE_FILE, {headers: {file}});
 export const addNewFile = (file) => api.create(url.ADD_NEW_FILE, file);
 export const updateFile = (file) => api.put(url.UPDATE_FILE, file);
 
 // To Do
 export const getTodos = (todo) => api.get(url.GET_TODOS, todo);
-export const deleteTodo = (todo) => api.delete(url.DELETE_TODO, { headers: { todo } });
+export const deleteTodo = (todo) => api.delete(url.DELETE_TODO, {headers: {todo}});
 export const addNewTodo = (todo) => api.create(url.ADD_NEW_TODO, todo);
 export const updateTodo = (todo) => api.put(url.UPDATE_TODO, todo);
 

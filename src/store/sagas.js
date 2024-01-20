@@ -50,12 +50,14 @@ import watchDeviceData from "./deviceData/saga";
 
 //API Key
 import APIKeysaga from "./apikey/saga";
+import registerDeviceSaga from "./deviceRegister/saga"
+import accountSaga from "./auth/registerAccount/saga"
 
 export default function* rootSaga() {
   yield all([
     //public
     fork(LayoutSaga),
-    // fork(AccountSaga),
+    fork(accountSaga),
     // fork(AuthSaga),
     // fork(ForgetSaga),
     // fork(ProfileSaga),
@@ -74,5 +76,6 @@ export default function* rootSaga() {
     // fork(todos),
     // fork(jobSaga),
     fork(APIKeysaga),
+      fork(registerDeviceSaga)
   ]);
 }

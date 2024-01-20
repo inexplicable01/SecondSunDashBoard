@@ -19,9 +19,24 @@ axios.interceptors.response.use(
   function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     let message;
+
+      try{
+        message = error.response.data.error;
+        return Promise.reject(message);
+      } catch(lackofmessage){
+        // message = "Request failed with status code 400";
+      }
+
     switch (error.status) {
       case 500:
         message = "Internal Server Error";
+        break;
+      case 400:
+        try{
+          message = error.response.data.error
+        } catch(lackofmessage){
+          message = "Request fAiled with status code 400";
+        }
         break;
       case 401:
         message = "Invalid credentials";
@@ -41,6 +56,10 @@ axios.interceptors.response.use(
  */
 const setAuthorization = (token) => {
   axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+};
+
+const setAPIKEY = (api_key) => {
+  axios.defaults.headers.common["x-api-key"] = api_key;
 };
 
 class APIClient {
@@ -102,4 +121,4 @@ const getLoggedinUser = () => {
   }
 };
 
-export { APIClient, setAuthorization, getLoggedinUser };
+export { APIClient, setAuthorization, getLoggedinUser ,setAPIKEY};

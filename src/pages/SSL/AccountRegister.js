@@ -5,7 +5,7 @@ import {createTheme, ThemeProvider} from '@mui/material/styles';
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import {Modal, CircularProgress, Select, MenuItem, FormControl, InputLabel,} from '@mui/material';
 import {ports} from './Components/DummyData';
-import {registerDevice} from "../../store/deviceRegister/action";
+import {registerAccount} from "../../store/auth/registerAccount/action";
 import {useDispatch} from "react-redux"
 
 const darkTheme = createTheme({
@@ -79,16 +79,13 @@ const submitButtonStyle = {
     cursor: 'pointer'
 };
 
-const RegistrationWizard = () => {
+const AccountRegister= () => {
     const dispatch = useDispatch()
-    const navigate = useNavigate()
     // const [activeStep, setActiveStep] = useState(0);
 
     const [clientName, setClientName] = useState('Waichak');
-    const [deviceDescription, setDeviceDescription] = useState('Internal Test Device 89457300000013894186');
-    const [deviceGroupID, setDeviceGroupID] = useState('GROUPID007');
-    const [deviceType, setDeviceType] = useState('ProofTrackerPro');
-    const [deviceiccid, setDeviceiccid] = useState('89457300000013894186');
+    const [clientEmail, setClientEmail] = useState('waichak.luk@gmail.com');
+
 
     // const [serialNumber, setSerialNumber] = useState('');
     // const [name, setName] = useState('');
@@ -102,7 +99,7 @@ const RegistrationWizard = () => {
         // Here, you can dispatch your action with the form data
         setLoading(true);
 
-        dispatch(registerDevice(clientName, deviceDescription, deviceGroupID, deviceType, deviceiccid,navigate))
+        dispatch(registerAccount(clientName, clientEmail))
         setLoading(false)
     };
 
@@ -134,51 +131,15 @@ const RegistrationWizard = () => {
                                 <input
                                     type="text"
                                     id="deviceDescription"
-                                    value={deviceDescription}
-                                    onChange={(e) => setDeviceDescription(e.target.value)}
-                                    style={inputFieldStyle}
-                                />
-                            </div>
-
-                            {/* Device Group ID Input */}
-                            <div style={inputStyle}>
-                                <label htmlFor="deviceGroupID">Device Group ID:</label>
-                                <input
-                                    type="text"
-                                    id="deviceGroupID"
-                                    value={deviceGroupID}
-                                    onChange={(e) => setDeviceGroupID(e.target.value)}
-                                    style={inputFieldStyle}
-                                />
-                            </div>
-
-                            {/* Device Type Input */}
-                            <div style={inputStyle}>
-                                <label htmlFor="deviceType">Device Type:</label>
-                                <input
-                                    type="text"
-                                    id="deviceType"
-                                    value={deviceType}
-                                    onChange={(e) => setDeviceType(e.target.value)}
-                                    style={inputFieldStyle}
-                                />
-                            </div>
-
-                            {/* Device ICCID Input */}
-                            <div style={inputStyle}>
-                                <label htmlFor="deviceiccid">Device ICCID:</label>
-                                <input
-                                    type="text"
-                                    id="deviceiccid"
-                                    value={deviceiccid}
-                                    onChange={(e) => setDeviceiccid(e.target.value)}
+                                    value={clientEmail}
+                                    onChange={(e) => setClientEmail(e.target.value)}
                                     style={inputFieldStyle}
                                 />
                             </div>
 
                             {/* Submit Button */}
                             <button type="submit" style={submitButtonStyle}>
-                                Register Device
+                                Register Account
                             </button>
                         </form>
                     </div>
@@ -205,10 +166,10 @@ const RegistrationWizard = () => {
     );
 }
 
-export default function StyledRegistrationWizard() {
+export default function StyledAccountRegistrationWizard() {
     return (
         <ThemeProvider theme={darkTheme}>
-            <RegistrationWizard/>
+            <AccountRegister/>
         </ThemeProvider>
     );
 }

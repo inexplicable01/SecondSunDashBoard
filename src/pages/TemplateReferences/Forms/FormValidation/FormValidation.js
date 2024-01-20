@@ -113,7 +113,7 @@ document.title ="Validation | Second Sun Node Device Dashboard";
       <UiContent />
       <div className="page-content">
         
-        <Container fluid={true}>
+        <Container fluid>
           <BreadCrumb title="Form Validation" pageTitle="Forms" />
           <Row>
             <Col lg={12}>
