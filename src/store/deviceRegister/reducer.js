@@ -32,7 +32,7 @@ const deviceRegisterReducer = (state = initialState, action) => {
         navigate:action.navigate
 
       };
-      navigate('/')
+      // navigate('/')
       break;
     case REGISTER_DEVICE_FAILED:
       state = {
