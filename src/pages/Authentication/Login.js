@@ -55,7 +55,7 @@ const Login = (props) => {
         enableReinitialize: true,
 
         initialValues: {
-            apikey: apikey || "SSL_API.8WkkjctJLH6eUwbhUo+2In/2nPQhr72KOAyEZ70En2c=" || '',
+            apikey: apikey || "" || '',
             // password: userLogin.password || "123456" || '',
         },
         validationSchema: Yup.object({
