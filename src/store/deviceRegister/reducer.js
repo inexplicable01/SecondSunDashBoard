@@ -2,6 +2,7 @@ import {
   REGISTER_DEVICE,
   REGISTER_DEVICE_SUCCESSFUL,
   REGISTER_DEVICE_FAILED,
+    REGISTER_DEVICE_RESET
 } from "./actionTypes";
 
 const initialState = {
@@ -29,7 +30,6 @@ const deviceRegisterReducer = (state = initialState, action) => {
         user: action.payload,
         success: true,
         registrationError: null,
-        navigate:action.navigate
 
       };
       // navigate('/')
@@ -41,6 +41,11 @@ const deviceRegisterReducer = (state = initialState, action) => {
         loading: false,
         registrationError: action.payload,
         error: true
+      };
+      break;
+    case REGISTER_DEVICE_RESET:
+      state = {
+        ...initialState
       };
       break;
     default:

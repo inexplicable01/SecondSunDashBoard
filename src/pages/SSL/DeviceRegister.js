@@ -1,12 +1,13 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {useNavigate} from "react-router-dom";
 import {Stepper, Step, StepLabel, TextField, Button, Container} from '@mui/material';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import {Modal, CircularProgress, Select, MenuItem, FormControl, InputLabel,} from '@mui/material';
 import {ports} from './Components/DummyData';
-import {registerDevice} from "../../store/deviceRegister/action";
-import {useDispatch} from "react-redux"
+import {registerDevice, resetdevice} from "../../store/deviceRegister/action";
+import {useDispatch, useSelector} from "react-redux"
+import deviceRegisterReducer from "../../store/deviceRegister/reducer";
 
 const darkTheme = createTheme({
     palette: {
@@ -82,13 +83,24 @@ const submitButtonStyle = {
 const RegistrationWizard = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const {success} = useSelector(state=> ({
+        success: state.deviceRegisterReducer.success,
+    }))
     // const [activeStep, setActiveStep] = useState(0);
 
-    const [clientName, setClientName] = useState('Waichak');
-    const [deviceDescription, setDeviceDescription] = useState('Internal Test Device 89457300000013894186');
-    const [deviceGroupID, setDeviceGroupID] = useState('GROUPID007');
-    const [deviceType, setDeviceType] = useState('ProofTrackerPro');
-    const [deviceiccid, setDeviceiccid] = useState('89457300000013894186');
+
+    //     const {user, loading, errormsg, validatedAPIKEY} = useSelector(state => ({
+    //
+    //     loading: state.Login.loading,
+    //     errormsg: state.APIKey.errormsg,
+    //     validatedAPIKEY: state.APIKey.apiKey
+    // }));
+
+    const [clientName, setClientName] = useState('register');
+    const [deviceDescription, setDeviceDescription] = useState('Internal Test Device');
+    const [deviceGroupID, setDeviceGroupID] = useState('admingroup');
+    const [deviceType, setDeviceType] = useState('Pro1');
+    const [deviceiccid, setDeviceiccid] = useState('89457300000013894228');
 
     // const [serialNumber, setSerialNumber] = useState('');
     // const [name, setName] = useState('');
@@ -106,7 +118,13 @@ const RegistrationWizard = () => {
         setLoading(false)
     };
 
+    useEffect(()=>{
+        if (success){
+          navigate('/dashboard')
+            dispatch(resetdevice())
 
+        }
+    },[success, navigate,dispatch])
     return (
         <React.Fragment>
             <div className="page-content">
