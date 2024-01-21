@@ -6,6 +6,7 @@ import {
 
 const INIT_STATE = {
   apiKey: null,
+  errormsg:null
 };
 
 const APIKey = (state = INIT_STATE, action) => {
@@ -27,7 +28,7 @@ const APIKey = (state = INIT_STATE, action) => {
         case GET_API_KEY:
           return {
             ...state,
-            error: action.payload.error,
+            errormsg: action.payload.error.message? action.payload.error.message: 'API key not incorrect',
           };
 
         default:

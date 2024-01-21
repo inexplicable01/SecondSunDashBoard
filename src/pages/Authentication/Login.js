@@ -1,21 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import { Card, CardBody, Col, Container, Input, Label, Row, Button, Form, FormFeedback, Alert, Spinner } from 'reactstrap';
+import React, {useEffect, useState} from 'react';
+import {
+    Card,
+    CardBody,
+    Col,
+    Container,
+    Input,
+    Label,
+    Row,
+    Button,
+    Form,
+    FormFeedback,
+    Alert,
+    Spinner
+} from 'reactstrap';
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 
 //redux
-import { useSelector, useDispatch } from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 // Formik validation
 import * as Yup from "yup";
-import { useFormik } from "formik";
+import {useFormik} from "formik";
 import {useNavigate} from "react-router-dom";
 // import { setAPIKEY } from "../../helpers/api_helper";
 
 
 //Social Media Imports
-import { GoogleLogin } from "react-google-login";
+import {GoogleLogin} from "react-google-login";
 // import TwitterLogin from "react-twitter-auth"
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 // actions
@@ -24,19 +37,18 @@ import {loginUser, socialLogin, resetLoginFlag, loginWithAPIKkey, logoutUser} fr
 import logoLight from "../../assets/images/logo-light.png";
 
 //Import config
-import { facebook, google } from "../../config";
+import {facebook, google} from "../../config";
 import withRouter from '../../Components/Common/withRouter';
 import APIKey from "../../store/apikey/reducer";
-import {setAPIKEY as setvalidatedapikey } from "../../helpers/api_helper";
+import {setAPIKEY as setvalidatedapikey} from "../../helpers/api_helper";
 
 const Login = (props) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { user, errorMsg, loading, error , validatedAPIKEY } = useSelector(state => ({
+    const {user, loading, errormsg, validatedAPIKEY} = useSelector(state => ({
         user: state.Account.user,
-        errorMsg: state.Login.errorMsg,
         loading: state.Login.loading,
-        error: state.Login.error,
+        errormsg: state.APIKey.errormsg,
         validatedAPIKEY: state.APIKey.apiKey
     }));
 
@@ -68,16 +80,16 @@ const Login = (props) => {
             dispatch(loginWithAPIKkey(values.apikey));
         }
     });
-  useEffect(() => {
-      console.log(validatedAPIKEY)
-    if (validatedAPIKEY== null) {
-      // If API key is present, navigate to the dashboard
+    useEffect(() => {
+        console.log(validatedAPIKEY)
+        if (validatedAPIKEY == null) {
+            // If API key is present, navigate to the dashboard
 
-    } else{
-      setvalidatedapikey(validatedAPIKEY);
-      navigate('/dashboard');
-    }
-  }, [validatedAPIKEY,navigate]);
+        } else {
+            setvalidatedapikey(validatedAPIKEY);
+            navigate('/dashboard');
+        }
+    }, [validatedAPIKEY, navigate]);
     // const signIn = (res, type) => {
     //     if (type === "google" && res) {
     //         const postData = {
@@ -112,12 +124,14 @@ const Login = (props) => {
     // };
 
     useEffect(() => {
-        if (error) {
+
+        console.log('errormsg',errormsg)
+        if (errormsg) {
             setTimeout(() => {
                 dispatch(resetLoginFlag());
             }, 3000);
         }
-    }, [dispatch, error]);
+    }, [dispatch, errormsg]);
 
     document.title = "APIKey SignIn | Second Sun Node Device Dashboard";
     return (
@@ -130,7 +144,7 @@ const Login = (props) => {
                                 <div className="text-center mt-sm-5 mb-4 text-white-50">
                                     <div>
                                         <Link to="/" className="d-inline-block auth-logo">
-                                            <img src={logoLight} alt="" height="20" />
+                                            <img src={logoLight} alt="" height="20"/>
                                         </Link>
                                     </div>
                                     <p className="mt-3 fs-15 fw-medium">SSL Dashboard</p>
@@ -144,9 +158,10 @@ const Login = (props) => {
                                     <CardBody className="p-4">
                                         <div className="text-center mt-2">
                                             <h5 className="text-primary">Welcome Back !</h5>
-                                            <p className="text-muted">Sign in to continue to Second Sun Lab Dasboard.</p>
+                                            <p className="text-muted">Sign in to continue to Second Sun Lab
+                                                Dasboard.</p>
                                         </div>
-                                        {errorMsg && errorMsg ? (<Alert color="danger"> {errorMsg} </Alert>) : null}
+                                        {errormsg && errormsg ? (<Alert color="danger"> {errormsg} </Alert>) : null}
                                         <div className="p-2 mt-4">
                                             <Form
                                                 onSubmit={(e) => {
@@ -181,12 +196,17 @@ const Login = (props) => {
                                                 {/*</div>*/}
 
                                                 <div className="mt-4">
-                                                    <Button color="primary" disabled={error ? null : loading ? true : false} className="btn btn-primary w-100" type="submit">
-                                                        {error ? null : loading ? <Spinner size="sm" className='me-2'> Loading... </Spinner> : null}
+                                                    <Button color="primary"
+                                                            disabled={errormsg ? null : loading ? true : false}
+                                                            className="btn btn-primary w-100" type="submit">
+                                                        {errormsg ? null : loading ? <Spinner size="sm"
+                                                                                           className='me-2'> Loading... </Spinner> : null}
                                                         Sign In
                                                     </Button>
                                                 </div>
-
+                                                {/*{errorMsg && (*/}
+                                                {/*    <Alert color="danger">{errorMsg}</Alert>*/}
+                                                {/*)}*/}
 
                                             </Form>
                                         </div>
@@ -209,70 +229,70 @@ const Login = (props) => {
 export default withRouter(Login);
 
 
-                                                // <div className="mb-3">
-                                                //     <div className="float-end">
-                                                //         <Link to="/forgot-password" className="text-muted">Forgot password?</Link>
-                                                //     </div>
-                                                //     <Label className="form-label" htmlFor="password-input">Password</Label>
-                                                //     <div className="position-relative auth-pass-inputgroup mb-3">
-                                                //         <Input
-                                                //             name="password"
-                                                //             value={validation.values.password || ""}
-                                                //             type={passwordShow ? "text" : "password"}
-                                                //             className="form-control pe-5"
-                                                //             placeholder="Enter Password"
-                                                //             onChange={validation.handleChange}
-                                                //             onBlur={validation.handleBlur}
-                                                //             invalid={
-                                                //                 validation.touched.password && validation.errors.password ? true : false
-                                                //             }
-                                                //         />
-                                                //         {validation.touched.password && validation.errors.password ? (
-                                                //             <FormFeedback type="invalid">{validation.errors.password}</FormFeedback>
-                                                //         ) : null}
-                                                //         <button className="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted" type="button" id="password-addon" onClick={() => setPasswordShow(!passwordShow)}><i className="ri-eye-fill align-middle"></i></button>
-                                                //     </div>
-                                                // </div>
+// <div className="mb-3">
+//     <div className="float-end">
+//         <Link to="/forgot-password" className="text-muted">Forgot password?</Link>
+//     </div>
+//     <Label className="form-label" htmlFor="password-input">Password</Label>
+//     <div className="position-relative auth-pass-inputgroup mb-3">
+//         <Input
+//             name="password"
+//             value={validation.values.password || ""}
+//             type={passwordShow ? "text" : "password"}
+//             className="form-control pe-5"
+//             placeholder="Enter Password"
+//             onChange={validation.handleChange}
+//             onBlur={validation.handleBlur}
+//             invalid={
+//                 validation.touched.password && validation.errors.password ? true : false
+//             }
+//         />
+//         {validation.touched.password && validation.errors.password ? (
+//             <FormFeedback type="invalid">{validation.errors.password}</FormFeedback>
+//         ) : null}
+//         <button className="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted" type="button" id="password-addon" onClick={() => setPasswordShow(!passwordShow)}><i className="ri-eye-fill align-middle"></i></button>
+//     </div>
+// </div>
 
-                                                // <div className="mt-4 text-center">
-                                                //     <div className="signin-other-title">
-                                                //         <h5 className="fs-13 mb-4 title">Sign In with</h5>
-                                                //     </div>
-                                                //     {/*<div>*/}
-                                                //     {/*    <FacebookLogin*/}
-                                                //     {/*        appId={facebook.APP_ID}*/}
-                                                //     {/*        autoLoad={false}*/}
-                                                //     {/*        callback={facebookResponse}*/}
-                                                //     {/*        render={renderProps => (*/}
-                                                //     {/*            <Button color="primary"*/}
-                                                //     {/*                className="btn-icon me-1"*/}
-                                                //     {/*                onClick={renderProps.onClick}*/}
-                                                //     {/*            >*/}
-                                                //     {/*                <i className="ri-facebook-fill fs-16" />*/}
-                                                //     {/*            </Button>*/}
-                                                //     {/*        )}*/}
-                                                //     {/*    />*/}
-                                                //
-                                                //         {/*<GoogleLogin*/}
-                                                //         {/*    clientId={*/}
-                                                //         {/*        google.CLIENT_ID ? google.CLIENT_ID : ""*/}
-                                                //         {/*    }*/}
-                                                //         {/*    render={renderProps => (*/}
-                                                //         {/*        <Button color="danger"*/}
-                                                //         {/*            to="#"*/}
-                                                //         {/*            className="btn-icon me-1"*/}
-                                                //         {/*            onClick={renderProps.onClick}*/}
-                                                //         {/*        >*/}
-                                                //         {/*            <i className="ri-google-fill fs-16" />*/}
-                                                //         {/*        </Button>*/}
-                                                //         {/*    )}*/}
-                                                //         {/*    onSuccess={googleResponse}*/}
-                                                //         {/*    onFailure={() => {*/}
-                                                //
-                                                //         {/*    }}*/}
-                                                //         {/*/>*/}
-                                                //
-                                                //         {/*<Button color="dark" className="btn-icon"><i className="ri-github-fill fs-16"></i></Button>{" "}*/}
-                                                //         {/*<Button color="info" className="btn-icon"><i className="ri-twitter-fill fs-16"></i></Button>*/}
-                                                //     {/*</div>*/}
-                                                // </div>
+// <div className="mt-4 text-center">
+//     <div className="signin-other-title">
+//         <h5 className="fs-13 mb-4 title">Sign In with</h5>
+//     </div>
+//     {/*<div>*/}
+//     {/*    <FacebookLogin*/}
+//     {/*        appId={facebook.APP_ID}*/}
+//     {/*        autoLoad={false}*/}
+//     {/*        callback={facebookResponse}*/}
+//     {/*        render={renderProps => (*/}
+//     {/*            <Button color="primary"*/}
+//     {/*                className="btn-icon me-1"*/}
+//     {/*                onClick={renderProps.onClick}*/}
+//     {/*            >*/}
+//     {/*                <i className="ri-facebook-fill fs-16" />*/}
+//     {/*            </Button>*/}
+//     {/*        )}*/}
+//     {/*    />*/}
+//
+//         {/*<GoogleLogin*/}
+//         {/*    clientId={*/}
+//         {/*        google.CLIENT_ID ? google.CLIENT_ID : ""*/}
+//         {/*    }*/}
+//         {/*    render={renderProps => (*/}
+//         {/*        <Button color="danger"*/}
+//         {/*            to="#"*/}
+//         {/*            className="btn-icon me-1"*/}
+//         {/*            onClick={renderProps.onClick}*/}
+//         {/*        >*/}
+//         {/*            <i className="ri-google-fill fs-16" />*/}
+//         {/*        </Button>*/}
+//         {/*    )}*/}
+//         {/*    onSuccess={googleResponse}*/}
+//         {/*    onFailure={() => {*/}
+//
+//         {/*    }}*/}
+//         {/*/>*/}
+//
+//         {/*<Button color="dark" className="btn-icon"><i className="ri-github-fill fs-16"></i></Button>{" "}*/}
+//         {/*<Button color="info" className="btn-icon"><i className="ri-twitter-fill fs-16"></i></Button>*/}
+//     {/*</div>*/}
+// </div>

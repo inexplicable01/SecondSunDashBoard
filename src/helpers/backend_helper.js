@@ -1,7 +1,7 @@
 import {APIClient} from "./api_helper";
 
 import * as url from "./url_helper";
-import {GET_DEVICE_DATA, REGISTER_DEVICES} from "./url_helper";
+import {GET_ACCOUNT_IDS, GET_DEVICE_DATA, REGISTER_DEVICES} from "./url_helper";
 import qs from "qs";
 import {useState} from "react";
 
@@ -118,6 +118,15 @@ export const registerAccountCall = (clientName, clientEmail) => {
     return api.create(`${url.REGISTER_ACCOUNT}`,data);
 };
 
+
+
+
+
+export const getAPIKey = (apikey) => {
+
+
+    return api.get(url.GET_DEVICE_DATA, null, apikey);
+}
 // Login Method
 export const postJwtLogin = data => api.create(url.POST_FAKE_JWT_LOGIN, data);
 
@@ -302,27 +311,27 @@ export const deleteTicket = ticket => api.delete(url.DELETE_TICKET + '/' + ticke
 // Dashboard Analytics
 
 // Sessions by Countries
-export const getAllData = () => api.get(url.GET_ALL_DATA);
-export const getHalfYearlyData = () => api.get(url.GET_HALFYEARLY_DATA);
-export const getMonthlyData = () => api.get(url.GET_MONTHLY_DATA);
-
-// Audiences Metrics
-export const getAllAudiencesMetricsData = () => api.get(url.GET_ALLAUDIENCESMETRICS_DATA);
-export const getMonthlyAudiencesMetricsData = () => api.get(url.GET_MONTHLYAUDIENCESMETRICS_DATA);
-export const getHalfYearlyAudiencesMetricsData = () => api.get(url.GET_HALFYEARLYAUDIENCESMETRICS_DATA);
-export const getYearlyAudiencesMetricsData = () => api.get(url.GET_YEARLYAUDIENCESMETRICS_DATA);
+// export const getAllData = () => api.get(url.GET_ALL_DATA);
+// export const getHalfYearlyData = () => api.get(url.GET_HALFYEARLY_DATA);
+// export const getMonthlyData = () => api.get(url.GET_MONTHLY_DATA);
+//
+// // Audiences Metrics
+// export const getAllAudiencesMetricsData = () => api.get(url.GET_ALLAUDIENCESMETRICS_DATA);
+// export const getMonthlyAudiencesMetricsData = () => api.get(url.GET_MONTHLYAUDIENCESMETRICS_DATA);
+// export const getHalfYearlyAudiencesMetricsData = () => api.get(url.GET_HALFYEARLYAUDIENCESMETRICS_DATA);
+// export const getYearlyAudiencesMetricsData = () => api.get(url.GET_YEARLYAUDIENCESMETRICS_DATA);
 
 // Users by Device
-export const getTodayDeviceData = () => api.get(url.GET_TODAYDEVICE_DATA);
-export const getLastWeekDeviceData = () => api.get(url.GET_LASTWEEKDEVICE_DATA);
-export const getLastMonthDeviceData = () => api.get(url.GET_LASTMONTHDEVICE_DATA);
-export const getCurrentYearDeviceData = () => api.get(url.GET_CURRENTYEARDEVICE_DATA);
-
-// Audiences Sessions by Country
-export const getTodaySessionData = () => api.get(url.GET_TODAYSESSION_DATA);
-export const getLastWeekSessionData = () => api.get(url.GET_LASTWEEKSESSION_DATA);
-export const getLastMonthSessionData = () => api.get(url.GET_LASTMONTHSESSION_DATA);
-export const getCurrentYearSessionData = () => api.get(url.GET_CURRENTYEARSESSION_DATA);
+// export const getTodayDeviceData = () => api.get(url.GET_TODAYDEVICE_DATA);
+// export const getLastWeekDeviceData = () => api.get(url.GET_LASTWEEKDEVICE_DATA);
+// export const getLastMonthDeviceData = () => api.get(url.GET_LASTMONTHDEVICE_DATA);
+// export const getCurrentYearDeviceData = () => api.get(url.GET_CURRENTYEARDEVICE_DATA);
+//
+// // Audiences Sessions by Country
+// export const getTodaySessionData = () => api.get(url.GET_TODAYSESSION_DATA);
+// export const getLastWeekSessionData = () => api.get(url.GET_LASTWEEKSESSION_DATA);
+// export const getLastMonthSessionData = () => api.get(url.GET_LASTMONTHSESSION_DATA);
+// export const getCurrentYearSessionData = () => api.get(url.GET_CURRENTYEARSESSION_DATA);
 
 // Dashboard CRM
 
@@ -355,16 +364,16 @@ export const getYearRevenueData = () => api.get(url.GET_YEARREVENUE_DATA);
 
 // Dashboard Crypto
 // Portfolio
-export const getBtcPortfolioData = () => api.get(url.GET_BTCPORTFOLIO_DATA);
-export const getUsdPortfolioData = () => api.get(url.GET_USDPORTFOLIO_DATA);
-export const getEuroPortfolioData = () => api.get(url.GET_EUROPORTFOLIO_DATA);
-
-// Market Graph
-export const getAllMarketData = () => api.get(url.GET_ALLMARKETDATA_DATA);
-export const getYearMarketData = () => api.get(url.GET_YEARMARKET_DATA);
-export const getMonthMarketData = () => api.get(url.GET_MONTHMARKET_DATA);
-export const getWeekMarketData = () => api.get(url.GET_WEEKMARKET_DATA);
-export const getHourMarketData = () => api.get(url.GET_HOURMARKET_DATA);
+// export const getBtcPortfolioData = () => api.get(url.GET_BTCPORTFOLIO_DATA);
+// export const getUsdPortfolioData = () => api.get(url.GET_USDPORTFOLIO_DATA);
+// export const getEuroPortfolioData = () => api.get(url.GET_EUROPORTFOLIO_DATA);
+//
+// // Market Graph
+// export const getAllMarketData = () => api.get(url.GET_ALLMARKETDATA_DATA);
+// export const getYearMarketData = () => api.get(url.GET_YEARMARKET_DATA);
+// export const getMonthMarketData = () => api.get(url.GET_MONTHMARKET_DATA);
+// export const getWeekMarketData = () => api.get(url.GET_WEEKMARKET_DATA);
+// export const getHourMarketData = () => api.get(url.GET_HOURMARKET_DATA);
 
 // Dashboard Project
 // Project Overview
@@ -381,10 +390,10 @@ export const getQuarterProjectStatusData = () => api.get(url.GET_QUARTERPROJECTS
 
 // Dashboard NFT
 // Marketplace
-export const getAllMarketplaceData = () => api.get(url.GET_ALLMARKETPLACE_DATA);
-export const getMonthMarketplaceData = () => api.get(url.GET_MONTHMARKETPLACE_DATA);
-export const gethalfYearMarketplaceData = () => api.get(url.GET_HALFYEARMARKETPLACE_DATA);
-export const getYearMarketplaceData = () => api.get(url.GET_YEARMARKETPLACE_DATA);
+// export const getAllMarketplaceData = () => api.get(url.GET_ALLMARKETPLACE_DATA);
+// export const getMonthMarketplaceData = () => api.get(url.GET_MONTHMARKETPLACE_DATA);
+// export const gethalfYearMarketplaceData = () => api.get(url.GET_HALFYEARMARKETPLACE_DATA);
+// export const getYearMarketplaceData = () => api.get(url.GET_YEARMARKETPLACE_DATA);
 
 // Project
 export const addProjectList = (project) => api.create(url.ADD_NEW_PROJECT, project);
@@ -425,4 +434,4 @@ export const addNewProject = (project) => api.create(url.ADD_NEW_TODO_PROJECT, p
 export const getJobApplicationList = () => api.get(url.GET_APPLICATION_LIST);
 
 //API Key
-export const getAPIKey = () => api.get(url.GET_API_KEY);
+// export const getAPIKey = () => api.get(url.GET_API_KEY);

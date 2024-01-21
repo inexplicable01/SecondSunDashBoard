@@ -10,7 +10,8 @@ import { getAPIKey as getAPIKeyApi } from "../../helpers/backend_helper";
 function* getAPIKeys({payload:{apikey}}) {
 
   try {
-    // const response = yield call(getAPIKeyApi);
+    const response = yield call(getAPIKeyApi);
+    console.log(response)
     yield put(APIKeyResponseSuccess(GET_API_KEY, apikey));
   } catch (error) {
     yield put(APIKeyResponseError(GET_API_KEY, error));
@@ -19,7 +20,10 @@ function* getAPIKeys({payload:{apikey}}) {
 
 function* checkAPIKeys({payload:{apikey}}) {
   try {
-    // const response = yield call(getAPIKeyApi);
+    const response = yield call(getAPIKeyApi,apikey);
+    console.log(response)
+
+
     yield put(APIKeyResponseSuccess(GET_API_KEY, apikey ));
   } catch (error) {
     yield put(APIKeyResponseError(GET_API_KEY, error));
