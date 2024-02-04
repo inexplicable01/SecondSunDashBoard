@@ -79,7 +79,11 @@ const DataVisualization = ({device, location, temperatureData}) => {
         },
     };
 
-    let filteredSeries = deviceData[curdevice]?.dataseries.filter(item => new Date(item.measurementTime) >= twentyfourHoursAgo) ?? []
+    // useMemo to memoize filteredSeries
+    const filteredSeries = useMemo(() => {
+        const twentyfourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+        return deviceData[curdevice]?.dataseries.filter(item => new Date(item.measurementTime) >= twentyfourHoursAgo) ?? [];
+    }, [deviceData, curdevice]); // Dependencies that, when changed, will recalculate filteredSeries
 
     const defaultCoords = [[-122.3321, 47.6062], [-122.0613245, 48.6092392]]; // Replace with your desired default coordinates[-122.3321, 47.6062], [-122.0613245, 48.6092392]
 
