@@ -74,6 +74,7 @@ const DeviceReducer = (state = initialState, action) => {
                 loading: false,
                 data: null,
                 error: action.error, // Store the error message here
+                curdevice:action.deviceId,
             };
         case FETCH_ACCOUNT_ID:
             return {

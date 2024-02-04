@@ -33,18 +33,12 @@ function* fetchDeviceDataSaga({payload: deviceId}) {
 // Calculate the start time by subtracting 1 day (24 hours) from the current time
         const startTime = new Date(new Date().getTime() - (24 * 60 * 60 * 1000)).toISOString();
 
-        // let params = qs.stringify({
-        //     '': oneDayAgo.toISOString(),
-        //     'endTime': now.toISOString()
-        // });
-
-
-
         const series = yield call(getDeviceDataTimeSeries, deviceId,startTime,endTime)
-        console.log(series)
+        console.log('returned data from Device Call, Currently asking for 1 day worth of data' , series)
         yield put({type: FETCH_DEVICE_DATA_SUCCESS, series: series, status: status, deviceId: deviceId});
     } catch (error) {
-        yield put({type: FETCH_DEVICE_DATA_FAILURE, error: error.message});
+        console.log('Failure')
+        yield put({type: FETCH_DEVICE_DATA_FAILURE, deviceId: deviceId, error: error.message});
     }
 }
 

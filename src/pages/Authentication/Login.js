@@ -53,6 +53,7 @@ const Login = (props) => {
     }));
 
 
+    // const [apikey, setAPIKEY] = useState(process.env.REACT_APP_XAPIKEY);
     const [apikey, setAPIKEY] = useState();
     // const [passwordShow, setPasswordShow] = useState(false);
 
@@ -67,7 +68,7 @@ const Login = (props) => {
         enableReinitialize: true,
 
         initialValues: {
-            apikey: apikey || "" || '',
+            apikey: apikey || '' || '',
             // password: userLogin.password || "123456" || '',
         },
         validationSchema: Yup.object({

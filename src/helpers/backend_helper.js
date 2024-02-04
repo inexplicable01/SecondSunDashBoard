@@ -75,7 +75,7 @@ export const getDeviceDataStatus = (deviceId) => {
     // };
 
     // Make the GET request with custom headers
-    // console.log('fackend_helper url ' + url.GET_DEVICE_DATA + '/' + deviceId + '/timeSeries')
+    console.log('backend_helper url ' + url.GET_DEVICE_DATA + '/' + deviceId + '/timeSeries')
     return api.get(url.GET_DEVICE_DATA + '/' + deviceId + '/status');
 };
 

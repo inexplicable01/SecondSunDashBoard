@@ -35,12 +35,12 @@ function SetViewToFitBounds({coordinates}) {
 }
 
 const randomcoords = switchxy([
-    [47.8610025, -122.3269672],  // Sao Paulo
-    [47.6610025, -122.3269672],  // Curitiba
-    [47.3610025, -122.3269672],  // Florianopolis
-    [47.6610025, -122.3269672],  // Porto Alegre
-    [47.1258383, -122.1609394],  // Montevideo
-    [47.3610025, -122.1609394]   // Buenos Aires
+    // [47.8610025, -122.3269672],  // Sao Paulo
+    // [47.6610025, -122.3269672],  // Curitiba
+    // [47.3610025, -122.3269672],  // Florianopolis
+    // [47.6610025, -122.3269672],  // Porto Alegre
+    // [47.1258383, -122.1609394],  // Montevideo
+    // [47.3610025, -122.1609394]   // Buenos Aires
 ])
 const formatToGeoJsonDevice = (coords) => {
     console.log('geo', coords)
@@ -57,7 +57,7 @@ const DataVisualization = ({device, location, temperatureData}) => {
         deviceData: state.DeviceReducer.deviceData,
         curdevice: state.DeviceReducer.curdevice
     }));
-    const curlocation = deviceData[curdevice]?.locationhistory[0] ?? randomcoords[1]
+    // const curlocation = deviceData[curdevice]?.locationhistory[0] ?? randomcoords[1]
 
     const twentyfourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000); // 2 hours in milliseconds
 
@@ -80,18 +80,24 @@ const DataVisualization = ({device, location, temperatureData}) => {
 
     let filteredSeries = deviceData[curdevice]?.dataseries.filter(item => new Date(item.measurementTime) >= twentyfourHoursAgo) ?? []
 
-    const defaultCoords = [[-122.3321, 47.6062], [-122.0613245, 48.6092392]]; // Replace with your desired default coordinates
+    const defaultCoords = [[-122.3321, 47.6062], [-122.0613245, 48.6092392]]; // Replace with your desired default coordinates[-122.3321, 47.6062], [-122.0613245, 48.6092392]
 
     const locationHistory = deviceData[curdevice]?.locationhistory ?? randomcoords;
     const validLocationHistory = locationHistory.length >= 2 ? locationHistory : defaultCoords;
 
 // Now use validLocationHistory in your component
+      const convertToSeattleTime = (utcTime) => {
+        if (!utcTime) return 'Not exist';
 
+        const date = new Date(utcTime);
+        return date.toLocaleString("en-US", { timeZone: "America/Los_Angeles" });
+      };
     const geoJsonData = useMemo(() => {
         return formatToGeoJsonDevice(deviceData[curdevice]?.locationhistory ?? randomcoords);
     }, [deviceData, curdevice]);
     // console.log('Cure Location ', [curlocation[1], curlocation[0]])
-    // console.log('device', curdevice, '  ', deviceData[curdevice]?.locationhistory ?? defaultCoords)
+    console.log('device', curdevice, '  ', deviceData[curdevice]?.locationhistory ?? defaultCoords)
+    console.log('device', curdevice, '  ', deviceData[curdevice])
     return (
         <div className="data-visualization-container">
             <div className="map-container">
@@ -164,6 +170,10 @@ const DataVisualization = ({device, location, temperatureData}) => {
                         type="line"
                         width="100%"
                     />
+                </div>
+                <div>
+
+                    {curdevice}'s Last Transmission (Seattle Time) : { convertToSeattleTime(deviceData[curdevice]?.dataseries?.slice(-1)[0]?.processTime)}
                 </div>
 
                 <div className="control-buttons">
