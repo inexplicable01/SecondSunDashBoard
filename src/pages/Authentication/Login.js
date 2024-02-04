@@ -53,8 +53,8 @@ const Login = (props) => {
     }));
 
 
-    // const [apikey, setAPIKEY] = useState(process.env.REACT_APP_XAPIKEY);
-    const [apikey, setAPIKEY] = useState();
+    const [apikey, setAPIKEY] = useState(process.env.REACT_APP_XAPIKEY);
+    // const [apikey, setAPIKEY] = useState();
     // const [passwordShow, setPasswordShow] = useState(false);
 
     useEffect(() => {
