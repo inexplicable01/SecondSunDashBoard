@@ -140,13 +140,12 @@ const DataVisualization = ({device, location, temperatureData}) => {
 
     useEffect(() => {
         metricChange(selectedMetric)
-    }, [selectedMetric, deviceData, curdevice])
+    }, [metricChange,selectedMetric, deviceData, curdevice])
     const handleMetricChange = (event) => {
         // console.log('event',event)
         const metric = event.target.value;
         setSelectedMetric(metric);
         metricChange(selectedMetric)
-
 
     };
 
