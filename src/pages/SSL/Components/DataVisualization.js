@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState, useCallback} from 'react';
 import {MapContainer, TileLayer, Marker, GeoJSON, Popup, useMap} from 'react-leaflet';
 import ReactApexChart from "react-apexcharts";
 import './DataVisualization.css';
@@ -101,7 +101,7 @@ const DataVisualization = ({device, location, temperatureData}) => {
     // console.log('device', curdevice, '  ', deviceData[curdevice])
 
 
-    const metricChange = (metric) => {
+    const metricChange = useCallback ((metric) => {
         // console.log('metric',metric)
         let newData = [];
         switch (metric) {
@@ -136,11 +136,11 @@ const DataVisualization = ({device, location, temperatureData}) => {
         // Assume newData is formatted correctly for ApexChart
         // console.log('newData',newData)
         setChartData(newData);
-    }
+    },[filteredSeries]);
 
     useEffect(() => {
         metricChange(selectedMetric)
-    }, [metricChange,selectedMetric, deviceData, curdevice])
+    }, [metricChange,selectedMetric])
     const handleMetricChange = (event) => {
         // console.log('event',event)
         const metric = event.target.value;
