@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {MapContainer, TileLayer, Marker, GeoJSON, Popup, useMap} from 'react-leaflet';
 import ReactApexChart from "react-apexcharts";
 import './DataVisualization.css';
@@ -53,9 +53,10 @@ const formatToGeoJsonDevice = (coords) => {
 }
 
 const DataVisualization = ({device, location, temperatureData}) => {
-    const {deviceData, curdevice} = useSelector(state => ({
+    const {deviceData, curdevice, loading} = useSelector(state => ({
         deviceData: state.DeviceReducer.deviceData,
-        curdevice: state.DeviceReducer.curdevice
+        curdevice: state.DeviceReducer.curdevice,
+        loading: state.DeviceReducer.loading
     }));
     // const curlocation = deviceData[curdevice]?.locationhistory[0] ?? randomcoords[1]
     const [chartData, setChartData] = useState([]);
@@ -100,39 +101,33 @@ const DataVisualization = ({device, location, temperatureData}) => {
     // console.log('device', curdevice, '  ', deviceData[curdevice])
 
 
-    const handleMetricChange = (event) => {
-        console.log('event',event)
-        const metric = event.target.value;
-        setSelectedMetric(metric);
-
-        // Update chart data based on selected metric
-        // This is a simplified example; you'll need to replace it with actual logic
-        // to fetch and prepare data based on the selected metric from deviceData
+    const metricChange = (metric) => {
+        // console.log('metric',metric)
         let newData = [];
         switch (metric) {
             case 'Temperature':
                 newData = filteredSeries.map(item => ({
-                                x: new Date(item.measurementTime),
-                                y: item.temperature
-                            }))
+                    x: new Date(item.measurementTime),
+                    y: item.temperature
+                }))
                 break;
             case 'Humidity':
                 newData = filteredSeries.map(item => ({
-                                x: new Date(item.measurementTime),
-                                y: item.humidity
-                            }))
+                    x: new Date(item.measurementTime),
+                    y: item.humidity
+                }))
                 break;
             case 'Light Intensity':
                 newData = filteredSeries.map(item => ({
-                                x: new Date(item.measurementTime),
-                                y: item.light
-                            }))
+                    x: new Date(item.measurementTime),
+                    y: item.light
+                }))
                 break;
             case 'Shock':
                 newData = filteredSeries.map(item => ({
-                                x: new Date(item.measurementTime),
-                                y: item.accelerationG
-                            }))
+                    x: new Date(item.measurementTime),
+                    y: item.accelerationG
+                }))
                 break;
             default:
                 newData = [];
@@ -141,123 +136,141 @@ const DataVisualization = ({device, location, temperatureData}) => {
         // Assume newData is formatted correctly for ApexChart
         // console.log('newData',newData)
         setChartData(newData);
+    }
+
+    useEffect(() => {
+        metricChange(selectedMetric)
+    }, [selectedMetric, deviceData, curdevice])
+    const handleMetricChange = (event) => {
+        // console.log('event',event)
+        const metric = event.target.value;
+        setSelectedMetric(metric);
+        metricChange(selectedMetric)
+
+
     };
 
 
-    return (
-        <div className="data-visualization-container">
-            <div className="map-container">
+    return (<div>
+            {loading ? (<div className="loading-screen">
+                    {/* Display a loading indicator here */}
+                    <p>Loading...</p>
+                </div>) :
+                (
+                    <div className="data-visualization-container">
+                        <div className="map-container">
 
 
-                <MapContainer scrollWheelZoom={false}
-                              zoom={8} className="map-container-container">
-                    <SetViewToFitBounds coordinates={switchxy(validLocationHistory)}/>
-                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-                    {/*<Marker position={startPort} >*/}
-                    {/*    <Popup>Start Port</Popup>*/}
-                    {/*</Marker>*/}
+                            <MapContainer scrollWheelZoom={false}
+                                          zoom={8} className="map-container-container">
+                                <SetViewToFitBounds coordinates={switchxy(validLocationHistory)}/>
+                                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
+                                {/*<Marker position={startPort} >*/}
+                                {/*    <Popup>Start Port</Popup>*/}
+                                {/*</Marker>*/}
 
-                    {/*<Marker position={endPort} >*/}
-                    {/*    <Popup>End Port</Popup>*/}
-                    {/*</Marker>*/}
-                    {/* Current Location Marker */}
-                    {/*                    <Marker position={[curlocation[1], curlocation[0]]} icon={currentLocationIcon}>*/}
-                    {/*                        <Popup>Current Location</Popup>*/}
-                    {/*                    </Marker>*/}
+                                {/*<Marker position={endPort} >*/}
+                                {/*    <Popup>End Port</Popup>*/}
+                                {/*</Marker>*/}
+                                {/* Current Location Marker */}
+                                {/*                    <Marker position={[curlocation[1], curlocation[0]]} icon={currentLocationIcon}>*/}
+                                {/*                        <Popup>Current Location</Popup>*/}
+                                {/*                    </Marker>*/}
 
-                    <GeoJSON key={`geojson-${device.deviceId}-${Date.now()}`} data={geoJsonData}/>
+                                <GeoJSON key={`geojson-${device.deviceId}-${Date.now()}`} data={geoJsonData}/>
 
-                    {
-                        geoJsonData.geometry.coordinates.map((coord, index) => (
-                            <Marker position={[coord[1], coord[0]]} key={`marker-${index}`} icon={currentLocationIcon}>
-                                <Popup>{`Point ${index + 1}`}</Popup>
-                            </Marker>
-                        ))
-                    }
+                                {
+                                    geoJsonData.geometry.coordinates.map((coord, index) => (
+                                        <Marker position={[coord[1], coord[0]]} key={`marker-${index}`}
+                                                icon={currentLocationIcon}>
+                                            <Popup>{`Point ${index + 1}`}</Popup>
+                                        </Marker>
+                                    ))
+                                }
 
-                    <GeoJSON key={deviceData[curdevice]?.locationhistory ?? defaultCoords} data={geoJsonData}/>
-                </MapContainer>
+                                <GeoJSON key={deviceData[curdevice]?.locationhistory ?? defaultCoords}
+                                         data={geoJsonData}/>
+                            </MapContainer>
 
-                {/*<MapContainer scrollWheelZoom={false} zoom={8} className="map-container-container">*/}
-
-
-                {/*    */}
-
-
-                {/*    /!* GeoJSON for the route *!/*/}
-                {/*    <GeoJSON key={`geojson-${device.deviceId}-${Date.now()}`} data={geoJsonData}/>*/}
-
-                {/*    /!* Loop through coordinates and create a marker for each *!/*/}
-                {/*    {*/}
-                {/*        geoJsonData.features[0].geometry.coordinates.map((coord, index) => (*/}
-                {/*            <Marker position={[coord[1], coord[0]]} key={`marker-${index}`}>*/}
-                {/*                <Popup>{`Point ${index}`}</Popup>*/}
-                {/*            </Marker>*/}
-                {/*        ))*/}
-                {/*    }*/}
-                {/*</MapContainer>*/}
-
-            </div>
-            {/*           {console.log('device sdfdsf', temperature)}*/}
-
-            {/*{console.log('device sdfdsf', deviceData[curdevice]?.temperaturehistory ?? 'default_value')}*/}
-            <div className="plot-section">
-                <div className="temperature-plot-container">
+                            {/*<MapContainer scrollWheelZoom={false} zoom={8} className="map-container-container">*/}
 
 
-                    <div>
-                        <select value={selectedMetric} onChange={handleMetricChange}>
-                            <option value="Temperature">Temperature</option>
-                            <option value="Humidity">Humidity</option>
-                            <option value="Light Intensity">Light Intensity</option>
-                            <option value="Shock">Shock</option>
-                        </select>
+                            {/*    */}
+
+
+                            {/*    /!* GeoJSON for the route *!/*/}
+                            {/*    <GeoJSON key={`geojson-${device.deviceId}-${Date.now()}`} data={geoJsonData}/>*/}
+
+                            {/*    /!* Loop through coordinates and create a marker for each *!/*/}
+                            {/*    {*/}
+                            {/*        geoJsonData.features[0].geometry.coordinates.map((coord, index) => (*/}
+                            {/*            <Marker position={[coord[1], coord[0]]} key={`marker-${index}`}>*/}
+                            {/*                <Popup>{`Point ${index}`}</Popup>*/}
+                            {/*            </Marker>*/}
+                            {/*        ))*/}
+                            {/*    }*/}
+                            {/*</MapContainer>*/}
+
+                        </div>
+                        {/*           {console.log('device sdfdsf', temperature)}*/}
+
+                        {/*{console.log('device sdfdsf', deviceData[curdevice]?.temperaturehistory ?? 'default_value')}*/}
+                        <div className="plot-section">
+                            <div className="temperature-plot-container">
+
+
+                                <div>
+                                    <select value={selectedMetric} onChange={handleMetricChange}>
+                                        <option value="Temperature">Temperature</option>
+                                        <option value="Humidity">Humidity</option>
+                                        <option value="Light Intensity">Light Intensity</option>
+                                        <option value="Shock">Shock</option>
+                                    </select>
+                                </div>
+                                <br/>
+
+                                <h4>{selectedMetric}</h4>
+                                <ReactApexChart
+                                    options={commonOptions}
+                                    series={[{
+                                        name: selectedMetric,
+                                        data: chartData
+                                    }]}
+                                    type="line"
+                                    width="100%"
+                                />
+                            </div>
+
+
+                            <div className="control-buttons">
+                                {/*{console.log('device sdfdsf', deviceData[curdevice]?.currenthumidity ?? 'default_value')}*/}
+                                <UpDownControl
+                                    label="Humidity"
+                                    // initialValue={deviceData[curdevice]['currenthumidity']}
+                                    initialValue={deviceData[curdevice]?.currenthumidity ?? '-'}
+                                    onChange={(limits) => console.log('Humidity limits:', limits)}
+                                    minLimit={0}
+                                    maxLimit={100}
+                                />
+                                <UpDownControl
+                                    label="Luminosity"
+                                    initialValue={deviceData[curdevice]?.currentluminosity ?? '-'}
+                                    onChange={(limits) => console.log('Luminosity limits:', limits)}
+                                    minLimit={0}
+                                    maxLimit={100}
+                                />
+                                <UpDownControl
+                                    label="Shock (g)"
+                                    initialValue={deviceData[curdevice]?.currentshock ?? '-'}
+                                    onChange={(limits) => console.log('Shock limits:', limits)}
+                                    minLimit={0}
+                                    maxLimit={10}
+                                />
+                            </div>
+                        </div>
                     </div>
-                    <br/>
-
-                    <h4>{selectedMetric}</h4>
-                    <ReactApexChart
-                        options={commonOptions}
-                        series={[{
-                            name: selectedMetric,
-                            data: chartData
-                        }]}
-                        type="line"
-                        width="100%"
-                    />
-                </div>
-                <div>
-
-                    {curdevice}'s Last Transmission (Seattle Time)
-                    : {convertToSeattleTime(deviceData[curdevice]?.dataseries?.slice(-1)[0]?.processTime)}
-                </div>
-
-                <div className="control-buttons">
-                    {/*{console.log('device sdfdsf', deviceData[curdevice]?.currenthumidity ?? 'default_value')}*/}
-                    <UpDownControl
-                        label="Humidity"
-                        // initialValue={deviceData[curdevice]['currenthumidity']}
-                        initialValue={deviceData[curdevice]?.currenthumidity ?? '-'}
-                        onChange={(limits) => console.log('Humidity limits:', limits)}
-                        minLimit={0}
-                        maxLimit={100}
-                    />
-                    <UpDownControl
-                        label="Luminosity"
-                        initialValue={deviceData[curdevice]?.currentluminosity ?? '-'}
-                        onChange={(limits) => console.log('Luminosity limits:', limits)}
-                        minLimit={0}
-                        maxLimit={100}
-                    />
-                    <UpDownControl
-                        label="Shock (g)"
-                        initialValue={deviceData[curdevice]?.currentshock ?? '-'}
-                        onChange={(limits) => console.log('Shock limits:', limits)}
-                        minLimit={0}
-                        maxLimit={10}
-                    />
-                </div>
-            </div>
+                )
+            }
         </div>
     );
 };
