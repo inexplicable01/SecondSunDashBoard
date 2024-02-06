@@ -42,14 +42,66 @@ const randomcoords = switchxy([
     // [47.1258383, -122.1609394],  // Montevideo
     // [47.3610025, -122.1609394]   // Buenos Aires
 ])
-const formatToGeoJsonDevice = (coords) => {
-    console.log('geo', coords)
+
+const seattleTimeFormatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Los_Angeles',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+});
+const formatToGeoJsonDevice = (dataseries) => {
+    // console.log('dataseries', dataseries)
+      // .filter(item => item.coordinates && item.coordinates.latitude != null && item.coordinates.longitude != null)
+  // .map(item => [item.coordinates.longitude, item.coordinates.latitude, item.locationAccuracy]),
+  //   for
     return {
         type: "Feature",
         geometry: {
-            type: "LineString", coordinates: coords
+            type: "LineString", coordinates: dataseries.filter(item => item.coordinates
+                && item.coordinates.latitude != null && item.coordinates.longitude != null)
+  .map(item => [item.coordinates.longitude, item.coordinates.latitude, item.locationAccuracy]),
         }, // New Delhi
     }
+}
+
+function getHourlyTicks(start, end) {
+    const ticks = [];
+    let current = new Date(start);
+    current.setMinutes(0, 0, 0); // Set to the start of the hour
+
+    while (current.getTime() <= end) {
+        ticks.push(current.getTime());
+        current.setHours(current.getHours() + 1); // Move to the next hour
+    }
+
+    return ticks;
+}
+
+const twentyfourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+const now = new Date();
+
+// Generate the array of timestamps for each hour
+const hourlyTimestamps = generateHourlyTimestamps(twentyfourHoursAgo, now);
+
+
+function generateHourlyTimestamps(start, end) {
+    // Set start date to the nearest hour before the actual start time
+    let current = new Date(start);
+    current.setMinutes(0, 0, 0); // Resets minutes, seconds, and milliseconds
+
+    // If the adjusted start time is after the actual start time, subtract one hour
+    if (current.getTime() > start) {
+        current.setHours(current.getHours() - 1);
+    }
+
+    let timestamps = [];
+    while (current.getTime() < end) {
+        timestamps.push(current.getTime());
+        current.setHours(current.getHours() + 1); // Increment by one hour
+    }
+
+    return timestamps;
 }
 
 const DataVisualization = ({device, location, temperatureData}) => {
@@ -69,6 +121,21 @@ const DataVisualization = ({device, location, temperatureData}) => {
             type: 'datetime',
             min: twentyfourHoursAgo.getTime(),
             max: Date.now(),
+            // tickAmount: 10,
+            categories: hourlyTimestamps, // Set the calculated hourly timestamps
+            labels: {
+                formatter: function (val) {
+                    // Format the date to show only the hour
+                    return new Intl.DateTimeFormat('en-US', {
+                        timeZone: 'America/Los_Angeles',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false
+                    }).format(new Date(val));
+                },
+            },
+            // Adjust 'tickAmount' to suit how many ticks you'd like to show across the axis
+            tickAmount: 24,
         },
         yaxis: {
             labels: {
@@ -87,8 +154,8 @@ const DataVisualization = ({device, location, temperatureData}) => {
 
     const defaultCoords = [[-122.3321, 47.6062], [-122.0613245, 48.6092392]]; // Replace with your desired default coordinates[-122.3321, 47.6062], [-122.0613245, 48.6092392]
 
-    const locationHistory = deviceData[curdevice]?.locationhistory ?? randomcoords;
-    const validLocationHistory = locationHistory.length >= 2 ? locationHistory : defaultCoords;
+    // const locationHistory = deviceData[curdevice]?.locationhistory ?? randomcoords;
+
 
 // Now use validLocationHistory in your component
     const convertToSeattleTime = (utcTime) => {
@@ -98,14 +165,14 @@ const DataVisualization = ({device, location, temperatureData}) => {
         return date.toLocaleString("en-US", {timeZone: "America/Los_Angeles"});
     };
     const geoJsonData = useMemo(() => {
-        return formatToGeoJsonDevice(deviceData[curdevice]?.locationhistory ?? randomcoords);
+        return formatToGeoJsonDevice(deviceData[curdevice]?.dataseries ?? randomcoords);
     }, [deviceData, curdevice]);
     // console.log('Cure Location ', [curlocation[1], curlocation[0]])
     // console.log('device', curdevice, '  ', deviceData[curdevice]?.locationhistory ?? defaultCoords)
     // console.log('device', curdevice, '  ', deviceData[curdevice])
 
-
-    const metricChange = useCallback ((metric) => {
+    const validLocationHistory = deviceData[curdevice].dataseries?.length >= 2 ? geoJsonData.geometry.coordinates : defaultCoords;
+    const metricChange = useCallback((metric) => {
         // console.log('metric',metric)
         let newData = [];
         switch (metric) {
@@ -140,11 +207,11 @@ const DataVisualization = ({device, location, temperatureData}) => {
         // Assume newData is formatted correctly for ApexChart
         // console.log('newData',newData)
         setChartData(newData);
-    },[filteredSeries]);
+    }, [filteredSeries]);
 
     useEffect(() => {
         metricChange(selectedMetric)
-    }, [metricChange,selectedMetric])
+    }, [metricChange, selectedMetric])
     const handleMetricChange = (event) => {
         // console.log('event',event)
         const metric = event.target.value;
@@ -183,36 +250,18 @@ const DataVisualization = ({device, location, temperatureData}) => {
                                 <GeoJSON key={`geojson-${device.deviceId}-${Date.now()}`} data={geoJsonData}/>
 
                                 {
-                                    geoJsonData.geometry.coordinates.map((coord, index) => (
-                                        <Marker position={[coord[1], coord[0]]} key={`marker-${index}`}
+                                    deviceData[curdevice]?.dataseries.map((item, index) => (
+                                        <Marker position={[item.coordinates.latitude, item.coordinates.longitude]} key={`marker-${index}`}
                                                 icon={currentLocationIcon}>
-                                            <Popup>{`Point ${index + 1}`}</Popup>
+                                            <Popup>{`Point ${index + 1}, Accuracy:${item.locationAccuracy}\n
+                                            time: ${seattleTimeFormatter.format(new Date(item.measurementTime))} PT time`}</Popup>
                                         </Marker>
                                     ))
                                 }
 
-                                <GeoJSON key={deviceData[curdevice]?.locationhistory ?? defaultCoords}
+                                <GeoJSON key={deviceData[curdevice]?.dataseries ?? defaultCoords}
                                          data={geoJsonData}/>
                             </MapContainer>
-
-                            {/*<MapContainer scrollWheelZoom={false} zoom={8} className="map-container-container">*/}
-
-
-                            {/*    */}
-
-
-                            {/*    /!* GeoJSON for the route *!/*/}
-                            {/*    <GeoJSON key={`geojson-${device.deviceId}-${Date.now()}`} data={geoJsonData}/>*/}
-
-                            {/*    /!* Loop through coordinates and create a marker for each *!/*/}
-                            {/*    {*/}
-                            {/*        geoJsonData.features[0].geometry.coordinates.map((coord, index) => (*/}
-                            {/*            <Marker position={[coord[1], coord[0]]} key={`marker-${index}`}>*/}
-                            {/*                <Popup>{`Point ${index}`}</Popup>*/}
-                            {/*            </Marker>*/}
-                            {/*        ))*/}
-                            {/*    }*/}
-                            {/*</MapContainer>*/}
 
                         </div>
                         {/*           {console.log('device sdfdsf', temperature)}*/}
@@ -281,8 +330,8 @@ const DataVisualization = ({device, location, temperatureData}) => {
 export default DataVisualization;
 
 
-const startPort = [-22.9068, -43.1729];
-// const endPortswitched = device.geometry.coordinates[device.geometry.coordinates.length - 1];
-const endPort = [-34.6037, -58.3816];
-const startIcon = createIcon('mdi mdi-crosshairs-gps');
-const endIcon = createIcon('mdi mdi-flag-checkered');
+// const startPort = [-22.9068, -43.1729];
+// // const endPortswitched = device.geometry.coordinates[device.geometry.coordinates.length - 1];
+// const endPort = [-34.6037, -58.3816];
+// const startIcon = createIcon('mdi mdi-crosshairs-gps');
+// const endIcon = createIcon('mdi mdi-flag-checkered');

@@ -43,19 +43,10 @@ const DeviceReducer = (state = initialState, action) => {
                 error: null,
                 deviceData:{...state.deviceData,
                     [action.deviceId]:{
-    //                     time_temp:[...action.series].reverse().map(item => new Date(item.measurementTime)
-    //                         .toLocaleTimeString('en-US', {
-    //     hour: 'numeric',
-    //     minute: 'numeric',
-    //     hour12: true
-    // })),
-    //                     temperaturehistory:[...action.series].reverse().map(item=> item.temperature),
                         dataseries:[...action.series].reverse(),
-                        locationhistory:action.series
-  .filter(item => item.coordinates && item.coordinates.latitude != null && item.coordinates.longitude != null)
-  .map(item => [item.coordinates.longitude, item.coordinates.latitude]),
-  //                       locationhistory:[[-122.3192532,42.6610025] ,[-122.0613245,43.6092392] ,
-  //                           [-122.0613245,45.6092392],[-122.0613245,48.6092392]  ],
+  //                       locationhistory:action.series
+  // .filter(item => item.coordinates && item.coordinates.latitude != null && item.coordinates.longitude != null)
+  // .map(item => [item.coordinates.longitude, item.coordinates.latitude, item.locationAccuracy]),
                         currenthumidity:action.status['humidity'],
                         currentluminosity:action.status['light'],
                         currentshock:action.status['accelerationG']
