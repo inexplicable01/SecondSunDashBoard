@@ -171,7 +171,9 @@ const DataVisualization = ({device, location, temperatureData}) => {
     // console.log('device', curdevice, '  ', deviceData[curdevice]?.locationhistory ?? defaultCoords)
     // console.log('device', curdevice, '  ', deviceData[curdevice])
 
-    const validLocationHistory = deviceData[curdevice].dataseries?.length >= 2 ? geoJsonData.geometry.coordinates : defaultCoords;
+    const validLocationHistory = deviceData[curdevice] && deviceData[curdevice].dataseries?.length >= 2
+    ? geoJsonData.geometry.coordinates
+    : defaultCoords;
     const metricChange = useCallback((metric) => {
         // console.log('metric',metric)
         let newData = [];
