@@ -79,20 +79,17 @@ export const getDeviceDataStatus = (deviceId) => {
     return api.get(url.GET_DEVICE_DATA + '/' + deviceId + '/status');
 };
 
-export const getDeviceDataTimeSeries = (deviceId, startTime, endTime) => {
-    // Define headers for this specific call
-    // const headers = {
-    //   'accountId': accountID// Replace with your actual header and value
-    //   // Add more headers if needed
-    // };
+export const getDeviceDataTimeSeries = (deviceId, startTime, endTime, page, pageSize) => {
+
     const params = qs.stringify({
         startTime,
-        endTime
+        endTime,
+        page,
+        pageSize
     });
-
     console.log('araon', params)
     // Make the GET request with custom headers
-    // console.log('fackend_helper url ' + url.GET_DEVICE_DATA + '/' + deviceId + '/status')
+    console.log('fackend_helper url ' + url.GET_DEVICE_DATA + '/' + deviceId + `/timeSeries?${params}`)
     return api.get(`${url.GET_DEVICE_DATA}/${deviceId}/timeSeries?${params}`);
 };
 

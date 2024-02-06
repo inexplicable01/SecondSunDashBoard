@@ -26,18 +26,29 @@ import {watchGetProjectStatusChartsData} from "../TemplateReferences/dashboardPr
 function* fetchDeviceDataSaga({payload: deviceId}) {
     try {
         const status = yield call(getDeviceDataStatus, deviceId);
+        const endTime = new Date().toISOString();// Get the current date and time
+        const startTime = new Date(new Date().getTime() - (24 * 60 * 60 * 1000)).toISOString();// Calculate the start time by subtracting 1 day (24 hours) from the current time
+        const pageSize = 500
+                let allMeasurements = [];
+        let page = 1;
+        let totalPages = 1; // St
 
-        // Get the current date and time
-        const endTime = new Date().toISOString();
+        while (page <= totalPages) {
+            const response = yield call(getDeviceDataTimeSeries, deviceId, startTime, endTime, page, pageSize);
+            console.log('Page ' + page + ' data:', response);
 
-// Calculate the start time by subtracting 1 day (24 hours) from the current time
-        const startTime = new Date(new Date().getTime() - (24 * 60 * 60 * 1000)).toISOString();
+            // Add the current page's measurements to the allMeasurements array
+            allMeasurements = allMeasurements.concat(response.measurements);
 
-        const series = yield call(getDeviceDataTimeSeries, deviceId,startTime,endTime)
-        console.log('returned data from Device Call, Currently asking for 1 day worth of data' , series)
-        yield put({type: FETCH_DEVICE_DATA_SUCCESS, series: series, status: status, deviceId: deviceId});
+            // Update totalPages based on the API response
+            totalPages = response.totalPages;
+            page++; // Go to the next page
+        }
+        // const series = yield call(getDeviceDataTimeSeries, deviceId,startTime,endTime)
+        console.log('All measurements retrieved:', allMeasurements);
+        yield put({type: FETCH_DEVICE_DATA_SUCCESS, series: allMeasurements, status: status, deviceId: deviceId});
     } catch (error) {
-        console.log('Failure')
+        console.log('Failure', error)
         yield put({type: FETCH_DEVICE_DATA_FAILURE, deviceId: deviceId, error: error.message});
     }
 }
