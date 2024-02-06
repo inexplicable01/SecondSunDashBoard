@@ -76,13 +76,13 @@ const Login = (props) => {
             // password: Yup.string().required("Please Enter Your Password"),
         }),
         onSubmit: (values) => {
-            console.log(values)
+            // console.log(values)
 
             dispatch(loginWithAPIKkey(values.apikey));
         }
     });
     useEffect(() => {
-        console.log(validatedAPIKEY)
+        // console.log(validatedAPIKEY)
         if (validatedAPIKEY == null) {
             // If API key is present, navigate to the dashboard
 
