@@ -258,7 +258,6 @@ const DataVisualization = ({device, location, temperatureData}) => {
                                         </Marker>
                                     ))
                                 }
-
                                 <GeoJSON key={deviceData[curdevice]?.dataseries ?? defaultCoords}
                                          data={geoJsonData}/>
                             </MapContainer>
