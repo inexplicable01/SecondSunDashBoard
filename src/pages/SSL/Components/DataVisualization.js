@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState, useCallback} from 'react';
-import {MapContainer, TileLayer, Marker, GeoJSON, Popup, useMap} from 'react-leaflet';
+import {MapContainer, TileLayer, Marker, GeoJSON, Popup, Circle, useMap} from 'react-leaflet';
 import ReactApexChart from "react-apexcharts";
 import './DataVisualization.css';
 import UpDownControl from './UpDownControl';
@@ -52,15 +52,15 @@ const seattleTimeFormatter = new Intl.DateTimeFormat('en-US', {
 });
 const formatToGeoJsonDevice = (dataseries) => {
     // console.log('dataseries', dataseries)
-      // .filter(item => item.coordinates && item.coordinates.latitude != null && item.coordinates.longitude != null)
-  // .map(item => [item.coordinates.longitude, item.coordinates.latitude, item.locationAccuracy]),
-  //   for
+    // .filter(item => item.coordinates && item.coordinates.latitude != null && item.coordinates.longitude != null)
+    // .map(item => [item.coordinates.longitude, item.coordinates.latitude, item.locationAccuracy]),
+    //   for
     return {
         type: "Feature",
         geometry: {
             type: "LineString", coordinates: dataseries.filter(item => item.coordinates
                 && item.coordinates.latitude != null && item.coordinates.longitude != null)
-  .map(item => [item.coordinates.longitude, item.coordinates.latitude, item.locationAccuracy]),
+                .map(item => [item.coordinates.longitude, item.coordinates.latitude, item.locationAccuracy]),
         }, // New Delhi
     }
 }
@@ -114,7 +114,7 @@ const DataVisualization = ({device, location, temperatureData}) => {
     const [chartData, setChartData] = useState([]);
     const twentyfourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000); // 2 hours in milliseconds
     const [selectedMetric, setSelectedMetric] = useState('Temperature');
-    const currentLocationIcon = createIcon('mdi mdi-truck-plus-outline ');
+    const currentLocationIcon = createIcon('mdi mdi-truck-minus ');
     const commonOptions = {
         chart: {id: 'basic-bar'},
         xaxis: {
@@ -172,8 +172,8 @@ const DataVisualization = ({device, location, temperatureData}) => {
     // console.log('device', curdevice, '  ', deviceData[curdevice])
 
     const validLocationHistory = deviceData[curdevice] && deviceData[curdevice].dataseries?.length >= 2
-    ? geoJsonData.geometry.coordinates
-    : defaultCoords;
+        ? geoJsonData.geometry.coordinates
+        : defaultCoords;
     const metricChange = useCallback((metric) => {
         // console.log('metric',metric)
         let newData = [];
@@ -237,27 +237,26 @@ const DataVisualization = ({device, location, temperatureData}) => {
                                           zoom={8} className="map-container-container">
                                 <SetViewToFitBounds coordinates={switchxy(validLocationHistory)}/>
                                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-                                {/*<Marker position={startPort} >*/}
-                                {/*    <Popup>Start Port</Popup>*/}
-                                {/*</Marker>*/}
-
-                                {/*<Marker position={endPort} >*/}
-                                {/*    <Popup>End Port</Popup>*/}
-                                {/*</Marker>*/}
-                                {/* Current Location Marker */}
-                                {/*                    <Marker position={[curlocation[1], curlocation[0]]} icon={currentLocationIcon}>*/}
-                                {/*                        <Popup>Current Location</Popup>*/}
-                                {/*                    </Marker>*/}
-
                                 <GeoJSON key={`geojson-${device.deviceId}-${Date.now()}`} data={geoJsonData}/>
-
                                 {
                                     deviceData[curdevice]?.dataseries.map((item, index) => (
-                                        <Marker position={[item.coordinates.latitude, item.coordinates.longitude]} key={`marker-${index}`}
-                                                icon={currentLocationIcon}>
-                                            <Popup>{`Point ${index + 1}, Accuracy:${item.locationAccuracy}\n
+                                        <>
+                                            <Marker position={[item.coordinates.latitude, item.coordinates.longitude]}
+                                                    key={`marker-${index}`}
+                                                    icon={currentLocationIcon}
+                                            >
+                                                <Popup>{`Point ${index + 1}, Accuracy:${item.locationAccuracy}\n
                                             time: ${seattleTimeFormatter.format(new Date(item.measurementTime))} PT time`}</Popup>
-                                        </Marker>
+                                            </Marker>
+                                            <Circle
+                                                center={[item.coordinates.latitude, item.coordinates.longitude]}
+                                                radius={item.locationAccuracy} // This should be your parameter that determines the size of the circle
+                                                key={`circle-${index}`}
+                                                // color="blue" // You can customize your circle color
+                                                fillColor="blue" // You can customize your fill color
+                                                fillOpacity={0.01} // You can customize your fill opacity
+                                            />
+                                        </>
                                     ))
                                 }
                                 <GeoJSON key={deviceData[curdevice]?.dataseries ?? defaultCoords}

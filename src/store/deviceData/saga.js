@@ -35,7 +35,7 @@ function* fetchDeviceDataSaga({payload: deviceId}) {
 
         while (page <= totalPages) {
             const response = yield call(getDeviceDataTimeSeries, deviceId, startTime, endTime, page, pageSize);
-            console.log('Page ' + page + ' data:', response);
+            // console.log('Page ' + page + ' data:', response);
 
             // Add the current page's measurements to the allMeasurements array
             allMeasurements = allMeasurements.concat(response.measurements);
