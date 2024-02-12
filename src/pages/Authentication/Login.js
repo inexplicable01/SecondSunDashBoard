@@ -34,7 +34,7 @@ import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props
 // actions
 import {loginUser, socialLogin, resetLoginFlag, loginWithAPIKkey, logoutUser} from "../../store/actions";
 
-import logoLight from "../../assets/images/logo-light.png";
+import logoLight from "../../assets/images/SSL/LEGACY_WEB_PNG.png";
 
 //Import config
 import {facebook, google} from "../../config";
@@ -145,7 +145,7 @@ const Login = (props) => {
                                 <div className="text-center mt-sm-5 mb-4 text-white-50">
                                     <div>
                                         <Link to="/" className="d-inline-block auth-logo">
-                                            <img src={logoLight} alt="" height="20"/>
+                                            <img src={logoLight} alt="" height="100"/>
                                         </Link>
                                     </div>
                                     <p className="mt-3 fs-15 fw-medium">SSL Dashboard</p>
