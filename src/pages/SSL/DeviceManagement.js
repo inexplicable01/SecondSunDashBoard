@@ -115,7 +115,7 @@ const DeviceManagement = (props) => {
             setClickedDeviceData(device);
             // console.log(device)
             // console.log(device.deviceId)
-            dispatch(fetchDeviceData(device.deviceId));
+            dispatch(fetchDeviceData(device.deviceId,7));
             if (showDeviceData && dataDivRef.current.scrollHeight ) {
                 const height = dataDivRef.current.scrollHeight + 'px';
                 // const height =  '500px';

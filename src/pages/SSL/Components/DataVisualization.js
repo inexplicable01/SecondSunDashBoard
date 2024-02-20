@@ -50,39 +50,13 @@ const seattleTimeFormatter = new Intl.DateTimeFormat('en-US', {
     second: '2-digit',
     hour12: false
 });
-const formatToGeoJsonDevice = (dataseries) => {
-    // console.log('dataseries', dataseries)
-    // .filter(item => item.coordinates && item.coordinates.latitude != null && item.coordinates.longitude != null)
-    // .map(item => [item.coordinates.longitude, item.coordinates.latitude, item.locationAccuracy]),
-    //   for
-    return {
-        type: "Feature",
-        geometry: {
-            type: "LineString", coordinates: dataseries.filter(item => item.coordinates
-                && item.coordinates.latitude != null && item.coordinates.longitude != null)
-                .map(item => [item.coordinates.longitude, item.coordinates.latitude, item.locationAccuracy]),
-        }, // New Delhi
-    }
-}
+const daytimeframe = 7
 
-function getHourlyTicks(start, end) {
-    const ticks = [];
-    let current = new Date(start);
-    current.setMinutes(0, 0, 0); // Set to the start of the hour
-
-    while (current.getTime() <= end) {
-        ticks.push(current.getTime());
-        current.setHours(current.getHours() + 1); // Move to the next hour
-    }
-
-    return ticks;
-}
-
-const twentyfourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+const daysAgo = new Date(Date.now() - daytimeframe * 24 * 60 * 60 * 1000);
 const now = new Date();
 
 // Generate the array of timestamps for each hour
-const hourlyTimestamps = generateHourlyTimestamps(twentyfourHoursAgo, now);
+const hourlyTimestamps = generateHourlyTimestamps(daysAgo, now);
 
 
 function generateHourlyTimestamps(start, end) {
@@ -104,7 +78,9 @@ function generateHourlyTimestamps(start, end) {
     return timestamps;
 }
 
+
 const DataVisualization = ({device, location, temperatureData}) => {
+    const [viewDays, setViewDays] = useState(1)
     const {deviceData, curdevice, loading} = useSelector(state => ({
         deviceData: state.DeviceReducer.deviceData,
         curdevice: state.DeviceReducer.curdevice,
@@ -112,14 +88,14 @@ const DataVisualization = ({device, location, temperatureData}) => {
     }));
     // const curlocation = deviceData[curdevice]?.locationhistory[0] ?? randomcoords[1]
     const [chartData, setChartData] = useState([]);
-    const twentyfourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000); // 2 hours in milliseconds
+    const daysAgo = new Date(Date.now() - viewDays * 24 * 60 * 60 * 1000); // 2 hours in milliseconds
     const [selectedMetric, setSelectedMetric] = useState('Temperature');
     const currentLocationIcon = createIcon('mdi mdi-truck-minus ');
     const commonOptions = {
         chart: {id: 'basic-bar'},
         xaxis: {
             type: 'datetime',
-            min: twentyfourHoursAgo.getTime(),
+            min: daysAgo.getTime(),
             max: Date.now(),
             // tickAmount: 10,
             categories: hourlyTimestamps, // Set the calculated hourly timestamps
@@ -148,28 +124,26 @@ const DataVisualization = ({device, location, temperatureData}) => {
 
     // useMemo to memoize filteredSeries
     const filteredSeries = useMemo(() => {
-        const twentyfourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-        return deviceData[curdevice]?.dataseries.filter(item => new Date(item.measurementTime) >= twentyfourHoursAgo) ?? [];
-    }, [deviceData, curdevice]); // Dependencies that, when changed, will recalculate filteredSeries
+        const daysAgo = new Date(Date.now() - viewDays * 24 * 60 * 60 * 1000);
+        return deviceData[curdevice]?.dataseries.filter(item => new Date(item.measurementTime) >= daysAgo) ?? [];
+    }, [deviceData, curdevice, viewDays]); // Dependencies that, when changed, will recalculate filteredSeries
 
     const defaultCoords = [[-122.3321, 47.6062], [-122.0613245, 48.6092392]]; // Replace with your desired default coordinates[-122.3321, 47.6062], [-122.0613245, 48.6092392]
 
-    // const locationHistory = deviceData[curdevice]?.locationhistory ?? randomcoords;
-
-
-// Now use validLocationHistory in your component
-    const convertToSeattleTime = (utcTime) => {
-        if (!utcTime) return 'Not exist';
-
-        const date = new Date(utcTime);
-        return date.toLocaleString("en-US", {timeZone: "America/Los_Angeles"});
-    };
     const geoJsonData = useMemo(() => {
-        return formatToGeoJsonDevice(deviceData[curdevice]?.dataseries ?? randomcoords);
-    }, [deviceData, curdevice]);
-    // console.log('Cure Location ', [curlocation[1], curlocation[0]])
-    // console.log('device', curdevice, '  ', deviceData[curdevice]?.locationhistory ?? defaultCoords)
-    // console.log('device', curdevice, '  ', deviceData[curdevice])
+        const dataseries = deviceData[curdevice]?.dataseries ?? randomcoords;
+        const daysAgo = new Date(Date.now() - viewDays * 24 * 60 * 60 * 1000);
+        return {
+            type: "Feature",
+            geometry: {
+                type: "LineString", coordinates: dataseries.filter(item => item.coordinates
+                    && item.coordinates.latitude != null && item.coordinates.longitude != null && (new Date(item.measurementTime) >= daysAgo))
+                    .map(item => [item.coordinates.longitude, item.coordinates.latitude, item.locationAccuracy]),
+            }, // New Delhi
+        }
+    }, [deviceData, curdevice, viewDays]);
+
+
 
     const validLocationHistory = deviceData[curdevice] && deviceData[curdevice].dataseries?.length >= 2
         ? geoJsonData.geometry.coordinates
@@ -278,6 +252,18 @@ const DataVisualization = ({device, location, temperatureData}) => {
                                         <option value="Light Intensity">Light Intensity</option>
                                         <option value="Shock">Shock</option>
                                     </select>
+                                </div>
+
+                                <div className="slider-container">
+                                    <span className="slider-label">1 day</span>
+                                    <input
+                                        type="range"
+                                        min="1" // Minimum value
+                                        max="7" // Maximum value
+                                        value={viewDays}
+                                        onChange={(e) => setViewDays(Number(e.target.value))}
+                                    />
+                                    <span className="slider-label">7 days</span>
                                 </div>
                                 <br/>
 

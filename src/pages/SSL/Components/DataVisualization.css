@@ -10,7 +10,21 @@
     /* You can add other styling properties as needed */
 
 }
+.slider-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  margin-top: 10px; /* Adjust as needed */
+}
 
+.slider-label {
+  margin: 0 10px; /* Adjust spacing around labels as needed */
+}
+
+input[type='range'] {
+  flex-grow: 1; /* Allows the slider to grow and fill available space */
+}
 
 
 .custom-icon .mdi {
@@ -39,10 +53,12 @@
     align-items: end;
 }
 
-.temperature-plot-container {
-    flex: 3; /* It will occupy 60% of the available space */
-    /*margin-bottom: 10px;*/
-}
+/*.temperature-plot-container {*/
+/*  display: flex;*/
+/*  flex-direction: column;*/
+/*  align-items: flex-start;*/
+/*}*/
+
 
 .control-buttons {
     display: flex;

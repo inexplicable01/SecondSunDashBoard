@@ -23,11 +23,11 @@ import {watchGetProjectStatusChartsData} from "../TemplateReferences/dashboardPr
 // import {GET_SALESFORECAST_CHARTS_DATA} from "../dashboardCRM/actionType";
 
 // Replace 'yourApiCallFunction' with the actual function to make the API request
-function* fetchDeviceDataSaga({payload: deviceId}) {
+function* fetchDeviceDataSaga({payload: {deviceId,days}}) {
     try {
         const status = yield call(getDeviceDataStatus, deviceId);
         const endTime = new Date().toISOString();// Get the current date and time
-        const startTime = new Date(new Date().getTime() - (24 * 60 * 60 * 1000)).toISOString();// Calculate the start time by subtracting 1 day (24 hours) from the current time
+        const startTime = new Date(new Date().getTime() - (days*24 * 60 * 60 * 1000)).toISOString();// Calculate the start time by subtracting 1 day (24 hours) from the current time
         const pageSize = 500
                 let allMeasurements = [];
         let page = 1;
