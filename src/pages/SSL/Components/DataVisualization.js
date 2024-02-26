@@ -29,8 +29,12 @@ const createIcon = (iconClass) => {
 }
 
 function SetViewToFitBounds({coordinates}) {
+    // if coordinates
     const map = useMap();
-    map.fitBounds(coordinates);
+    if (coordinates && coordinates.length > 0){
+          map.fitBounds(coordinates);
+    }
+
     return null;  // No UI rendered by this component
 }
 
@@ -132,6 +136,7 @@ const DataVisualization = ({device, location, temperatureData}) => {
 
     const geoJsonData = useMemo(() => {
         const dataseries = deviceData[curdevice]?.dataseries ?? randomcoords;
+        // console.log('useMemo dataseries',dataseries)
         const daysAgo = new Date(Date.now() - viewDays * 24 * 60 * 60 * 1000);
         return {
             type: "Feature",
@@ -144,7 +149,7 @@ const DataVisualization = ({device, location, temperatureData}) => {
     }, [deviceData, curdevice, viewDays]);
 
 
-
+    // console.log('geoJsonData.geometry',geoJsonData.geometry)
     const validLocationHistory = deviceData[curdevice] && deviceData[curdevice].dataseries?.length >= 2
         ? geoJsonData.geometry.coordinates
         : defaultCoords;
@@ -195,8 +200,13 @@ const DataVisualization = ({device, location, temperatureData}) => {
         metricChange(selectedMetric)
 
     };
-
-
+    const keysArray = deviceData[curdevice]?.dataseries?.map((_, index) => `key${index}`) ?? ['defaultKey'];
+    // console.log('dataseries', deviceData[curdevice]?.dataseries)
+    // console.log('keysArray',keysArray)
+    // console.log('geoJsonData',geoJsonData)
+    //  console.log('validLocationHistory',validLocationHistory)
+    // validLocationHistory
+// geoJsonData
     return (<div>
             {loading ? (<div className="loading-screen">
                     {/* Display a loading indicator here */}
@@ -233,7 +243,7 @@ const DataVisualization = ({device, location, temperatureData}) => {
                                         </>
                                     ))
                                 }
-                                <GeoJSON key={deviceData[curdevice]?.dataseries ?? defaultCoords}
+                                <GeoJSON key={keysArray}
                                          data={geoJsonData}/>
                             </MapContainer>
 
