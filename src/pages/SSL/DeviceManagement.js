@@ -52,6 +52,7 @@ const DeviceManagement = (props) => {
         const [visibleColumns, setVisibleColumns] = useState({
             serialNumber: true,
             devicegroupid: true,
+            deviceType:true,
             company: true,
             status: true,
             lastTransmitted: true,

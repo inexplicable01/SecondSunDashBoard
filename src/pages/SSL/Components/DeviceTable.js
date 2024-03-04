@@ -52,9 +52,9 @@ const DeviceTable = ({ devices, visibleColumns, onStatusChange, handleDataIconCl
             accessor: 'deviceGroup',
         });
     }
-    if (visibleColumns.location) {
+    if (visibleColumns.deviceType) {
         cols.push({
-            Header: 'Location',
+            Header: 'Device',
             accessor: 'deviceType',
         });
     }
