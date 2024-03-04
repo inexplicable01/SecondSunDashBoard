@@ -23,18 +23,18 @@ const temperatureData = {
     }]
 };
 
-const fakedata = [
-  { name: 'Lucas Smith', location: 'San Diego' },
-  { name: 'Amelia Williams', location: 'San Jose' },
-  { name: 'Amelia Smith', location: 'San Diego' },
-  { name: 'Emma Wilson', location: 'Dallas' },
-  { name: 'Olivia Williams', location: 'Dallas' },
-  { name: 'Elijah Jackson', location: 'New York' },
-  { name: 'Noah Davis', location: 'Chicago' },
-  { name: 'Isabella Williams', location: 'San Diego' },
-  { name: 'Lucas Martinez', location: 'San Diego' },
-  { name: 'Benjamin Anderson', location: 'San Antonio' }
-]
+// const fakedata = [
+//   { name: 'Lucas Smith', location: 'San Diego' },
+//   { name: 'Amelia Williams', location: 'San Jose' },
+//   { name: 'Amelia Smith', location: 'San Diego' },
+//   { name: 'Emma Wilson', location: 'Dallas' },
+//   { name: 'Olivia Williams', location: 'Dallas' },
+//   { name: 'Elijah Jackson', location: 'New York' },
+//   { name: 'Noah Davis', location: 'Chicago' },
+//   { name: 'Isabella Williams', location: 'San Diego' },
+//   { name: 'Lucas Martinez', location: 'San Diego' },
+//   { name: 'Benjamin Anderson', location: 'San Antonio' }
+// ]
 
 const DeviceManagement = (props) => {
         // State to hold devices
@@ -51,7 +51,7 @@ const DeviceManagement = (props) => {
 
         const [visibleColumns, setVisibleColumns] = useState({
             serialNumber: true,
-            name: true,
+            devicegroupid: true,
             company: true,
             status: true,
             lastTransmitted: true,
@@ -60,7 +60,7 @@ const DeviceManagement = (props) => {
             registeredDate: true,
             registeredBy: true,
             startPort: true,
-            endPort: true,
+            location: true,
         });
         const [showCheckboxes, setShowCheckboxes] = useState(false); // state to toggle visibility of checkboxes
         const [isModalOpen, setIsModalOpen] = useState(false);
@@ -100,7 +100,7 @@ const DeviceManagement = (props) => {
         }, [dispatch]); // This effect runs whenever `fastdemodata` changes
 
 
-        const namelocationdata = props.fdata? props.fdata:fakedata
+        // const namelocationdata = props.fdata? props.fdata:fakedata
 
 
         const handleCheckboxChange = (e) => {
@@ -174,8 +174,8 @@ let newdevices = [];
 if (Array.isArray(devices)) {
     newdevices = devices.map((device, index) => ({
         ...device,
-        name: namelocationdata[index]?.name,
-        location: namelocationdata[index]?.location,
+        // name: namelocationdata[index]?.name,
+        // location: namelocationdata[index]?.location,
     }));
 }
 
@@ -206,7 +206,6 @@ if (Array.isArray(devices)) {
                                         devices={newdevices}
                                         visibleColumns={visibleColumns}
                                         onStatusChange={handleStatusChange}
-                                        namelocationdata={namelocationdata}
                                         handleDataIconClick={handleDataIconClick}
                                     />
                                 </div>

@@ -46,16 +46,16 @@ const DeviceTable = ({ devices, visibleColumns, onStatusChange, handleDataIconCl
             }
         });
     }
-        if (visibleColumns.startPort) {
+        if (visibleColumns.devicegroupid) {
         cols.push({
-            Header: 'Name',
-            accessor: 'name',
+            Header: 'Device Group',
+            accessor: 'deviceGroup',
         });
     }
-    if (visibleColumns.endPort) {
+    if (visibleColumns.location) {
         cols.push({
             Header: 'Location',
-            accessor: 'location',
+            accessor: 'deviceType',
         });
     }
     if (visibleColumns.status) {

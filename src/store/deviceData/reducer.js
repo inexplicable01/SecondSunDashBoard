@@ -26,17 +26,6 @@ const DeviceReducer = (state = initialState, action) => {
             };
         case FETCH_DEVICE_DATA_SUCCESS:
 
-
-            // console.log(action.status)
-            // console.log(action.series)
-            // console.log('adsf')
-            // locationhistory =
-            // if (locationhistory.length<2){
-            //     locationhistory = [
-            //         [47.6610025, -122.3269672],  // Sao Paulo
-            //         [47.6610025, -122.3269672]]
-            // }
-            // action.series.map(item=> [item.coordinates.latitude , item.coordinates.longitude])
             return {
                 ...state,
                 loading: false,

@@ -40,7 +40,7 @@ function SetViewToFitBounds({coordinates}) {
 
 const randomcoords = switchxy([
     // [47.8610025, -122.3269672],  // Sao Paulo
-    // [47.6610025, -122.3269672],  // Curitiba
+    // [47.6610025, -122.3269672],  // Curitibad
     // [47.3610025, -122.3269672],  // Florianopolis
     // [47.6610025, -122.3269672],  // Porto Alegre
     // [47.1258383, -122.1609394],  // Montevideo
@@ -49,9 +49,12 @@ const randomcoords = switchxy([
 
 const seattleTimeFormatter = new Intl.DateTimeFormat('en-US', {
     timeZone: 'America/Los_Angeles',
+        year: 'numeric', // Add year in the numeric format (e.g., 2023)
+    month: '2-digit', // Add month in the 2-digit format (e.g., 03)
+    day: '2-digit', // Add day in the 2-digit format (e.g., 04)
     hour: '2-digit',
     minute: '2-digit',
-    second: '2-digit',
+    // second: '2-digit',
     hour12: false
 });
 const daytimeframe = 7

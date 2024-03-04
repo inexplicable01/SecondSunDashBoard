@@ -23,13 +23,13 @@ import {watchGetProjectStatusChartsData} from "../TemplateReferences/dashboardPr
 // import {GET_SALESFORECAST_CHARTS_DATA} from "../dashboardCRM/actionType";
 
 // Replace 'yourApiCallFunction' with the actual function to make the API request
-function* fetchDeviceDataSaga({payload: {deviceId,days}}) {
+function* fetchDeviceDataSaga({payload: {deviceId, days}}) {
     try {
         const status = yield call(getDeviceDataStatus, deviceId);
         const endTime = new Date().toISOString();// Get the current date and time
-        const startTime = new Date(new Date().getTime() - (days*24 * 60 * 60 * 1000)).toISOString();// Calculate the start time by subtracting 1 day (24 hours) from the current time
+        const startTime = new Date(new Date().getTime() - (days * 24 * 60 * 60 * 1000)).toISOString();// Calculate the start time by subtracting 1 day (24 hours) from the current time
         const pageSize = 500
-                let allMeasurements = [];
+        let allMeasurements = [];
         let page = 1;
         let totalPages = 1; // St
 
@@ -55,10 +55,18 @@ function* fetchDeviceDataSaga({payload: {deviceId,days}}) {
 
 function* fetchAccountIDsSaga({accountID}) {
     try {
-
-        const response= yield call(getAccountDevices);
+        const response = yield call(getAccountDevices);
         const devices = response.filter(device => device !== null).map(device2 => ({...device2, status: 'Active'}))
-        console.log(devices)
+        console.log('devices', devices)
+        // for (const device of devices) {
+        //     const devicestatus = yield call(getDeviceDataStatus, device.deviceId);
+        //     // Step 3: Fetch city for coordinates
+        //     // console.log(devicestatus)
+        //     // // const city = yield call(getCityApi, coordinates);
+        //     // //
+        //     // // // Step 4: Dispatch action to update state with city info
+        //     // // yield put(setCityForCoordinates(device.id, city));
+        // }
         yield put({type: FETCH_ACCOUNT_ID_SUCCESS, devices: devices});
     } catch (error) {
         console.log('error', error)
