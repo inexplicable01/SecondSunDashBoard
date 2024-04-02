@@ -104,6 +104,12 @@ const DeviceTable = ({ devices, visibleColumns, onStatusChange, handleDataIconCl
             accessor: 'iccid',
         });
     }
+    if (visibleColumns.imei) {
+        cols.push({
+            Header: 'IMEI',
+            accessor: 'imei',
+        });
+    }
     if (visibleColumns.batteryLife) {
         cols.push({
             Header: 'Battery Life (Days)',

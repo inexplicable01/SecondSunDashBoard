@@ -57,6 +57,7 @@ const DeviceManagement = (props) => {
             status: true,
             lastTransmitted: true,
             lastLocation: true,
+            imei: true,
             batteryLife: true,
             registeredDate: true,
             registeredBy: true,
