@@ -2,7 +2,7 @@ import React, {useState, useRef, useEffect, useCallback} from "react";
 
 import {useLocation} from "react-router-dom";
 
-import {Col, Container, Row} from 'reactstrap';
+import {Button, Col, Container, Row} from 'reactstrap';
 import BreadCrumb from '../../Components/Common/BreadCrumb';
 import {ports, generateDeviceData} from './Components/DummyData';
 import './DeviceManagement.css';
@@ -52,7 +52,7 @@ const DeviceManagement = (props) => {
         const [visibleColumns, setVisibleColumns] = useState({
             serialNumber: true,
             devicegroupid: true,
-            deviceType:true,
+            deviceType: true,
             company: true,
             status: true,
             lastTransmitted: true,
@@ -117,8 +117,8 @@ const DeviceManagement = (props) => {
             setClickedDeviceData(device);
             // console.log(device)
             // console.log(device.deviceId)
-            dispatch(fetchDeviceData(device.deviceId,7));
-            if (showDeviceData && dataDivRef.current.scrollHeight ) {
+            dispatch(fetchDeviceData(device.deviceId, 7));
+            if (showDeviceData && dataDivRef.current.scrollHeight) {
                 const height = dataDivRef.current.scrollHeight + 'px';
                 // const height =  '500px';
                 setMaxHeight(height);
@@ -156,8 +156,6 @@ const DeviceManagement = (props) => {
         };
 
 
-
-
         useEffect(() => {
             if (!showDeviceData) {
                 const timer = setTimeout(() => {
@@ -171,22 +169,22 @@ const DeviceManagement = (props) => {
         //
         //
         // }, [devices]);
-let newdevices = [];
+        let newdevices = [];
 
-if (Array.isArray(devices)) {
-    newdevices = devices.map((device, index) => ({
-        ...device,
-        // name: namelocationdata[index]?.name,
-        // location: namelocationdata[index]?.location,
-    }));
-}
+        if (Array.isArray(devices)) {
+            newdevices = devices.map((device, index) => ({
+                ...device,
+                // name: namelocationdata[index]?.name,
+                // location: namelocationdata[index]?.location,
+            }));
+        }
 
         return (
             <React.Fragment>
                 <div className="page-content">
                     <Container fluid>
 
-                        <BreadCrumb title={props.title? props.title:'Registered Devices'} pageTitle="Devices"/>
+                        <BreadCrumb title={props.title ? props.title : 'Registered Devices'} pageTitle="Devices"/>
                         <Row>
                             <Col xs={12}>
 
@@ -213,9 +211,15 @@ if (Array.isArray(devices)) {
                                 </div>
                                 {clickedDeviceData && (
                                     <div className={`clicked-device-data ${showDeviceData ? 'open' : ''}`}
-                                         // style={{padding:'20px' , margin:'20px'}}
+                                        // style={{padding:'20px' , margin:'20px'}}
                                     >
-                                        <h3>Device {clickedDeviceData.deviceId}</h3>
+                                        <div>
+                                            <h3>Device {clickedDeviceData.deviceId}</h3>
+                                            <Button color="secondary" className="rounded-pill"
+                                                    onClick={() => handleDataIconClick(clickedDeviceData)}>
+                                                Refresh
+                                            </Button>
+                                        </div>
                                         <DataVisualization device={clickedDeviceData} location={location}
                                                            temperatureData={temperatureData}/>
                                     </div>
