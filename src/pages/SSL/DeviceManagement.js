@@ -245,11 +245,10 @@ const DeviceManagement = (props) => {
                                 <div className={`clicked-device-data ${showDeviceData ? 'open' : ''}`}
                                     // style={{padding:'20px' , margin:'20px'}}
                                 >
-                                    <div style="display: inline">
+                                    <div>
                                         <h3>Device {clickedDeviceData.deviceId}</h3>
                                         <Button color="secondary" className="rounded-pill"
-                                                onClick={() => handleDataIconClick(clickedDeviceData)}
-                                                style="test-align: center">
+                                                onClick={() => handleDataIconClick(clickedDeviceData)}>
                                             Refresh
                                         </Button>
                                     </div>
