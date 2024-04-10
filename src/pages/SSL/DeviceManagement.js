@@ -66,6 +66,9 @@ const DeviceManagement = (props) => {
         });
         const [showCheckboxes, setShowCheckboxes] = useState(false); // state to toggle visibility of checkboxes
         const [isModalOpen, setIsModalOpen] = useState(false);
+        const [greenDeviceCount, setGreenDeviceCount] = useState(0)
+        const [orangeDeviceCount, setOrangeDeviceCount] = useState(0)
+        const [blackDeviceCount, setBlackDeviceCount] = useState(0)
 // Render checkboxes
         const allColumns = Object.keys(visibleColumns);  // Get all column keys
         const [showDeviceData, setShowDeviceData] = useState(false);
@@ -165,10 +168,33 @@ const DeviceManagement = (props) => {
             }
         }, [showDeviceData]);
 
-        // useEffect(() => {
-        //
-        //
-        // }, [devices]);
+        useEffect(() => {
+            let g = 0;
+            let o = 0;
+            let b = 0;
+
+            devices.forEach((device) => {
+                // Assuming 'measurementTime' is a property of 'device'
+                const measurementTime = new Date(device.measurementTime);
+                const currentTime = new Date();
+                // Calculate the difference in minutes
+                const timeDifference = (currentTime - measurementTime) / (1000 * 60);
+
+                // Increment counters based on the time difference
+                if (timeDifference < 10) {
+                    g += 1;
+                } else if (timeDifference >= 10 && timeDifference <= 30) {
+                    o += 1;
+                } else {
+                    b += 1;
+                }
+            });
+
+            setBlackDeviceCount(b);
+            setOrangeDeviceCount(o);
+            setGreenDeviceCount(g);
+        }, [devices]); // Make sure this dependency list is correct
+
         let newdevices = [];
 
         if (Array.isArray(devices)) {
@@ -185,48 +211,55 @@ const DeviceManagement = (props) => {
                     <Container fluid>
 
                         <BreadCrumb title={props.title ? props.title : 'Registered Devices'} pageTitle="Devices"/>
+                        <h1>
+                            Active: <span style={{color: 'green'}}> {greenDeviceCount}</span>
+                            {' '}Maybe Active: <span style={{color: 'orange'}}>{orangeDeviceCount}</span>
+                            {' '}Not Active:<span style={{color: 'white'}}>{blackDeviceCount}</span>
+                        </h1>
                         <Row>
-                            <Col xs={12}>
+                        <Col xs={12}>
 
-                                {showCheckboxes &&
-                                    <div className="checkbox-container">
-                                        <input type="checkbox" id="serialNumber" checked={visibleColumns.serialNumber}
-                                               onChange={() => toggleColumnVisibility('serialNumber')}/>
-                                        <label htmlFor="serialNumber">Serial Number</label>
-                                    </div>
-                                }
-
-
-                                <div className="side-by-side-container">
-                                    <h3>Registered Devices</h3>
-                                    <button onClick={toggleModal}>Show/Hide Columns</button>
+                            {showCheckboxes &&
+                                <div className="checkbox-container">
+                                    <input type="checkbox" id="serialNumber" checked={visibleColumns.serialNumber}
+                                           onChange={() => toggleColumnVisibility('serialNumber')}/>
+                                    <label htmlFor="serialNumber">Serial Number</label>
                                 </div>
-                                <div>
-                                    <DeviceTable
-                                        devices={newdevices}
-                                        visibleColumns={visibleColumns}
-                                        onStatusChange={handleStatusChange}
-                                        handleDataIconClick={handleDataIconClick}
-                                    />
-                                </div>
-                                {clickedDeviceData && (
-                                    <div className={`clicked-device-data ${showDeviceData ? 'open' : ''}`}
-                                        // style={{padding:'20px' , margin:'20px'}}
-                                    >
-                                        <div>
-                                            <h3>Device {clickedDeviceData.deviceId}</h3>
-                                            <Button color="secondary" className="rounded-pill"
-                                                    onClick={() => handleDataIconClick(clickedDeviceData)}>
-                                                Refresh
-                                            </Button>
-                                        </div>
-                                        <DataVisualization device={clickedDeviceData} location={location}
-                                                           temperatureData={temperatureData}/>
-                                    </div>
-                                )}
+                            }
 
-                            </Col>
-                        </Row>
+
+                            <div className="side-by-side-container">
+                                <h3>Registered Devices</h3>
+                                <button onClick={toggleModal}>Show/Hide Columns</button>
+                            </div>
+                            <div>
+                                <DeviceTable
+                                    devices={newdevices}
+                                    visibleColumns={visibleColumns}
+                                    onStatusChange={handleStatusChange}
+                                    handleDataIconClick={handleDataIconClick}
+                                />
+                            </div>
+                            <br/>
+                            {clickedDeviceData && (
+                                <div className={`clicked-device-data ${showDeviceData ? 'open' : ''}`}
+                                    // style={{padding:'20px' , margin:'20px'}}
+                                >
+                                    <div style="display: inline">
+                                        <h3>Device {clickedDeviceData.deviceId}</h3>
+                                        <Button color="secondary" className="rounded-pill"
+                                                onClick={() => handleDataIconClick(clickedDeviceData)}
+                                                style="test-align: center">
+                                            Refresh
+                                        </Button>
+                                    </div>
+                                    <DataVisualization device={clickedDeviceData} location={location}
+                                                       temperatureData={temperatureData}/>
+                                </div>
+                            )}
+
+                        </Col>
+                    </Row>
 
                         <ColumnVisibilityModal
                             isVisible={isModalOpen}
