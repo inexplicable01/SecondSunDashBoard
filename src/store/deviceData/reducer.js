@@ -3,13 +3,14 @@ import {
     FETCH_DEVICE_DATA_SUCCESS,
     FETCH_DEVICE_DATA,
     FETCH_DEVICE_DATA_FAILURE, FETCH_ACCOUNT_ID,
-    FETCH_ACCOUNT_ID_SUCCESS
+    FETCH_ACCOUNT_ID_SUCCESS, FETCH_ACCOUNT_ID_FAILURE
 
 } from "./actionType";
 
 const initialState = {
     data: null,
     loading: false,
+    alldeviceloading:false,
     error: null,
     devices: [],
     deviceData:{},
@@ -59,15 +60,22 @@ const DeviceReducer = (state = initialState, action) => {
         case FETCH_ACCOUNT_ID:
             return {
                 ...state,
-                loading: true,
+                alldeviceloading: true,
             };
         case FETCH_ACCOUNT_ID_SUCCESS:
             // console.log(action.devices)
             return {
                 ...state,
-                loading: false,
+                alldeviceloading: false,
                 devices: action.devices,
                 error: null,
+            };
+        case FETCH_ACCOUNT_ID_FAILURE:
+            return {
+                ...state,
+                alldeviceloading: false,
+                error: action.error, // Store the error message here
+                // curdevice:action.deviceId,
             };
         default:
             return state;

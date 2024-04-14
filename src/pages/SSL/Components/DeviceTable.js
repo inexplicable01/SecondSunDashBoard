@@ -18,7 +18,7 @@ const formatDateTime = (dateString) => {
 }
 
 const DeviceTable = ({devices, visibleColumns, onStatusChange, handleDataIconClick}) => {
-
+    // console.log('DeviceTable',devices)
 
     const columns = React.useMemo(() => {
         let cols = [];

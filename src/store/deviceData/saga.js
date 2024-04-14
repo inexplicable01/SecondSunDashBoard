@@ -70,7 +70,7 @@ function* fetchAccountIDsSaga({accountID}) {
         yield put({type: FETCH_ACCOUNT_ID_SUCCESS, devices: devices});
     } catch (error) {
         console.log('error', error)
-        yield put({type: FETCH_ACCOUNT_ID_SUCCESS, error: error.message, victory: ['No']});
+        yield put({type: FETCH_ACCOUNT_ID_FAILURE, error: error.message, victory: ['No']});
     }
 }
 

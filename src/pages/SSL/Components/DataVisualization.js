@@ -213,7 +213,7 @@ const DataVisualization = ({device, location, temperatureData}) => {
     return (<div>
             {loading ? (<div className="loading-screen">
                     {/* Display a loading indicator here */}
-                    <p>Loading...</p>
+                    <p>Loading Device {device.deviceId}...</p>
                 </div>) :
                 (
                     <div className="data-visualization-container">

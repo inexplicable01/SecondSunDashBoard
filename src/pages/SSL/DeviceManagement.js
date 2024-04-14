@@ -39,9 +39,10 @@ const temperatureData = {
 const DeviceManagement = (props) => {
         // State to hold devices
         // document.title = "Registered Devices | Second Sun Labs";
-        const {deviceids, devices} = useSelector(state => ({
+        const {deviceids, devices, alldeviceloading} = useSelector(state => ({
             deviceids: state.DeviceReducer.deviceids,
-            devices: state.DeviceReducer.devices
+            devices: state.DeviceReducer.devices,
+            alldeviceloading: state.DeviceReducer.alldeviceloading
         }));
         const dataDivRef = useRef(null);
         const [maxHeight, setMaxHeight] = useState('0px');
@@ -72,6 +73,8 @@ const DeviceManagement = (props) => {
 // Render checkboxes
         const allColumns = Object.keys(visibleColumns);  // Get all column keys
         const [showDeviceData, setShowDeviceData] = useState(false);
+        const [deviceTypes, setDeviceTypes] = useState([]);
+        const [selectedTypes, setSelectedTypes] = useState(new Set());
 
         const location = useLocation();
         const {serialNumber, name, company, startPort, endPort} = location.state || {};
@@ -94,18 +97,15 @@ const DeviceManagement = (props) => {
             return null;
         };
 
-        // const handleFetchAccountID = (accountID) => {
-        //     dispatch(fetchAccountID(accountID));
-        // };
 
+        const handleFetchAccountID = useCallback((accountID) => {
+            dispatch(fetchAccountID(accountID));
+        }, [dispatch]);
 
+        // console.log('devices', devices)
         useEffect(() => {
-            // Define a function to calculate the new devices array
-            dispatch(fetchAccountID('blahfakafake'));
-        }, [dispatch]); // This effect runs whenever `fastdemodata` changes
-
-
-        // const namelocationdata = props.fdata? props.fdata:fakedata
+            handleFetchAccountID('PlaceHolder');
+        }, [handleFetchAccountID, dispatch]); //
 
 
         const handleCheckboxChange = (e) => {
@@ -138,7 +138,23 @@ const DeviceManagement = (props) => {
             setIsModalOpen(!isModalOpen);
         };
 
+        useEffect(() => {
+            const types = new Set(devices.map(device => device.deviceType)); // Adjust device.type based on your data structure
+            setDeviceTypes([...types]);
+            setSelectedTypes(types);
+        }, [devices]);
 
+        const toggleDeviceType = (type) => {
+            setSelectedTypes(prevSelected => {
+                const newSelected = new Set(prevSelected);
+                if (newSelected.has(type)) {
+                    newSelected.delete(type);
+                } else {
+                    newSelected.add(type);
+                }
+                return newSelected;
+            });
+        };
         const handleStatusChange = (rowData) => {
             // Toggle the status of the given row data and update the devices state
             // const updatedDevices = devices.map(device => {
@@ -179,30 +195,36 @@ const DeviceManagement = (props) => {
                 const currentTime = new Date();
                 // Calculate the difference in minutes
                 const timeDifference = (currentTime - measurementTime) / (1000 * 60);
-
-                // Increment counters based on the time difference
-                if (timeDifference < 10) {
-                    g += 1;
-                } else if (timeDifference >= 10 && timeDifference <= 30) {
-                    o += 1;
-                } else {
-                    b += 1;
+                if (selectedTypes.has(device.deviceType))
+                {
+                    if (timeDifference < 10) {
+                        g += 1;
+                    } else if (timeDifference >= 10 && timeDifference <= 30) {
+                        o += 1;
+                    } else {
+                        b += 1;
+                    }
                 }
+                // Increment counters based on the time difference
+
             });
 
             setBlackDeviceCount(b);
             setOrangeDeviceCount(o);
             setGreenDeviceCount(g);
-        }, [devices]); // Make sure this dependency list is correct
+        }, [devices, selectedTypes]); // Make sure this dependency list is correct
 
         let newdevices = [];
 
         if (Array.isArray(devices)) {
+
+            devices.sort((a, b) => a.deviceId - b.deviceId);
             newdevices = devices.map((device, index) => ({
                 ...device,
                 // name: namelocationdata[index]?.name,
                 // location: namelocationdata[index]?.location,
             }));
+            console.log('newdevices are updated.')
         }
 
         return (
@@ -217,48 +239,71 @@ const DeviceManagement = (props) => {
                             {' '}Not Active:<span style={{color: 'white'}}>{blackDeviceCount}</span>
                         </h1>
                         <Row>
-                        <Col xs={12}>
+                            <Col xs={12}>
 
-                            {showCheckboxes &&
-                                <div className="checkbox-container">
-                                    <input type="checkbox" id="serialNumber" checked={visibleColumns.serialNumber}
-                                           onChange={() => toggleColumnVisibility('serialNumber')}/>
-                                    <label htmlFor="serialNumber">Serial Number</label>
-                                </div>
-                            }
-
-
-                            <div className="side-by-side-container">
-                                <h3>Registered Devices</h3>
-                                <button onClick={toggleModal}>Show/Hide Columns</button>
-                            </div>
-                            <div>
-                                <DeviceTable
-                                    devices={newdevices}
-                                    visibleColumns={visibleColumns}
-                                    onStatusChange={handleStatusChange}
-                                    handleDataIconClick={handleDataIconClick}
-                                />
-                            </div>
-                            <br/>
-                            {clickedDeviceData && (
-                                <div className={`clicked-device-data ${showDeviceData ? 'open' : ''}`}
-                                    // style={{padding:'20px' , margin:'20px'}}
-                                >
-                                    <div>
-                                        <h3>Device {clickedDeviceData.deviceId}</h3>
-                                        <Button color="secondary" className="rounded-pill"
-                                                onClick={() => handleDataIconClick(clickedDeviceData)}>
-                                            Refresh
-                                        </Button>
+                                {showCheckboxes &&
+                                    <div className="checkbox-container">
+                                        <input type="checkbox" id="serialNumber" checked={visibleColumns.serialNumber}
+                                               onChange={() => toggleColumnVisibility('serialNumber')}/>
+                                        <label htmlFor="serialNumber">Serial Number</label>
                                     </div>
-                                    <DataVisualization device={clickedDeviceData} location={location}
-                                                       temperatureData={temperatureData}/>
-                                </div>
-                            )}
+                                }
 
-                        </Col>
-                    </Row>
+                                <div>
+                                    {deviceTypes.map((type) => (
+                                        <label key={type} style={{padding: '5px'}}>
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedTypes.has(type)}
+                                                onChange={() => toggleDeviceType(type)}
+                                            />
+                                            {type}
+                                        </label>
+                                    ))}
+                                </div>
+
+                                <div className="side-by-side-container">
+                                    <h3>Registered Devices</h3>
+                                    <Button color="secondary" className="rounded-pill"
+                                            onClick={() => handleFetchAccountID('PlaceHolder')}>
+                                        Refresh
+                                    </Button>
+                                    <button onClick={toggleModal}>Show/Hide Columns</button>
+                                </div>
+                                <div>
+                                    {alldeviceloading ? <div className="loading-screen">
+                                            {/* Display a loading indicator here */}
+                                            <p>Loading All Device Menu...</p>
+                                        </div> :
+
+                                        <DeviceTable
+                                            devices={newdevices.filter(device => selectedTypes.has(device.deviceType))}
+                                            visibleColumns={visibleColumns}
+                                            onStatusChange={handleStatusChange}
+                                            handleDataIconClick={handleDataIconClick}
+                                        />
+
+                                    }
+                                </div>
+                                <br/>
+                                {clickedDeviceData && (
+                                    <div className={`clicked-device-data ${showDeviceData ? 'open' : ''}`}
+                                        // style={{padding:'20px' , margin:'20px'}}
+                                    >
+                                        <div>
+                                            <h3>Device {clickedDeviceData.deviceId}</h3>
+                                            <Button color="secondary" className="rounded-pill"
+                                                    onClick={() => handleDataIconClick(clickedDeviceData)}>
+                                                Refresh Device
+                                            </Button>
+                                        </div>
+                                        <DataVisualization device={clickedDeviceData} location={location}
+                                                           temperatureData={temperatureData}/>
+                                    </div>
+                                )}
+
+                            </Col>
+                        </Row>
 
                         <ColumnVisibilityModal
                             isVisible={isModalOpen}
@@ -275,60 +320,3 @@ const DeviceManagement = (props) => {
 ;
 
 export default DeviceManagement;
-// useEffect(() => {
-//     async function fetchData() {
-//         try {
-//             // console.log('gothere')
-//             const response = await fetch('http://35.160.4.251:5000/Devices/demoFast', {
-//                 method: 'GET',
-//                 mode: 'cors',
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     // other headers as needed
-//                 },
-//                 // credentials: 'include'  // If you need to include credentials like cookies
-//             })
-//             if (!response.ok) {
-//                 throw new Error('Network response was not ok');
-//             } else {
-//                 const result = await response.json();
-//                 console.log(result)
-//                 setFastDemoData({
-//                     type: "Feature",
-//                     geometry: {
-//                         type: "LineString", coordinates: [
-//                             [-43.1729, -22.9068],  // Rio de Janeiro
-//                             [-46.6333, -23.5505],  // Sao Paulo
-//                             [-49.2718, -25.4289],  // Curitiba
-//                             [-48.5044, -27.6146],  // Florianopolis
-//                             [-51.2177, -30.0346],  // Porto Alegre
-//                             [-56.1882, -34.9033],  // Montevideo
-//                             [-58.3816, -34.6037]   // Buenos Aires
-//                         ]
-//                     }, // Buenos Aires
-//                     properties: {
-//                         name: result.deviceId, // assuming you want to use the name in your device data, if not, remove this
-//                         company: result.deviceOwner, // if this is not in the structure of device data, remove this
-//                         serialNumber: 'NeedtoAdd',
-//                         lastTransmitted: result.measurementTime, // random date in 2023, or you might have another date logic
-//                         lastLocation: 'Home', // you might need logic here if you have location data for incoming device
-//                         batteryLife: result.estimatedBatteryLife, // random battery percentage from 10 to 100, or use incoming device data
-//                         registeredDate: new Date().toISOString().split('T')[0], // this uses today's date for the registeredDate of the incoming device
-//                         registeredBy: result.deviceOwner, // I'm assuming the registeredBy is the name provided in the form
-//                         startPort: 'startPort',
-//                         endPort: 'EndPort',
-//                     }
-//                 });
-//             }
-//
-//         } catch (error) {
-//             console.log(error)
-//             setError(error);
-//         } finally {
-//             setLoading(false);
-//         }
-//     }
-//
-//     console.log('not async')
-//     fetchData();
-// }, []);
