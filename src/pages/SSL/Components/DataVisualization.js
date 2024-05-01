@@ -31,8 +31,8 @@ const createIcon = (iconClass) => {
 function SetViewToFitBounds({coordinates}) {
     // if coordinates
     const map = useMap();
-    if (coordinates && coordinates.length > 0){
-          map.fitBounds(coordinates);
+    if (coordinates && coordinates.length > 0) {
+        map.fitBounds(coordinates);
     }
 
     return null;  // No UI rendered by this component
@@ -49,7 +49,7 @@ const randomcoords = switchxy([
 
 const seattleTimeFormatter = new Intl.DateTimeFormat('en-US', {
     timeZone: 'America/Los_Angeles',
-        year: 'numeric', // Add year in the numeric format (e.g., 2023)
+    year: 'numeric', // Add year in the numeric format (e.g., 2023)
     month: '2-digit', // Add month in the 2-digit format (e.g., 03)
     day: '2-digit', // Add day in the 2-digit format (e.g., 04)
     hour: '2-digit',
@@ -97,6 +97,10 @@ const DataVisualization = ({device, location, temperatureData}) => {
     const [chartData, setChartData] = useState([]);
     const daysAgo = new Date(Date.now() - viewDays * 24 * 60 * 60 * 1000); // 2 hours in milliseconds
     const [selectedMetric, setSelectedMetric] = useState('Temperature');
+    const [useCustomLimits, setUseCustomLimits] = useState(false);
+    const [minLimit, setMinLimit] = useState('');
+    const [maxLimit, setMaxLimit] = useState('');
+
     const currentLocationIcon = createIcon('mdi mdi-truck-minus ');
     const commonOptions = {
         chart: {id: 'basic-bar'},
@@ -121,6 +125,9 @@ const DataVisualization = ({device, location, temperatureData}) => {
             tickAmount: 24,
         },
         yaxis: {
+            forceNiceScale: !useCustomLimits,
+            min: useCustomLimits ? Number(minLimit) : undefined,
+            max: useCustomLimits ? Number(maxLimit) : undefined,
             labels: {
                 formatter: function (value) {
                     return Number(value).toPrecision(3);  // Keep only 3 significant figures
@@ -205,7 +212,7 @@ const DataVisualization = ({device, location, temperatureData}) => {
     };
     const keysArray = deviceData[curdevice]?.dataseries?.map((_, index) => `key${index}`) ?? ['defaultKey'];
     // console.log('dataseries', deviceData[curdevice]?.dataseries)
-    // console.log('keysArray',keysArray)
+    console.log('rerender')
     // console.log('geoJsonData',geoJsonData)
     //  console.log('validLocationHistory',validLocationHistory)
     // validLocationHistory
@@ -218,8 +225,6 @@ const DataVisualization = ({device, location, temperatureData}) => {
                 (
                     <div className="data-visualization-container">
                         <div className="map-container">
-
-
                             <MapContainer scrollWheelZoom={false}
                                           zoom={8} className="map-container-container">
                                 <SetViewToFitBounds coordinates={switchxy(validLocationHistory)}/>
@@ -289,6 +294,31 @@ const DataVisualization = ({device, location, temperatureData}) => {
                                     }]}
                                     type="line"
                                     width="100%"
+                                />
+
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        checked={useCustomLimits}
+                                        onChange={(e) => setUseCustomLimits(e.target.checked)}
+                                    />
+                                    Use Custom Limits
+                                </label>
+
+
+                                <input
+                                    type="number"
+                                    placeholder="Min"
+                                    disabled={!useCustomLimits}
+                                    value={minLimit}
+                                    onChange ={(e) => setMinLimit(e.target.value)}
+                                />
+                                <input
+                                    type="number"
+                                    placeholder="Max"
+                                    disabled={!useCustomLimits}
+                                    value={maxLimit}
+                                    onChange ={(e) => setMaxLimit(e.target.value)}
                                 />
                             </div>
 
