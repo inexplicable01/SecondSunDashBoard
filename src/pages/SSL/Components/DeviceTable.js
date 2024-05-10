@@ -43,10 +43,23 @@ const DeviceTable = ({devices, visibleColumns, onStatusChange, handleDataIconCli
                     }
 
                     return (
-                        <span style={{cursor: 'pointer', color: color}}
-                              onClick={() => handleDataIconClick(row.original)}>
-                    {cell.value}<br/>
-                </span>
+                        <Button color="secondary" className="rounded-pill" outline
+                                onClick={() => handleDataIconClick(row.original)}
+                        >
+                             <span style={{
+                                 cursor: 'pointer', color: color,
+                                 fontSize: '18px',  // Adjust font size as needed
+                                 fontWeight: 'bold'  // Makes the font bold
+                             }}
+                             >
+                            {cell.value}<br/>
+                        </span>
+
+                        </Button>
+                        //         <span style={{cursor: 'pointer', color: color}}
+                        //               >
+                        //     <br/>
+                        // </span>
                     );
                 }
             });
