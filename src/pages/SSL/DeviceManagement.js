@@ -12,30 +12,6 @@ import DeviceTable from './Components/DeviceTable';
 import {useSelector, useDispatch} from "react-redux";
 import {fetchAccountID, fetchDeviceData} from '../../store/deviceData/action'
 
-const temperatureData = {
-    labels: ['January', 'February', 'March', 'April', 'May'],
-    datasets: [{
-        label: 'Temperature',
-        data: [12, 19, 3, 5, 2],
-        fill: false,
-        borderColor: 'rgb(75, 192, 192)',
-        tension: 0.1
-    }]
-};
-
-// const fakedata = [
-//   { name: 'Lucas Smith', location: 'San Diego' },
-//   { name: 'Amelia Williams', location: 'San Jose' },
-//   { name: 'Amelia Smith', location: 'San Diego' },
-//   { name: 'Emma Wilson', location: 'Dallas' },
-//   { name: 'Olivia Williams', location: 'Dallas' },
-//   { name: 'Elijah Jackson', location: 'New York' },
-//   { name: 'Noah Davis', location: 'Chicago' },
-//   { name: 'Isabella Williams', location: 'San Diego' },
-//   { name: 'Lucas Martinez', location: 'San Diego' },
-//   { name: 'Benjamin Anderson', location: 'San Antonio' }
-// ]
-
 const DeviceManagement = (props) => {
         // State to hold devices
         // document.title = "Registered Devices | Second Sun Labs";
@@ -195,8 +171,7 @@ const DeviceManagement = (props) => {
                 const currentTime = new Date();
                 // Calculate the difference in minutes
                 const timeDifference = (currentTime - measurementTime) / (1000 * 60);
-                if (selectedTypes.has(device.deviceType))
-                {
+                if (selectedTypes.has(device.deviceType)) {
                     if (timeDifference < 10) {
                         g += 1;
                     } else if (timeDifference >= 10 && timeDifference <= 30) {
@@ -226,6 +201,7 @@ const DeviceManagement = (props) => {
             }));
             console.log('newdevices are updated.')
         }
+        console.log('clickedDeviceData',clickedDeviceData)
 
         return (
             <React.Fragment>
@@ -238,39 +214,39 @@ const DeviceManagement = (props) => {
                             {' '}Maybe Active: <span style={{color: 'orange'}}>{orangeDeviceCount}</span>
                             {' '}Not Active:<span style={{color: 'white'}}>{blackDeviceCount}</span>
                         </h1>
+                        {showCheckboxes &&
+                            <div className="checkbox-container">
+                                <input type="checkbox" id="serialNumber" checked={visibleColumns.serialNumber}
+                                       onChange={() => toggleColumnVisibility('serialNumber')}/>
+                                <label htmlFor="serialNumber">Serial Number</label>
+                            </div>
+                        }
+                        <div>
+                            {deviceTypes.map((type) => (
+                                <label key={type} style={{padding: '5px'}}>
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedTypes.has(type)}
+                                        onChange={() => toggleDeviceType(type)}
+                                    />
+                                    {type}
+                                </label>
+                            ))}
+                        </div>
+
+
                         <Row>
-                            <Col xs={12}>
-
-                                {showCheckboxes &&
-                                    <div className="checkbox-container">
-                                        <input type="checkbox" id="serialNumber" checked={visibleColumns.serialNumber}
-                                               onChange={() => toggleColumnVisibility('serialNumber')}/>
-                                        <label htmlFor="serialNumber">Serial Number</label>
-                                    </div>
-                                }
-
-                                <div>
-                                    {deviceTypes.map((type) => (
-                                        <label key={type} style={{padding: '5px'}}>
-                                            <input
-                                                type="checkbox"
-                                                checked={selectedTypes.has(type)}
-                                                onChange={() => toggleDeviceType(type)}
-                                            />
-                                            {type}
-                                        </label>
-                                    ))}
-                                </div>
-
+                            <Col xs={3}>
                                 <div className="side-by-side-container">
                                     <h3>Registered Devices</h3>
                                     <Button color="secondary" className="rounded-pill"
                                             onClick={() => handleFetchAccountID('PlaceHolder')}>
-                                        Refresh
+                                        Refresh List
                                     </Button>
-                                    <button onClick={toggleModal}>Show/Hide Columns</button>
+                                    {/*<button onClick={toggleModal}>Show/Hide Columns</button>*/}
                                 </div>
-                                <div>
+
+                                <div className="device-table-container">
                                     {alldeviceloading ? <div className="loading-screen">
                                             {/* Display a loading indicator here */}
                                             <p>Loading All Device Menu...</p>
@@ -285,23 +261,23 @@ const DeviceManagement = (props) => {
 
                                     }
                                 </div>
-                                <br/>
-                                {clickedDeviceData && (
-                                    <div className={`clicked-device-data ${showDeviceData ? 'open' : ''}`}
-                                        // style={{padding:'20px' , margin:'20px'}}
-                                    >
-                                        <div>
-                                            <h3>Device {clickedDeviceData.deviceId}</h3>
-                                            <Button color="secondary" className="rounded-pill"
-                                                    onClick={() => handleDataIconClick(clickedDeviceData)}>
-                                                Refresh Device
-                                            </Button>
+                            </Col>
+                            <Col xs={9}>
+                                <div>
+                                    {clickedDeviceData && (
+                                        <div className={`clicked-device-data ${showDeviceData ? 'open' : ''}`}
+                                            // style={{padding:'20px' , margin:'20px'}}
+                                        >
+                                            <div className="side-by-side-container">
+                                                <Button color="secondary" className="rounded-pill"
+                                                        onClick={() => handleDataIconClick(clickedDeviceData)}>
+                                                    Refresh Device {clickedDeviceData.deviceId}
+                                                </Button>
+                                            </div>
+                                            <DataVisualization device={clickedDeviceData} location={location}/>
                                         </div>
-                                        <DataVisualization device={clickedDeviceData} location={location}
-                                                           temperatureData={temperatureData}/>
-                                    </div>
-                                )}
-
+                                    )}
+                                </div>
                             </Col>
                         </Row>
 

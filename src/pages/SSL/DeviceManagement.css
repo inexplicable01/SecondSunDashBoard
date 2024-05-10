@@ -9,6 +9,13 @@
   display: none;
 }
 
+.device-table-container {
+  max-width: 100%; /* Ensures the container does not exceed the column width */
+  overflow-x: auto; /* Allows horizontal scrolling if table is wider than the container */
+   max-height: 80vh; /* Adjust based on your layout */
+  overflow-y: auto; /* Enables vertical scrolling */
+}
+
 /* Create a custom checkbox */
 .checkbox-container::before {
   content: "";

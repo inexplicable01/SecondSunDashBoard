@@ -86,7 +86,7 @@ function generateHourlyTimestamps(start, end) {
 }
 
 
-const DataVisualization = ({device, location, temperatureData}) => {
+const DataVisualization = ({device, location}) => {
     const [viewDays, setViewDays] = useState(1)
     const {deviceData, curdevice, loading} = useSelector(state => ({
         deviceData: state.DeviceReducer.deviceData,
@@ -191,6 +191,12 @@ const DataVisualization = ({device, location, temperatureData}) => {
                     y: item.accelerationG
                 }))
                 break;
+            case 'Battery':
+                newData = filteredSeries.map(item => ({
+                    x: new Date(item.measurementTime),
+                    y: item.battery
+                }))
+                break;
             default:
                 newData = [];
         }
@@ -216,6 +222,100 @@ const DataVisualization = ({device, location, temperatureData}) => {
     // console.log('geoJsonData',geoJsonData)
     //  console.log('validLocationHistory',validLocationHistory)
     // validLocationHistory
+
+    const MAX_LAT_LNG_DIFF = 0.01;  // Define max difference in latitude/longitude to consider points "close"
+    const MAX_ACCURACY_DIFF = 5;    // Define max difference in accuracy to consider points "close"
+
+    function processproximityDataseries(dataseries) {
+        // Initial array of processed data
+        const processedData = [];
+
+        dataseries.forEach((item) => {
+            let foundGroup = false;
+
+            // Check existing groups for a close match
+            for (let data of processedData) {
+                if (Math.abs(data.center.latitude - item.coordinates.latitude) <= MAX_LAT_LNG_DIFF &&
+                    Math.abs(data.center.longitude - item.coordinates.longitude) <= MAX_LAT_LNG_DIFF &&
+                    Math.abs(data.accuracy - item.locationAccuracy) <= MAX_ACCURACY_DIFF) {
+                    // If close, increment the opacity without exceeding 0.5
+                    data.opacity = Math.min(data.opacity + 0.01, 0.5);
+                    foundGroup = true;
+                    break;
+                }
+            }
+
+            // If no close group was found, create a new entry
+            if (!foundGroup) {
+                processedData.push({
+                    center: item.coordinates,
+                    accuracy: item.locationAccuracy,
+                    opacity: 0.1,  // Start with a base opacity
+                });
+            }
+        });
+
+        return processedData;
+    }
+
+    const processedproximityData = processproximityDataseries(deviceData[curdevice].dataseries);
+
+    function getDistance(lat1, lon1, lat2, lon2) {
+        function toRadians(deg) {
+            return deg * (Math.PI / 180);
+        }
+
+        const R = 3958.8; // Radius of the Earth in miles
+        const dLat = toRadians(lat2 - lat1);
+        const dLon = toRadians(lon2 - lon1);
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = R * c;
+
+        return distance * 5280; // Convert miles to feet
+    }
+
+    const MAX_DISTANCE_FEET = 500; // Max distance in feet to consider points "close"
+
+    function processMarkerData(dataseries) {
+        const processedMarkers = [];
+
+        dataseries.forEach((item) => {
+            let found = false;
+            for (let marker of processedMarkers) {
+                const distance = getDistance(marker.lat, marker.lng, item.coordinates.latitude, item.coordinates.longitude);
+                if (distance <= MAX_DISTANCE_FEET) {
+                    marker.times.push(new Date(item.measurementTime));
+                    marker.accuracies.push(item.locationAccuracy);
+                    marker.count++;
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                processedMarkers.push({
+                    lat: item.coordinates.latitude,
+                    lng: item.coordinates.longitude,
+                    times: [new Date(item.measurementTime)],
+                    accuracies: [item.locationAccuracy],
+                    count: 1  // Initialize count as 1 for a new marker
+                });
+            }
+        });
+
+        return processedMarkers;
+    }
+
+    const processedMarkers = processMarkerData(deviceData[curdevice].dataseries);
+    processedMarkers.forEach(marker => {
+        marker.times.sort((a, b) => a - b); // Sort times in ascending order
+        marker.earliestTime = marker.times[0];
+        marker.latestTime = marker.times[marker.times.length - 1];
+    });
 // geoJsonData
     return (<div>
             {loading ? (<div className="loading-screen">
@@ -230,29 +330,30 @@ const DataVisualization = ({device, location, temperatureData}) => {
                                 <SetViewToFitBounds coordinates={switchxy(validLocationHistory)}/>
                                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
                                 <GeoJSON key={`geojson-${device.deviceId}-${Date.now()}`} data={geoJsonData}/>
+                                {processedMarkers.map((marker, index) => (
+                                    <Marker position={[marker.lat, marker.lng]} key={`marker-${index}`}
+                                            icon={currentLocationIcon}>
+                                        <Popup>
+                                            {`Marker ${index + 1}:`}
+                                            <div>{`Represented Markers: ${marker.count}`}</div>
+                                            <div>{`Earliest Time: ${seattleTimeFormatter.format(marker.earliestTime)} PT`}</div>
+                                            <div>{`Latest Time: ${seattleTimeFormatter.format(marker.latestTime)} PT`}</div>
+                                        </Popup>
+                                    </Marker>
+                                ))}
                                 {
-                                    deviceData[curdevice]?.dataseries.map((item, index) => (
-                                        <>
-                                            <Marker position={[item.coordinates.latitude, item.coordinates.longitude]}
-                                                    key={`marker-${index}`}
-                                                    icon={currentLocationIcon}
-                                            >
-                                                <Popup>{`Point ${index + 1}, Accuracy:${item.locationAccuracy}\n
-                                            time: ${seattleTimeFormatter.format(new Date(item.measurementTime))} PT time`}</Popup>
-                                            </Marker>
-                                            <Circle
-                                                center={[item.coordinates.latitude, item.coordinates.longitude]}
-                                                radius={item.locationAccuracy} // This should be your parameter that determines the size of the circle
-                                                key={`circle-${index}`}
-                                                // color="blue" // You can customize your circle color
-                                                fillColor="blue" // You can customize your fill color
-                                                fillOpacity={0.01} // You can customize your fill opacity
-                                            />
-                                        </>
+                                    processedproximityData.map((data, index) => (
+                                        <Circle
+                                            key={`processed-circle-${index}`}
+                                            center={[data.center.latitude, data.center.longitude]}
+                                            radius={data.accuracy} // Use the accuracy as radius
+                                            fillColor="blue"
+                                            fillOpacity={data.opacity} // Use calculated opacity
+                                        />
                                     ))
                                 }
-                                <GeoJSON key={keysArray}
-                                         data={geoJsonData}/>
+                                {/*<GeoJSON key={keysArray}*/}
+                                {/*         data={geoJsonData}/>*/}
                             </MapContainer>
 
                         </div>
@@ -269,6 +370,7 @@ const DataVisualization = ({device, location, temperatureData}) => {
                                         <option value="Humidity">Humidity</option>
                                         <option value="Light Intensity">Light Intensity</option>
                                         <option value="Shock">Shock</option>
+                                        <option value="Battery">Battery</option>
                                     </select>
                                 </div>
 
@@ -311,14 +413,14 @@ const DataVisualization = ({device, location, temperatureData}) => {
                                     placeholder="Min"
                                     disabled={!useCustomLimits}
                                     value={minLimit}
-                                    onChange ={(e) => setMinLimit(e.target.value)}
+                                    onChange={(e) => setMinLimit(e.target.value)}
                                 />
                                 <input
                                     type="number"
                                     placeholder="Max"
                                     disabled={!useCustomLimits}
                                     value={maxLimit}
-                                    onChange ={(e) => setMaxLimit(e.target.value)}
+                                    onChange={(e) => setMaxLimit(e.target.value)}
                                 />
                             </div>
 

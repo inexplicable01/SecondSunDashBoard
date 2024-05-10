@@ -43,7 +43,8 @@ const DeviceTable = ({devices, visibleColumns, onStatusChange, handleDataIconCli
                     }
 
                     return (
-                        <span style={{color: color}}>
+                        <span style={{cursor: 'pointer', color: color}}
+                              onClick={() => handleDataIconClick(row.original)}>
                     {cell.value}<br/>
                 </span>
                     );
@@ -62,63 +63,68 @@ const DeviceTable = ({devices, visibleColumns, onStatusChange, handleDataIconCli
                 accessor: 'deviceType',
             });
         }
-        if (visibleColumns.status) {
-            cols.push({
-                Header: '',
-                accessor: 'status',
-                Cell: ({row}) => (
-
-                    <Button color="secondary" className="rounded-pill"
-                            onClick={() => handleDataIconClick(row.original)}>
-                        View Data
-                    </Button>
-                    // <label className="switch">
-                    //   {/*<input*/}
-                    //   {/*  type="checkbox"*/}
-                    //   {/*  checked={row.original.status === 'Active'}*/}
-                    //   {/*  onChange={() => onStatusChange(row.original)}*/}
-                    //   {/*/>*/}
-                    //   {/*<span className="slider"></span>*/}
-                    // </label>
-                ),
-            });
-        }
+        // if (visibleColumns.status) {
+        //     cols.push({
+        //         Header: '',
+        //         accessor: 'status',
+        //         Cell: ({row}) => (
+        //
+        //             <Button color="secondary" className="rounded-pill"
+        //                     >
+        //                 View Data
+        //             </Button>
+        //             // <label className="switch">
+        //             //   {/*<input*/}
+        //             //   {/*  type="checkbox"*/}
+        //             //   {/*  checked={row.original.status === 'Active'}*/}
+        //             //   {/*  onChange={() => onStatusChange(row.original)}*/}
+        //             //   {/*/>*/}
+        //             //   {/*<span className="slider"></span>*/}
+        //             // </label>
+        //         ),
+        //     });
+        // }
         // if (visibleColumns.name) {
         //     cols.push({
         //         Header: 'Owner',
         //         accessor: 'deviceOwner',
         //     });
         // }
-        if (visibleColumns.company) {
-            cols.push({
-                Header: 'Company',
-                accessor: 'accountId',
-            });
-        }
-        if (visibleColumns.lastTransmitted) {
-            cols.push({
-                Header: 'Last Transmitted',
-                accessor: 'measurementTime',
-                Cell: ({value}) => (formatDateTime(value) + ', PT Time')
-            });
-        }
-        if (visibleColumns.lastLocation) {
-            cols.push({
-                Header: 'ICCID',
-                accessor: 'iccid',
-            });
-        }
-        if (visibleColumns.imei) {
-            cols.push({
-                Header: 'IMEI',
-                accessor: 'imei',
-            });
-        }
+        // if (visibleColumns.company) {
+        //     cols.push({
+        //         Header: 'Company',
+        //         accessor: 'accountId',
+        //     });
+        // }
+        // if (visibleColumns.lastTransmitted) {
+        //     cols.push({
+        //         Header: 'Last Transmitted',
+        //         accessor: 'measurementTime',
+        //         Cell: ({value}) => (formatDateTime(value) + ', PT Time')
+        //     });
+        // }
+        // if (visibleColumns.lastLocation) {
+        //     cols.push({
+        //         Header: 'ICCID',
+        //         accessor: 'iccid',
+        //     });
+        // }
+        // if (visibleColumns.imei) {
+        //     cols.push({
+        //         Header: 'IMEI',
+        //         accessor: 'imei',
+        //     });
+        // }
         if (visibleColumns.batteryLife) {
             cols.push({
-                Header: 'Battery Life (Days)',
+                Header: 'Days',
                 accessor: 'estimatedBatteryLife',
-            });
+                Cell: ({value}) => {
+                    const number = parseFloat(value); // Ensuring value is treated as a number
+                    return number >= 0 && number <= 90 ? number.toFixed(2) : '--';
+                }
+            })
+            ;
         }
         // if (visibleColumns.registeredDate) {
         //     cols.push({

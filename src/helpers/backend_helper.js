@@ -87,9 +87,9 @@ export const getDeviceDataTimeSeries = (deviceId, startTime, endTime, page, page
         page,
         pageSize
     });
-    console.log('araon', params)
+    // console.log('araon', params)
     // Make the GET request with custom headers
-    console.log('fackend_helper url ' + url.GET_DEVICE_DATA + '/' + deviceId + `/timeSeries?${params}`)
+    // console.log('fackend_helper url ' + url.GET_DEVICE_DATA + '/' + deviceId + `/timeSeries?${params}`)
     return api.get(`${url.GET_DEVICE_DATA}/${deviceId}/timeSeries?${params}`);
 };
 
