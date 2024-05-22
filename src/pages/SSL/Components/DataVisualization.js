@@ -46,40 +46,41 @@ const randomcoords = switchxy([
     // [47.1258383, -122.1609394],  // Montevideo
     // [47.3610025, -122.1609394]   // Buenos Aires
 ])
-    const MAX_LAT_LNG_DIFF = 0.01;  // Define max difference in latitude/longitude to consider points "close"
-    const MAX_ACCURACY_DIFF = 5;    // Define max difference in accuracy to consider points "close"
+const MAX_LAT_LNG_DIFF = 0.01;  // Define max difference in latitude/longitude to consider points "close"
+const MAX_ACCURACY_DIFF = 5;    // Define max difference in accuracy to consider points "close"
 
-    function processproximityDataseries(dataseries) {
-        // Initial array of processed data
-        const processedData = [];
+function processproximityDataseries(dataseries) {
+    // Initial array of processed data
+    const processedData = [];
 
-        dataseries.forEach((item) => {
-            let foundGroup = false;
+    dataseries.forEach((item) => {
+        let foundGroup = false;
 
-            // Check existing groups for a close match
-            for (let data of processedData) {
-                if (Math.abs(data.center.latitude - item.coordinates.latitude) <= MAX_LAT_LNG_DIFF &&
-                    Math.abs(data.center.longitude - item.coordinates.longitude) <= MAX_LAT_LNG_DIFF &&
-                    Math.abs(data.accuracy - item.locationAccuracy) <= MAX_ACCURACY_DIFF) {
-                    // If close, increment the opacity without exceeding 0.5
-                    data.opacity = Math.min(data.opacity + 0.01, 0.5);
-                    foundGroup = true;
-                    break;
-                }
+        // Check existing groups for a close match
+        for (let data of processedData) {
+            if (Math.abs(data.center.latitude - item.coordinates.latitude) <= MAX_LAT_LNG_DIFF &&
+                Math.abs(data.center.longitude - item.coordinates.longitude) <= MAX_LAT_LNG_DIFF &&
+                Math.abs(data.accuracy - item.locationAccuracy) <= MAX_ACCURACY_DIFF) {
+                // If close, increment the opacity without exceeding 0.5
+                data.opacity = Math.min(data.opacity + 0.01, 0.5);
+                foundGroup = true;
+                break;
             }
+        }
 
-            // If no close group was found, create a new entry
-            if (!foundGroup) {
-                processedData.push({
-                    center: item.coordinates,
-                    accuracy: item.locationAccuracy,
-                    opacity: 0.1,  // Start with a base opacity
-                });
-            }
-        });
+        // If no close group was found, create a new entry
+        if (!foundGroup) {
+            processedData.push({
+                center: item.coordinates,
+                accuracy: item.locationAccuracy,
+                opacity: 0.1,  // Start with a base opacity
+            });
+        }
+    });
 
-        return processedData;
-    }
+    return processedData;
+}
+
 const seattleTimeFormatter = new Intl.DateTimeFormat('en-US', {
     timeZone: 'America/Los_Angeles',
     year: 'numeric', // Add year in the numeric format (e.g., 2023)
@@ -117,54 +118,56 @@ function generateHourlyTimestamps(start, end) {
 
     return timestamps;
 }
-    function getDistance(lat1, lon1, lat2, lon2) {
-        function toRadians(deg) {
-            return deg * (Math.PI / 180);
+
+function getDistance(lat1, lon1, lat2, lon2) {
+    function toRadians(deg) {
+        return deg * (Math.PI / 180);
+    }
+
+    const R = 3958.8; // Radius of the Earth in miles
+    const dLat = toRadians(lat2 - lat1);
+    const dLon = toRadians(lon2 - lon1);
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+
+    return distance * 5280; // Convert miles to feet
+}
+
+const MAX_DISTANCE_FEET = 500; // Max distance in feet to consider points "close"
+function processMarkerData(dataseries) {
+    const processedMarkers = [];
+
+    dataseries.forEach((item) => {
+        let found = false;
+        for (let marker of processedMarkers) {
+            const distance = getDistance(marker.lat, marker.lng, item.coordinates.latitude, item.coordinates.longitude);
+            if (distance <= MAX_DISTANCE_FEET) {
+                marker.times.push(new Date(item.measurementTime));
+                marker.accuracies.push(item.locationAccuracy);
+                marker.count++;
+                found = true;
+                break;
+            }
         }
 
-        const R = 3958.8; // Radius of the Earth in miles
-        const dLat = toRadians(lat2 - lat1);
-        const dLon = toRadians(lon2 - lon1);
-        const a =
-            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        const distance = R * c;
+        if (!found) {
+            processedMarkers.push({
+                lat: item.coordinates.latitude,
+                lng: item.coordinates.longitude,
+                times: [new Date(item.measurementTime)],
+                accuracies: [item.locationAccuracy],
+                count: 1  // Initialize count as 1 for a new marker
+            });
+        }
+    });
 
-        return distance * 5280; // Convert miles to feet
-    }
+    return processedMarkers;
+}
 
-    const MAX_DISTANCE_FEET = 500; // Max distance in feet to consider points "close"
-    function processMarkerData(dataseries) {
-        const processedMarkers = [];
-
-        dataseries.forEach((item) => {
-            let found = false;
-            for (let marker of processedMarkers) {
-                const distance = getDistance(marker.lat, marker.lng, item.coordinates.latitude, item.coordinates.longitude);
-                if (distance <= MAX_DISTANCE_FEET) {
-                    marker.times.push(new Date(item.measurementTime));
-                    marker.accuracies.push(item.locationAccuracy);
-                    marker.count++;
-                    found = true;
-                    break;
-                }
-            }
-
-            if (!found) {
-                processedMarkers.push({
-                    lat: item.coordinates.latitude,
-                    lng: item.coordinates.longitude,
-                    times: [new Date(item.measurementTime)],
-                    accuracies: [item.locationAccuracy],
-                    count: 1  // Initialize count as 1 for a new marker
-                });
-            }
-        });
-
-        return processedMarkers;
-    }
 const DataVisualization = ({device, location}) => {
     const [viewDays, setViewDays] = useState(1)
     const {deviceData, curdevice, loading} = useSelector(state => ({
@@ -182,6 +185,10 @@ const DataVisualization = ({device, location}) => {
 
     const currentLocationIcon = createIcon('mdi mdi-truck-minus ');
     const commonOptions = {
+        markers: {
+            size: 6, // Adjust the size of the cross
+            // shape: 'cross'
+        },
         chart: {id: 'basic-bar'},
         xaxis: {
             type: 'datetime',
@@ -303,27 +310,27 @@ const DataVisualization = ({device, location}) => {
     // validLocationHistory
 
 
-let processedProximityData;
-let processedMarkers;
+    let processedProximityData;
+    let processedMarkers;
 
 // Check if dataseries exists and handle accordingly
-const dataseries = deviceData[curdevice]?.dataseries;
-if (dataseries && dataseries.length > 0) {
-    // Process data if dataseries is not empty
-    processedProximityData = processproximityDataseries(dataseries);
-    processedMarkers = processMarkerData(dataseries);
+    const dataseries = deviceData[curdevice]?.dataseries;
+    if (dataseries && dataseries.length > 0) {
+        // Process data if dataseries is not empty
+        processedProximityData = processproximityDataseries(dataseries);
+        processedMarkers = processMarkerData(dataseries);
 
-    // Sort times and set earliest and latest times for each marker
-    processedMarkers.forEach(marker => {
-        marker.times.sort((a, b) => a - b);  // Sort times in ascending order
-        marker.earliestTime = marker.times[0]; // Get the earliest time
-        marker.latestTime = marker.times[marker.times.length - 1]; // Get the latest time
-    });
-} else {
-    // Handle the case where dataseries is null, undefined, or empty
-    processedProximityData = processproximityDataseries([]);
-    processedMarkers = processMarkerData([]);
-}
+        // Sort times and set earliest and latest times for each marker
+        processedMarkers.forEach(marker => {
+            marker.times.sort((a, b) => a - b);  // Sort times in ascending order
+            marker.earliestTime = marker.times[0]; // Get the earliest time
+            marker.latestTime = marker.times[marker.times.length - 1]; // Get the latest time
+        });
+    } else {
+        // Handle the case where dataseries is null, undefined, or empty
+        processedProximityData = processproximityDataseries([]);
+        processedMarkers = processMarkerData([]);
+    }
 
 // geoJsonData
     return (<div>

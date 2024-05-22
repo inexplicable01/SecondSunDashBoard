@@ -16,7 +16,7 @@
   transition: all .1s ease-out;
 
   @media (min-width: 768px) {
-    margin-left: $vertical-menu-width;
+    margin-left: 0px;//$vertical-menu-width;
   }
 }
 
@@ -1412,7 +1412,8 @@
 
     &[data-sidebar-size="sm"] {
       .main-content {
-        margin-left: calc(#{$vertical-menu-width-sm} + 25px);
+        //margin-left: calc(#{$vertical-menu-width-sm} + 25px);
+        margin-left: 0px;
       }
 
       .navbar-brand-box {

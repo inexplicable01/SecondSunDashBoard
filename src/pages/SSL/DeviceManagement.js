@@ -32,6 +32,7 @@ const DeviceManagement = (props) => {
             deviceType: true,
             company: true,
             status: true,
+            firmwire: true,
             lastTransmitted: true,
             lastLocation: true,
             imei: true,

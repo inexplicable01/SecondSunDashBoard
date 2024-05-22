@@ -125,18 +125,18 @@ const Layout = (props) => {
 
     return (
         <React.Fragment>
-            <div id="layout-wrapper">
+            {/*<div id="layout-wrapper">*/}
                 {/*<Header*/}
                 {/*    headerClass={headerClass}*/}
                 {/*    layoutModeType={layoutModeType}*/}
                 {/*    onChangeLayoutMode={onChangeLayoutMode} />*/}
-                <Sidebar
-                layoutType={layoutType}
-                 />
+                {/*<Sidebar*/}
+                {/*layoutType={layoutType}*/}
+                {/* />*/}
                 <div className="main-content">{props.children}
                     <Footer />
                 </div>
-            </div>
+            {/*</div>*/}
             {/*<RightSidebar />*/}
         </React.Fragment>
 

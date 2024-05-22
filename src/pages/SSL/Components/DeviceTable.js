@@ -67,13 +67,19 @@ const DeviceTable = ({devices, visibleColumns, onStatusChange, handleDataIconCli
         if (visibleColumns.devicegroupid) {
             cols.push({
                 Header: 'Device Group',
-                accessor: 'deviceGroup',
+                accessor: 'clientName',
             });
         }
         if (visibleColumns.deviceType) {
             cols.push({
                 Header: 'Device',
                 accessor: 'deviceType',
+            });
+        }
+        if (visibleColumns.firmwire) {
+            cols.push({
+                Header: 'Firmwire',
+                accessor: 'firmwireVersion',
             });
         }
         // if (visibleColumns.status) {
